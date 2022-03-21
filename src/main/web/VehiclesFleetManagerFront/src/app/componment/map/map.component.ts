@@ -16,6 +16,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
+import "leaflet-mouse-position";
 
 @Component({
   selector: 'app-map',
@@ -59,6 +60,9 @@ export class MapComponent implements OnInit,OnDestroy {
   });
 
   ngOnInit() {
+    if (this.map instanceof Map) {
+      L.control.mousePosition().addTo(this.map);
+    }
      Marker.prototype.options.icon = this.defaultIcon;
   }
 
@@ -78,6 +82,7 @@ export class MapComponent implements OnInit,OnDestroy {
       waypoints: [L.latLng(57.74, 11.94), L.latLng(57.6792, 11.949)],
       routeWhileDragging: true
     }).addTo(map);
+    L.control.mousePosition().addTo(this.map);
   }
 
   onMapZoomEnd(e: LeafletEvent) {

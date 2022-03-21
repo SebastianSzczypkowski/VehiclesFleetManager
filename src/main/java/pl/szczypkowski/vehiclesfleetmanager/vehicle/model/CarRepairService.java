@@ -5,8 +5,9 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
-@Table(name = "car_repair_serwis")
-public class CarRepairSerwis {
+@Table(name = "car_repair_service")
+@Entity
+public class CarRepairService {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,10 +29,10 @@ public class CarRepairSerwis {
     private String description;
 
 
-    public CarRepairSerwis() {
+    public CarRepairService() {
     }
 
-    public CarRepairSerwis(Long id, String carRepairShopName, Date date, Double cost, String currency, String description) {
+    public CarRepairService(Long id, String carRepairShopName, Date date, Double cost, String currency, String description) {
         this.id = id;
         this.carRepairShopName = carRepairShopName;
         this.date = date;
@@ -92,7 +93,7 @@ public class CarRepairSerwis {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CarRepairSerwis that = (CarRepairSerwis) o;
+        CarRepairService that = (CarRepairService) o;
         return Objects.equals(id, that.id) && Objects.equals(carRepairShopName, that.carRepairShopName) && Objects.equals(date, that.date) && Objects.equals(cost, that.cost) && Objects.equals(currency, that.currency) && Objects.equals(description, that.description);
     }
 

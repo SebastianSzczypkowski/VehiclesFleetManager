@@ -1,17 +1,17 @@
 package pl.szczypkowski.vehiclesfleetmanager.driver.controller;
 
-
-import liquibase.pro.packaged.E;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.Mapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.szczypkowski.vehiclesfleetmanager.driver.model.Driver;
 import pl.szczypkowski.vehiclesfleetmanager.driver.service.DriverService;
 
 import java.util.List;
 
-@RestController("/driver")
+@RestController
+@RequestMapping("/driver")
 public class DriverController {
 
     private DriverService driverService;

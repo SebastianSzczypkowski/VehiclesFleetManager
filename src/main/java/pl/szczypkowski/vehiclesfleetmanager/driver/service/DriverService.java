@@ -1,6 +1,5 @@
 package pl.szczypkowski.vehiclesfleetmanager.driver.service;
 
-import liquibase.pro.packaged.D;
 import org.apache.juli.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
