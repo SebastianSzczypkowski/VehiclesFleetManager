@@ -15,12 +15,16 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule} from "@angular/material/button";
 import {MatInputModule} from "@angular/material/input";
 import {LeafletModule} from "@asymmetrik/ngx-leaflet";
+import { SetRouteComponent } from './componment/set-route/set-route.component';
+import {HttpClientModule} from "@angular/common/http";
+import {EventEmitterService} from "./service/event-emitter.service";
 
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
+    SetRouteComponent,
 
   ],
   imports: [
@@ -38,10 +42,11 @@ import {LeafletModule} from "@asymmetrik/ngx-leaflet";
     MatButtonModule,
     MatInputModule,
     LeafletModule,
+    HttpClientModule
 
 
   ],
-  providers: [],
+  providers: [EventEmitterService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

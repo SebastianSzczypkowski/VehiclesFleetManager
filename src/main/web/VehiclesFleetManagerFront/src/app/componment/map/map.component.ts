@@ -17,10 +17,14 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
 import "leaflet-mouse-position";
+import {style} from "@angular/animations";
+import {SetRouteComponent} from "../set-route/set-route.component";
+import {EventEmitterService} from "../../service/event-emitter.service";
+import {Coordinates} from "../../model/coordinates";
 
 @Component({
   selector: 'app-map',
-  // templateUrl: './map.component.html',
+   //templateUrl: './map.component.html',
   styleUrls: ['./map.component.css'],
   template: `<div class="map-container" leaflet
      [leafletOptions]="options"
@@ -48,10 +52,12 @@ export class MapComponent implements OnInit,OnDestroy {
   };
   public map?: Map;
   public zoom?: number;
+  @Input() setRoute: SetRouteComponent | undefined;
+  public controls: Control[] = [];
 
 
 
-  constructor() {
+  constructor(private eventEmitterService:EventEmitterService) {
   }
 
   private defaultIcon: Icon = icon({
@@ -64,6 +70,22 @@ export class MapComponent implements OnInit,OnDestroy {
       L.control.mousePosition().addTo(this.map);
     }
      Marker.prototype.options.icon = this.defaultIcon;
+
+    if(this.eventEmitterService.subsVar==undefined){
+      this.eventEmitterService.subsVar=this.eventEmitterService.addRouteToMap.subscribe(
+        (coords: Coordinates[])=>
+        {
+          this.addNewRoute(coords);
+        }
+
+      )
+      this.eventEmitterService.subsVar2=this.eventEmitterService.removeRouteFromMap.subscribe(
+        ()=>{
+          this.removeAll();
+        }
+      )
+    }
+
   }
 
 
@@ -78,12 +100,71 @@ export class MapComponent implements OnInit,OnDestroy {
     this.map$.emit(map);
     this.zoom = map.getZoom();
     this.zoom$.emit(this.zoom);
-    L.Routing.control({
-      waypoints: [L.latLng(57.74, 11.94), L.latLng(57.6792, 11.949)],
-      routeWhileDragging: true
-    }).addTo(map);
+    console.log("Retrieved DATA: " + JSON.stringify(this.setRoute?.coordinates1));
+    // if(this.setRoute!=null) {
+    //  this.controls.push(L.Routing.control({
+    //
+    //     waypoints: [L.latLng(<number>this.setRoute.coordinates1._lat, <number>this.setRoute.coordinates1._lon), L.latLng(57.6792, 11.949)],
+    //     routeWhileDragging: true,
+    //     showAlternatives: true,
+    //     altLineOptions: {
+    //       styles: [
+    //         {color: '#646464', opacity: 0.9, weight: 5},
+    //         {color: '#CECECE', opacity: 1, weight: 3},
+    //       ], extendToWaypoints: false,
+    //       missingRouteTolerance: 0
+    //     },
+    //     fitSelectedRoutes: true
+    //
+    //   }).addTo(map));
+    //
+    // }
+    // L.Routing.control({
+    //   waypoints: [L.latLng(57.50, 11.94), L.latLng(57.40, 11.949)],
+    //   routeWhileDragging: true,
+    //   lineOptions: {styles: [
+    //       {color: 'white', opacity: 0.9, weight: 9},
+    //       {color: '#FC8428', opacity: 1, weight: 3},
+    //     ],extendToWaypoints:false,
+    //     missingRouteTolerance:0},
+    //   fitSelectedRoutes:true
+    //
+    // }).addTo(map);
+
     L.control.mousePosition().addTo(this.map);
   }
+
+  addNewRoute(coords: Coordinates[]) {
+    if(this.map!=undefined) {
+      console.log("Lon: " + JSON.stringify(coords[0]._lon));
+      if (coords != undefined) {
+        this.controls.push(L.Routing.control({
+
+          waypoints: [L.latLng(<number>coords[0].lat, <number>coords[0].lon),
+            L.latLng(<number>coords[1].lat, <number>coords[1].lon)],
+          routeWhileDragging: true,
+          showAlternatives: true,
+          altLineOptions: {
+            styles: [
+              {color: '#646464', opacity: 0.9, weight: 5},
+              {color: '#CECECE', opacity: 1, weight: 3},
+            ], extendToWaypoints: false,
+            missingRouteTolerance: 0
+          },
+          fitSelectedRoutes: true
+
+        }).addTo(this.map));
+      }
+    }
+  }
+
+   removeAll()
+   {
+     this.controls.forEach(e=>{
+       this.map?.removeControl(e);
+     }
+   )
+   }
 
   onMapZoomEnd(e: LeafletEvent) {
     this.zoom = e.target.getZoom();

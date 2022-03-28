@@ -3,15 +3,13 @@ package pl.szczypkowski.vehiclesfleetmanager.map.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.map.service.MapService;
 
 import java.io.IOException;
 
 @RestController()
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/map")
 public class MapController {
 
@@ -25,7 +23,7 @@ public class MapController {
     @GetMapping("/cord")
     public ResponseEntity<?> getCord(@RequestParam MultiValueMap<String,String> params) throws IOException {
         //TODO przekazywanie parametrów miejscowości
-        return  mapService.getCoordinates(params);
+        return  mapService.getCoordinatesForRoute(params);
     }
 
 

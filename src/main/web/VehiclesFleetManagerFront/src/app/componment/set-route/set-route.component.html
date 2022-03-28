@@ -1,0 +1,30 @@
+
+<div class="routeForm">
+  <form [formGroup]="setRouteForm" (ngSubmit)="onSubmit()">
+<div class="form-row">
+  <div class="form-group col-md-6">
+    <label for="start">Lokacja początkowa</label>
+    <P>
+    <input type="text" class="form-control" id="start" name="start"  formControlName="start">
+      </P>
+  </div>
+</div>
+<div class="form-row">
+  <div class="form-group col-md-6">
+    <label for="end">Lokacja docelowa</label>
+    <p>
+    <input type="text" class="form-control" id="end" name="end" formControlName="end">
+    </p>
+  </div>
+</div>
+<div class="form-row">
+  <button mat-raised-button color="primary" type="submit">dodaj</button>
+</div>
+  </form>
+  <div class="form-row">
+    <button mat-raised-button color="primary"  (click)="remove()">wyczyść</button>
+  </div>
+
+</div>
+
+<app-map></app-map>

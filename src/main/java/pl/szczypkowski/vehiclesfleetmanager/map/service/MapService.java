@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class MapService {
@@ -24,32 +25,41 @@ public class MapService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(MapService.class);
 
-    public ResponseEntity<?> getCoordinates(MultiValueMap<String, String> params) throws IOException {
+    public ResponseEntity<?> getCoordinatesForRoute(MultiValueMap<String, String> params) throws IOException {
+
+        String start = params.get("start"). get(0).toLowerCase(Locale.ROOT);
+        String end = params.get("end").get(0).toLowerCase(Locale.ROOT);
 
         //TODO sprawdzenie przekazanyuch parametrów + dodanie ich do link z api
+
         List<Coordinates> coordinatesList = new ArrayList<>();
-        Client client = ClientBuilder.newClient();
-        Response response = client.target("https://nominatim.openstreetmap.org/search?q=135+pilkington+avenue,+birmingham&format=json&polygon=1&addressdetails=1")
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .header("Accept", "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8")
-                .get();
-        String json =response.readEntity(String.class);;
-        JSONArray array = new JSONArray(json);
 
-        for(int i=0;i<array.length();i++)
-        {
-            Coordinates coordinates = new Coordinates();
-            String lon = array.getJSONObject(i).getString("lon");
-            String lat = array.getJSONObject(i).getString("lat");
-            coordinates.setLat(lat);
-            coordinates.setLon(lon);
-            coordinatesList.add(coordinates);
-
-        }
-
+        coordinatesList.add(getCoordinates(start));
+        coordinatesList.add(getCoordinates(end));
 
         return ResponseEntity.ok().body(coordinatesList);
 
+    }
+
+    public Coordinates getCoordinates(String value)
+    {
+
+        value=value.replace(" ","%20");
+        Client client = ClientBuilder.newClient();
+        Response response = client.target("https://nominatim.openstreetmap.org/search?q="+value+"&format=json&polygon=1&addressdetails=1")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .header("Accept", "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8")
+                .get();
+        String json =response.readEntity(String.class);
+        JSONArray array = new JSONArray(json);
+
+        Coordinates coordinates = new Coordinates();
+        String lon = array.getJSONObject(0).getString("lon");
+        String lat = array.getJSONObject(0).getString("lat");
+        coordinates.setLat(lat);
+        coordinates.setLon(lon);
+
+        return coordinates;
     }
 
 //
