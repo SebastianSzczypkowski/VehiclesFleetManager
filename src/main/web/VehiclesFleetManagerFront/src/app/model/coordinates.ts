@@ -2,6 +2,7 @@ export class Coordinates {
 
   _lon: number | undefined;
    _lat: number | undefined;
+  details: string | undefined;
 
   get lon(): number | undefined {
     return this._lon;

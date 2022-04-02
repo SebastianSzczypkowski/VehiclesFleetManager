@@ -4,12 +4,14 @@ package pl.szczypkowski.vehiclesfleetmanager.map.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import pl.szczypkowski.vehiclesfleetmanager.map.model.Coordinates;
 import pl.szczypkowski.vehiclesfleetmanager.map.service.MapService;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController()
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin()
 @RequestMapping("/map")
 public class MapController {
 
@@ -27,5 +29,18 @@ public class MapController {
     }
 
 
+    @PostMapping("/save")
+    public ResponseEntity<?> save(@RequestBody Coordinates coordinates)
+    {
+        return mapService.save(coordinates);
+    }
+
+
+    @CrossOrigin
+    @PostMapping("/save-road")
+    public ResponseEntity<?> saveRoad(@RequestBody List<Coordinates> list)
+    {
+        return mapService.saveRoad(list);
+    }
 
 }

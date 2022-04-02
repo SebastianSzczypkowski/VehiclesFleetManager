@@ -17,6 +17,8 @@ export class SetRouteComponent implements OnInit {
   coordinates1: Coordinates = new Coordinates;
   coordinates2: Coordinates = new Coordinates;
   coordinates: Coordinates[] = [];
+
+  roadSaveAnswer: string | undefined;
   form:any={};
   setRouteForm!: FormGroup;
   // startCordX: string;
@@ -41,6 +43,7 @@ export class SetRouteComponent implements OnInit {
 
   onSubmit() {
 
+
     this.mapService.getCoordinates(this.setRouteForm.get('start')?.value,this.setRouteForm.get('end')?.value).subscribe(
 
       data=>{
@@ -56,6 +59,13 @@ export class SetRouteComponent implements OnInit {
 
       }
     )
+    this.mapService.saveRoad(this.coordinates).subscribe(
+      data=>
+      {
+        this.roadSaveAnswer=data;
+      }
+    )
+
 
   }
 

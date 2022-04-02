@@ -1,13 +1,19 @@
 package pl.szczypkowski.vehiclesfleetmanager.map.service;
 
 
+import com.fasterxml.jackson.databind.JsonSerializable;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import pl.szczypkowski.vehiclesfleetmanager.map.model.Coordinates;
+import pl.szczypkowski.vehiclesfleetmanager.map.repository.CoordinatesRepository;
+import pl.szczypkowski.vehiclesfleetmanager.road.service.RoadService;
+import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -23,7 +29,15 @@ public class MapService {
 
 
 
+
     private final Logger LOGGER = LoggerFactory.getLogger(MapService.class);
+    private final CoordinatesRepository coordinatesRepository;
+    private final RoadService roadService;
+
+    public MapService(CoordinatesRepository coordinatesRepository, RoadService roadService) {
+        this.coordinatesRepository = coordinatesRepository;
+        this.roadService = roadService;
+    }
 
     public ResponseEntity<?> getCoordinatesForRoute(MultiValueMap<String, String> params) throws IOException {
 
@@ -54,60 +68,43 @@ public class MapService {
         JSONArray array = new JSONArray(json);
 
         Coordinates coordinates = new Coordinates();
-        String lon = array.getJSONObject(0).getString("lon");
-        String lat = array.getJSONObject(0).getString("lat");
-        coordinates.setLat(lat);
-        coordinates.setLon(lon);
+
+
+        coordinates.setLat(array.getJSONObject(0).getString("lat"));
+        coordinates.setLon(array.getJSONObject(0).getString("lon"));
+        coordinates.setDetails(array.getJSONObject(0).getString("display_name"));
+
 
         return coordinates;
     }
 
-//
-//    public List<Event> getData(int limit) throws IOException
-//    {
-//        List<Event> list = new ArrayList<>();
-//        JSONObject json = readJsonFromUrl("https://eonet.sci.gsfc.nasa.gov/api/v2.1/events?limit="+limit);
-//        JSONArray array = json.getJSONArray("events");
-//        for(int i=0;i<array.length();i++)
-//        {
-//            String id = array.getJSONObject(i).getString("id");
-//            String title = array.getJSONObject(i).getString("title");
-//            String link = array.getJSONObject(i).getString("link");
-//            Category category = new Category();
-//            JSONArray categoriesArray = array.getJSONObject(i).getJSONArray("categories");
-//            for(int j=0;j<categoriesArray.length();j++)
-//            {
-//                category.setId(categoriesArray.getJSONObject(j).getLong("id"));
-//                category.setTitle(categoriesArray.getJSONObject(j).getString("title"));
-//            }
-//
-//            List<Sources> sourcesList = new ArrayList<>();
-//            JSONArray sourcesArray = array.getJSONObject(i).getJSONArray("sources");
-//            for(int j=0;j<sourcesArray.length();j++)
-//            {
-//                sourcesList.add(new Sources(sourcesArray.getJSONObject(j).getString("id"),sourcesArray.getJSONObject(j).getString("url")));
-//            }
-//
-//            List<Geometries> geometriesList = new ArrayList<>();
-//            JSONArray geometriesArray = array.getJSONObject(i).getJSONArray("geometries");
-//            for(int j=0;j<geometriesArray.length();j++)
-//            {
-//                double coordinates[] = new double[2];
-//                String dateString = geometriesArray.getJSONObject(j).getString("date");
-//                LocalDateTime localdatetime = LocalDateTime.parse(dateString.substring(0,19));
-//
-//                JSONArray coordinatesArray = geometriesArray.getJSONObject(j).getJSONArray("coordinates");
-//                for(int k=0;k<coordinatesArray.length();k++)
-//                {
-//                    coordinates[k] = coordinatesArray.getDouble(k);
-//                }
-//                geometriesList.add(new Geometries(localdatetime,
-//                        geometriesArray.getJSONObject(j).getString("type"),coordinates[0],coordinates[1]
-//                ));
-//            }
-//            list.add(new Event(id,title,link,sourcesList,category,geometriesList));
-//        }
-//        log.info("Passing "+list.size()+" elements from events list to controller");
-//        return list;
-//    }
+
+    public ResponseEntity<?> save(Coordinates coordinates) {
+
+        try{
+
+            Coordinates saved = coordinatesRepository.save(coordinates);
+            return ResponseEntity.ok().body(saved);
+        }catch (Exception e)
+        {
+            LOGGER.error("Nie udało się zapisać trasy");
+            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Wystąpił błąd podczas zapisu trasy"));
+        }
+    }
+
+    public ResponseEntity<?> saveRoad(List<Coordinates> list) {
+
+        try {
+
+            Coordinates start = coordinatesRepository.save(list.get(0));
+            Coordinates end = coordinatesRepository.save(list.get(1));
+            roadService.save(start.getId(),end.getId());
+
+            return ResponseEntity.ok().body(ToJsonString.toJsonString("Pomyślnie zapisano trase"));
+        }catch (Exception e)
+        {
+            LOGGER.error("Wystąpił błąd podczas zapisywania trasy");
+            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się zapisać trasy"));
+        }
+    }
 }

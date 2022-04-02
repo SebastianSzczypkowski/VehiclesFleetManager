@@ -3,3 +3,8 @@
   margin: 6em auto;
   margin-left: 1em ;
 }
+
+mat-nav-list{
+
+  width: 480px;
+}

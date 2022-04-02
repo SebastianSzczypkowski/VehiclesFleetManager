@@ -3,18 +3,14 @@
   <form [formGroup]="setRouteForm" (ngSubmit)="onSubmit()">
 <div class="form-row">
   <div class="form-group col-md-6">
-    <label for="start">Lokacja początkowa</label>
-    <P>
+    <label for="start">Lokacja początkowa </label>
     <input type="text" class="form-control" id="start" name="start"  formControlName="start">
-      </P>
   </div>
 </div>
 <div class="form-row">
   <div class="form-group col-md-6">
-    <label for="end">Lokacja docelowa</label>
-    <p>
+    <label for="end">Lokacja docelowa    </label>
     <input type="text" class="form-control" id="end" name="end" formControlName="end">
-    </p>
   </div>
 </div>
 <div class="form-row">
@@ -24,6 +20,36 @@
   <div class="form-row">
     <button mat-raised-button color="primary"  (click)="remove()">wyczyść</button>
   </div>
+<p>
+  <mat-slide-toggle>Pokaż wszystkie</mat-slide-toggle>
+</p>
+
+  <mat-nav-list>
+    <mat-list-item >
+      <a matLine href="...">Dane 1</a>
+      <button mat-icon-button >
+        <mat-icon>info</mat-icon>
+      </button>
+      <button mat-icon-button >
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-icon-button >
+        <mat-icon>edit</mat-icon>
+      </button>
+    </mat-list-item>
+    <mat-list-item >
+      <a matLine href="...">Dane 2</a>
+      <button mat-icon-button >
+        <mat-icon>info</mat-icon>
+      </button>
+      <button mat-icon-button >
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-icon-button >
+        <mat-icon>edit</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-nav-list>
 
 </div>
 
