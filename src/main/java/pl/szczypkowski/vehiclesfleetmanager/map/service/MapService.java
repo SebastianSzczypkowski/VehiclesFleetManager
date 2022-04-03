@@ -43,19 +43,21 @@ public class MapService {
 
         String start = params.get("start"). get(0).toLowerCase(Locale.ROOT);
         String end = params.get("end").get(0).toLowerCase(Locale.ROOT);
+        String color = params.get("color").get(0).toLowerCase(Locale.ROOT);
+        String name = params.get("name").get(0).toLowerCase(Locale.ROOT);
 
         //TODO sprawdzenie przekazanyuch parametrów + dodanie ich do link z api
 
         List<Coordinates> coordinatesList = new ArrayList<>();
 
-        coordinatesList.add(getCoordinates(start));
-        coordinatesList.add(getCoordinates(end));
+        coordinatesList.add(getCoordinates(start,color,name));
+        coordinatesList.add(getCoordinates(end,color,name));
 
         return ResponseEntity.ok().body(coordinatesList);
 
     }
 
-    public Coordinates getCoordinates(String value)
+    public Coordinates getCoordinates(String value,String color,String name)
     {
 
         value=value.replace(" ","%20");
@@ -73,7 +75,10 @@ public class MapService {
         coordinates.setLat(array.getJSONObject(0).getString("lat"));
         coordinates.setLon(array.getJSONObject(0).getString("lon"));
         coordinates.setDetails(array.getJSONObject(0).getString("display_name"));
-
+        if(color!=null)
+        coordinates.setColor(color);
+        if(name!=null)
+        coordinates.setName(name);
 
         return coordinates;
     }
@@ -96,14 +101,18 @@ public class MapService {
 
         try {
 
-            Coordinates start = coordinatesRepository.save(list.get(0));
-            Coordinates end = coordinatesRepository.save(list.get(1));
-            roadService.save(start.getId(),end.getId());
-
-            return ResponseEntity.ok().body(ToJsonString.toJsonString("Pomyślnie zapisano trase"));
+            if(list.size()>0) {
+                Coordinates start = coordinatesRepository.save(list.get(0));
+                Coordinates end = coordinatesRepository.save(list.get(1));
+                roadService.save(start.getId(), end.getId());
+                return ResponseEntity.ok().body(ToJsonString.toJsonString("Pomyślnie zapisano trase"));
+            }
+            else
+                return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Przesłana lista jest pusta"));
         }catch (Exception e)
         {
             LOGGER.error("Wystąpił błąd podczas zapisywania trasy");
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się zapisać trasy"));
         }
     }

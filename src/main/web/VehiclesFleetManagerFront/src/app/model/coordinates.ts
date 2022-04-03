@@ -3,6 +3,8 @@ export class Coordinates {
   _lon: number | undefined;
    _lat: number | undefined;
   details: string | undefined;
+  color: string | undefined;
+  name: string | undefined;
 
   get lon(): number | undefined {
     return this._lon;

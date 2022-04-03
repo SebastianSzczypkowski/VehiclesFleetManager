@@ -17,10 +17,10 @@ export class MapService {
 
   constructor(private http:HttpClient) { }
 
-  getCoordinates(start:any,end:any)
+  getCoordinates(start:any,end:any,color:any,name:any)
   {
     return this.http.get<Coordinates[]>(AUTH_API+'cord',{
-      params: {start,end}
+      params: {start,end,color,name}
     })
 
   }

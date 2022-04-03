@@ -15,6 +15,10 @@ public class Coordinates {
     private String lat;
     @Column(name = "details")
     private String details;
+    @Column(name="color")
+    private String color;
+    @Column(name = "name")
+    private String name;
 
 
     public Coordinates() {
@@ -27,12 +31,29 @@ public class Coordinates {
         this.details = details;
     }
 
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getDetails() {

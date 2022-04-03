@@ -20,6 +20,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { EventEmitterService } from "./service/event-emitter.service";
 import {MatListModule} from "@angular/material/list";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {NgxColorsModule} from "ngx-colors";
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
     HttpClientModule,
     MatListModule,
     MatSlideToggleModule,
+    NgxColorsModule
 
 
   ],

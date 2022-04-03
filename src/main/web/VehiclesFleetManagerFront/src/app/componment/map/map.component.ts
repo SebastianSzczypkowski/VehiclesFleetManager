@@ -100,7 +100,6 @@ export class MapComponent implements OnInit,OnDestroy {
     this.map$.emit(map);
     this.zoom = map.getZoom();
     this.zoom$.emit(this.zoom);
-    console.log("Retrieved DATA: " + JSON.stringify(this.setRoute?.coordinates1));
     // if(this.setRoute!=null) {
     //  this.controls.push(L.Routing.control({
     //
@@ -136,14 +135,20 @@ export class MapComponent implements OnInit,OnDestroy {
 
   addNewRoute(coords: Coordinates[]) {
     if(this.map!=undefined) {
-      console.log("Lon: " + JSON.stringify(coords[0]._lon));
+
       if (coords != undefined) {
+
         this.controls.push(L.Routing.control({
 
           waypoints: [L.latLng(<number>coords[0].lat, <number>coords[0].lon),
             L.latLng(<number>coords[1].lat, <number>coords[1].lon)],
           routeWhileDragging: true,
           showAlternatives: true,
+          lineOptions: {styles: [
+                    {color: 'white', opacity: 0.9, weight: 9},
+                    {color: coords[0].color, opacity: 1, weight: 3},
+                  ], extendToWaypoints: false,
+            missingRouteTolerance: 0},
           altLineOptions: {
             styles: [
               {color: '#646464', opacity: 0.9, weight: 5},

@@ -1,6 +1,12 @@
 
 <div class="routeForm">
   <form [formGroup]="setRouteForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="end">Nazwa trasy:   </label>
+        <input type="text" class="form-control" id="name" name="name" formControlName="name">
+      </div>
+    </div>
 <div class="form-row">
   <div class="form-group col-md-6">
     <label for="start">Lokacja początkowa </label>
@@ -13,9 +19,19 @@
     <input type="text" class="form-control" id="end" name="end" formControlName="end">
   </div>
 </div>
+
+    <div class="form-row">
+      <label>Wybierz kolor trasy:</label>
+      <ngx-colors ngx-colors-trigger  id="color" name="color" formControlName="color"></ngx-colors>
+
+    </div>
+    <p></p>
 <div class="form-row">
   <button mat-raised-button color="primary" type="submit">dodaj</button>
 </div>
+
+
+
   </form>
   <div class="form-row">
     <button mat-raised-button color="primary"  (click)="remove()">wyczyść</button>
@@ -24,9 +40,9 @@
   <mat-slide-toggle>Pokaż wszystkie</mat-slide-toggle>
 </p>
 
-  <mat-nav-list>
+  <mat-nav-list *ngFor="let road of roadNames">
     <mat-list-item >
-      <a matLine href="...">Dane 1</a>
+      <a matLine href="...">{{road}}</a>
       <button mat-icon-button >
         <mat-icon>info</mat-icon>
       </button>
@@ -37,18 +53,7 @@
         <mat-icon>edit</mat-icon>
       </button>
     </mat-list-item>
-    <mat-list-item >
-      <a matLine href="...">Dane 2</a>
-      <button mat-icon-button >
-        <mat-icon>info</mat-icon>
-      </button>
-      <button mat-icon-button >
-        <mat-icon>delete</mat-icon>
-      </button>
-      <button mat-icon-button >
-        <mat-icon>edit</mat-icon>
-      </button>
-    </mat-list-item>
+
   </mat-nav-list>
 
 </div>
