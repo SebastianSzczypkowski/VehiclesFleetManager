@@ -43,10 +43,10 @@
   <mat-nav-list *ngFor="let road of roadNames">
     <mat-list-item >
       <a matLine href="...">{{road}}</a>
-      <button mat-icon-button >
+      <button mat-icon-button  (click)="getRoadDetails(road)">
         <mat-icon>info</mat-icon>
       </button>
-      <button mat-icon-button >
+      <button mat-icon-button (click)="removeRoad(road)">
         <mat-icon>delete</mat-icon>
       </button>
       <button mat-icon-button >

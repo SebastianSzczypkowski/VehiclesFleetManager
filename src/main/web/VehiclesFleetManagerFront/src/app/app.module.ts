@@ -21,12 +21,20 @@ import { EventEmitterService } from "./service/event-emitter.service";
 import {MatListModule} from "@angular/material/list";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {NgxColorsModule} from "ngx-colors";
+import {MatDialog, MatDialogModule} from "@angular/material/dialog";
+import { RoadInfoComponent } from './componment/set-route/road-info/road-info.component';
+import { RouteCreatorComponent } from './componment/route-creator/route-creator.component';
+import {MatStepperModule} from "@angular/material/stepper";
+import { CreatorMapComponent } from './componment/route-creator/creator-map/creator-map.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
     SetRouteComponent,
+    RoadInfoComponent,
+    RouteCreatorComponent,
+    CreatorMapComponent,
 
   ],
   imports: [
@@ -47,7 +55,9 @@ import {NgxColorsModule} from "ngx-colors";
     HttpClientModule,
     MatListModule,
     MatSlideToggleModule,
-    NgxColorsModule
+    NgxColorsModule,
+    MatDialogModule,
+    MatStepperModule
 
 
   ],

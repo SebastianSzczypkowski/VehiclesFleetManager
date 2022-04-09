@@ -9,8 +9,10 @@ export class EventEmitterService {
 
   addRouteToMap = new EventEmitter();
   removeRouteFromMap = new EventEmitter();
+  infoRoute = new EventEmitter();
   subsVar!: Subscription;
   subsVar2! :Subscription;
+  subsRoadInfo!:Subscription
   constructor() { }
 
   onAddRouteClick(coordinates: Coordinates[]){
@@ -20,6 +22,11 @@ export class EventEmitterService {
   onRemoveRouteClick()
   {
     this.removeRouteFromMap.emit();
+  }
+
+  onInfoRouteClick(coordinates: Coordinates)
+  {
+    this.infoRoute.emit(coordinates);
   }
 
 }

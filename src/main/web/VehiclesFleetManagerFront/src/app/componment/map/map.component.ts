@@ -163,9 +163,7 @@ export class MapComponent implements OnInit,OnDestroy {
     }
   }
 
-   removeAll
-
-   ()
+   removeAll()
    {
      this.controls.forEach(e=>{
        this.map?.removeControl(e);

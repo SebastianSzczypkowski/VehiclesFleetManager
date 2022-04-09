@@ -1,0 +1,37 @@
+
+.mat-input-element {
+  color: slategray;
+}
+.mat-form-field-label {
+  color: slategray;
+}
+.mat-form-field-underline {
+  background-color: slategray;
+}
+.mat-form-field-ripple {
+  background-color: slategray;
+}
+.mat-form-field-required-marker {
+  color: slategray;
+}
+
+p { margin:0 }
+
+mat-card{
+  height: 250px;
+  width: 250px;
+
+
+}
+.example-card {
+
+  margin-bottom: 50px;
+  float: left;
+}
+
+.img-continer{
+
+  margin-left:  60vh;
+  margin-top: 5vh;
+
+}

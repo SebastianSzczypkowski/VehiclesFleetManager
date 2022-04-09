@@ -1,0 +1,99 @@
+<mat-stepper #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Wyznacz trasę</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Nazwa Trasy</mat-label>
+        <input matInput placeholder="Nazwa trasy" formControlName="nazwa" required>
+      </mat-form-field>
+
+      <p>
+      <mat-form-field appearance="fill">
+        <mat-label>Lokacja początkowa</mat-label>
+        <input matInput placeholder="Lokacja początkowa" formControlName="start" required>
+      </mat-form-field>
+      </p>
+    <p>
+      <mat-form-field appearance="fill">
+        <mat-label>Lokacja docelowa</mat-label>
+        <input matInput placeholder="Lokacja docelowa" formControlName="end" required>
+      </mat-form-field>
+    </p>
+
+<p>
+
+    <mat-label>Wybierz kolor trasy:</mat-label>
+    <ngx-colors ngx-colors-trigger  id="color" name="color" formControlName="color"></ngx-colors>
+
+</p>
+
+
+      <div style="margin-top: 2vh">
+        <button mat-raised-button color="primary" type="submit">resetuj</button>
+
+        <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh">dalej</button>
+
+      </div>
+    </form>
+    <app-creator-map></app-creator-map>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Wybierz kierowce</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Wybierz kierowce</mat-label>
+        <input matInput formControlName="secondCtrl" placeholder="kierowca"
+               required>
+      </mat-form-field>
+<!--      <div>-->
+<!--        <button mat-button matStepperPrevious>Back</button>-->
+<!--        <button mat-button matStepperNext>Next</button>-->
+<!--      </div>-->
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Wybierz rodzaj pojazu</ng-template>
+
+    <div class="img-continer">
+
+      <div class="example-card">
+    <mat-card>
+        <img mat-card-image src="assets/car.png" alt="smaochód osobowy">
+    </mat-card>
+
+      <mat-card>
+        <img mat-card-image src="assets/truck.png" alt="smaochód osobowy" >
+      </mat-card>
+      </div>
+      <div class="example-card">
+      <mat-card>
+        <img mat-card-image src="assets/truck2.png" alt="smaochód osobowy">
+      </mat-card>
+      <mat-card>
+        <img mat-card-image src="assets/truck3.png" alt="smaochód osobowy">
+      </mat-card>
+      </div>
+    </div>
+<!--    <div>-->
+<!--      <button mat-button matStepperPrevious>Back</button>-->
+<!--      <button mat-button (click)="stepper.reset()">Reset</button>-->
+<!--    </div>-->
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Wybierz pojazd</ng-template>
+
+    <!--    <div>-->
+    <!--      <button mat-button matStepperPrevious>Back</button>-->
+    <!--      <button mat-button (click)="stepper.reset()">Reset</button>-->
+    <!--    </div>-->
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Wybierz ładunek</ng-template>
+    <p>You are now done.</p>
+    <!--    <div>-->
+    <!--      <button mat-button matStepperPrevious>Back</button>-->
+    <!--      <button mat-button (click)="stepper.reset()">Reset</button>-->
+    <!--    </div>-->
+  </mat-step>
+
+</mat-stepper>
