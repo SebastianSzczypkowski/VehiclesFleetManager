@@ -4,7 +4,9 @@ package pl.szczypkowski.vehiclesfleetmanager.vehicle.Service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.Vehicle;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.repository.VehicleRepository;
 
@@ -43,4 +45,15 @@ public class VehicleService {
         }
     }
 
+    public ResponseEntity<?> getAllNotOccupied()
+    {
+        try{
+
+            return ResponseEntity.ok().body(vehicleRepository.findAllByOccupiedFalse());
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie można pobrać listy wolnych pojazdów"));
+        }
+    }
 }

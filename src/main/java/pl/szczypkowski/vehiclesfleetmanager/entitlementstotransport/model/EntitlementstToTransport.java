@@ -2,6 +2,8 @@ package pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.model;
 
 
 
+import pl.szczypkowski.vehiclesfleetmanager.driver.model.Driver;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
@@ -102,5 +104,16 @@ public class EntitlementstToTransport {
                 ", expiryDate=" + expiryDate +
                 ", documentTyp='" + documentTyp + '\'' +
                 '}';
+    }
+
+    @ManyToOne(optional = false)
+    private Driver drivers;
+
+    public Driver getDrivers() {
+        return drivers;
+    }
+
+    public void setDrivers(Driver drivers) {
+        this.drivers = drivers;
     }
 }

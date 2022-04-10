@@ -1,6 +1,8 @@
 package pl.szczypkowski.vehiclesfleetmanager.driver.model;
 
 
+import pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.model.EntitlementstToTransport;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
@@ -28,16 +30,31 @@ public class Driver {
     @Column(name = "address")
     private String address;
 
+    @ManyToOne()
+    @JoinColumn(name = "entitlemenstst")
+    private EntitlementstToTransport entitlementstToTransport;
+
+
+
     public Driver() {
     }
 
-    public Driver(Long id, String name, String surname, Integer pesel, Date dateOfBirth, String address) {
+    public Driver(Long id, String name, String surname, Integer pesel, Date dateOfBirth, String address, EntitlementstToTransport entitlementstToTransport) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.pesel = pesel;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
+        this.entitlementstToTransport = entitlementstToTransport;
+    }
+
+    public EntitlementstToTransport getEntitlementstToTransport() {
+        return entitlementstToTransport;
+    }
+
+    public void setEntitlementstToTransport(EntitlementstToTransport entitlementstToTransport) {
+        this.entitlementstToTransport = entitlementstToTransport;
     }
 
     public Long getId() {

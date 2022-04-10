@@ -20,6 +20,7 @@ p { margin:0 }
 mat-card{
   height: 250px;
   width: 250px;
+  margin: 1vh;
 
 
 }
@@ -34,4 +35,28 @@ mat-card{
   margin-left:  60vh;
   margin-top: 5vh;
 
+}
+
+.demo-table {
+  width: 100%;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+.mat-row .mat-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+
+.mat-row:hover .mat-cell {
+  border-color: #3f51b5;
+  border-width: 2px;
+  background-color: #4b5fcc;
+}
+
+.demo-row-is-clicked {
+  font-weight: bold;
 }

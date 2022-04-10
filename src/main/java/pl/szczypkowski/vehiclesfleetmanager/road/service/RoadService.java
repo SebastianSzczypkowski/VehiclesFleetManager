@@ -8,6 +8,7 @@ import pl.szczypkowski.vehiclesfleetmanager.road.model.Road;
 import pl.szczypkowski.vehiclesfleetmanager.road.repository.RoadRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class RoadService {
@@ -19,6 +20,11 @@ public class RoadService {
         this.roadRepository = roadRepository;
     }
 
+
+    public List<Road> getAll()
+    {
+        return roadRepository.findAll();
+    }
 
     public void save (Long start,Long end)
     {

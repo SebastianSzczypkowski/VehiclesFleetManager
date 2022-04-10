@@ -45,6 +45,47 @@
         <input matInput formControlName="secondCtrl" placeholder="kierowca"
                required>
       </mat-form-field>
+      <table mat-table [dataSource]="dataSource"
+             class="mat-elevation-z8 demo-table ">
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
+            No.
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+            Imie Nazwisko
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="weight">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by driverLicenc">
+            Prawojazdy
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.driverLicenc}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="symbol">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by additionalPermissions">
+            Dodatkowe uprawnienia
+          </th>
+          <td mat-cell *matCellDef="let element"> <img src="assets/uprawnienia/MW1.3.png" style="width: 32px;height: 32px">
+            <img src="assets/uprawnienia/GP2.0.png" style="width: 32px;height: 32px">
+            <img src="assets/uprawnienia/GN2.0.jpg" style="width: 32px;height: 32px">
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
 <!--      <div>-->
 <!--        <button mat-button matStepperPrevious>Back</button>-->
 <!--        <button mat-button matStepperNext>Next</button>-->
@@ -57,20 +98,21 @@
     <div class="img-continer">
 
       <div class="example-card">
-    <mat-card>
+    <mat-card appMaterialElevation [defaultElevation]="defaultElevation"  matTooltip="smaochód osobowy" matTooltipPosition="above">
+
         <img mat-card-image src="assets/car.png" alt="smaochód osobowy">
     </mat-card>
 
-      <mat-card>
-        <img mat-card-image src="assets/truck.png" alt="smaochód osobowy" >
+      <mat-card appMaterialElevation [defaultElevation]="defaultElevation" matTooltip="smaochód dostawczy" matTooltipPosition="above">
+        <img mat-card-image src="assets/truck.png" alt="smaochód dostawczy" >
       </mat-card>
       </div>
       <div class="example-card">
-      <mat-card>
-        <img mat-card-image src="assets/truck2.png" alt="smaochód osobowy">
+      <mat-card appMaterialElevation [defaultElevation]="defaultElevation" >
+        <img mat-card-image src="assets/truck2.png" alt="ciężarówka powyżej 3.5tony" matTooltip="ciężarówka" matTooltipPosition="above">
       </mat-card>
-      <mat-card>
-        <img mat-card-image src="assets/truck3.png" alt="smaochód osobowy">
+      <mat-card appMaterialElevation [defaultElevation]="defaultElevation" matTooltip="tir" matTooltipPosition="above">
+        <img mat-card-image src="assets/truck3.png" alt="tir">
       </mat-card>
       </div>
     </div>
@@ -82,6 +124,18 @@
   <mat-step>
     <ng-template matStepLabel>Wybierz pojazd</ng-template>
 
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Wybierz pojazd</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Wybierz pojazd</mat-label>
+        <input matInput formControlName="secondCtrl" placeholder="pojazd"
+               required>
+      </mat-form-field>
+      <!--      <div>-->
+      <!--        <button mat-button matStepperPrevious>Back</button>-->
+      <!--        <button mat-button matStepperNext>Next</button>-->
+      <!--      </div>-->
+    </form>
     <!--    <div>-->
     <!--      <button mat-button matStepperPrevious>Back</button>-->
     <!--      <button mat-button (click)="stepper.reset()">Reset</button>-->
@@ -89,7 +143,19 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Wybierz ładunek</ng-template>
-    <p>You are now done.</p>
+
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Wybierz ładunek</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Wybierz ładunek</mat-label>
+        <input matInput formControlName="secondCtrl" placeholder="ładunek"
+               required>
+      </mat-form-field>
+      <!--      <div>-->
+      <!--        <button mat-button matStepperPrevious>Back</button>-->
+      <!--        <button mat-button matStepperNext>Next</button>-->
+      <!--      </div>-->
+    </form>
     <!--    <div>-->
     <!--      <button mat-button matStepperPrevious>Back</button>-->
     <!--      <button mat-button (click)="stepper.reset()">Reset</button>-->

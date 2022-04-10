@@ -26,6 +26,9 @@ import { RoadInfoComponent } from './componment/set-route/road-info/road-info.co
 import { RouteCreatorComponent } from './componment/route-creator/route-creator.component';
 import {MatStepperModule} from "@angular/material/stepper";
 import { CreatorMapComponent } from './componment/route-creator/creator-map/creator-map.component';
+import {MaterialElevationDirective} from "./componment/route-creator/MaterialElevationDirective";
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatTableModule} from "@angular/material/table";
 
 @NgModule({
   declarations: [
@@ -35,6 +38,7 @@ import { CreatorMapComponent } from './componment/route-creator/creator-map/crea
     RoadInfoComponent,
     RouteCreatorComponent,
     CreatorMapComponent,
+    MaterialElevationDirective,
 
   ],
   imports: [
@@ -57,7 +61,9 @@ import { CreatorMapComponent } from './componment/route-creator/creator-map/crea
     MatSlideToggleModule,
     NgxColorsModule,
     MatDialogModule,
-    MatStepperModule
+    MatStepperModule,
+    MatTooltipModule,
+    MatTableModule
 
 
   ],
