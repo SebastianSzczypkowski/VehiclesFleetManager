@@ -7,11 +7,9 @@ import java.util.List;
 
 public interface CargoRepository extends JpaRepository<Cargo,Long> {
 
-    List<Cargo> findAllByAssignedFalse();
-    List<Cargo> findAllByAssignedTrue();
-    List<Cargo> findAllByDeliveredTrue();
-    List<Cargo> findAllByDeliveredFalse();
-    List<Cargo> finaAllByAssignedTrueAndDeliveredFalse();
+//    List<Cargo> findAllByAssignedFalse();
+
+   // List<Cargo> finaAllByAssignedTrueAndDeliveredFalse();
 
 
 }

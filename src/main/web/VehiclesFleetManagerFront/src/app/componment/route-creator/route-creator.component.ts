@@ -15,6 +15,9 @@ import {STEPPER_GLOBAL_OPTIONS} from "@angular/cdk/stepper";
 import {MatTableDataSource} from "@angular/material/table";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {MatSort, Sort} from "@angular/material/sort";
+import {RouteCreatorService} from "./service/route-creator.service";
+import {MapService} from "../../service/map.service";
+import {Coordinates} from "../../model/coordinates";
 
 export interface PeriodicElement {
   name: string;
@@ -59,7 +62,10 @@ export class RouteCreatorComponent implements OnInit,AfterViewInit {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
 
-  constructor(private _formBuilder: FormBuilder,private _liveAnnouncer: LiveAnnouncer) {
+  coordinates:Coordinates[]=[];
+  constructor(private _formBuilder: FormBuilder,private _liveAnnouncer: LiveAnnouncer
+              ,private routeCreatorService:RouteCreatorService,
+              private mapService:MapService) {
 
   }
 
@@ -95,5 +101,27 @@ export class RouteCreatorComponent implements OnInit,AfterViewInit {
     }
   }
 
+  showRoute()
+  {
+    this.mapService.getCoordinates(this.firstFormGroup.get('start')?.value,this.firstFormGroup.get('end')?.value,
+      this.firstFormGroup.get('color')?.value,this.firstFormGroup.get('name')?.value).subscribe(
+
+      data=>{
+        this.coordinates=data;
+        // // @ts-ignore
+        // this.map.addNewRoute();
+        this.routeCreatorService.routeCreatorShow(this.coordinates);
+        // console.log("Retrieved DATA: " + JSON.stringify(data));
+        // console.log("Retrieved DATA: " + JSON.stringify(this.coordinates));
+        // console.log("Retrieved DATA: " + JSON.stringify(this.coordinates[1]));
+
+      }
+    )
+  }
+
+
+  remove() {
+    this.routeCreatorService.routeCreatorRemove();
+  }
 
 }

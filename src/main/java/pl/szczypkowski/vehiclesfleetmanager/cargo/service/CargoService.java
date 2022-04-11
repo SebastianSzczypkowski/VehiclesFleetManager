@@ -51,7 +51,8 @@ public class CargoService {
     {
         try{
 
-            return cargoRepository.findAllByAssignedFalse();
+           // return cargoRepository.findAllByAssignedFalse();
+            return null;
         }catch (Exception e)
         {
             e.printStackTrace();
@@ -62,7 +63,8 @@ public class CargoService {
     {
         try{
 
-            return cargoRepository.findAllByAssignedTrue();
+            //return cargoRepository.findAllByAssignedTrue();
+            return null;
         }catch (Exception e)
         {
             e.printStackTrace();
@@ -74,7 +76,8 @@ public class CargoService {
     {
         try{
 
-            return cargoRepository.finaAllByAssignedTrueAndDeliveredFalse();
+           // return cargoRepository.finaAllByAssignedTrueAndDeliveredFalse();
+            return null;
         }catch (Exception e)
         {
             e.printStackTrace();

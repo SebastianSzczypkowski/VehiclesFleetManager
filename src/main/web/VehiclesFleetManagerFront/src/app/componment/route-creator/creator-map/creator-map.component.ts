@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {icon, Icon, latLng, LeafletEvent, Map, MapOptions, Marker, tileLayer} from "leaflet";
+import {Control, icon, Icon, latLng, LeafletEvent, Map, MapOptions, Marker, tileLayer} from "leaflet";
 import * as L from "leaflet";
+import {RouteCreatorService} from "../service/route-creator.service";
+import {Coordinates} from "../../../model/coordinates";
 
 @Component({
   selector: 'app-creator-map',
@@ -28,8 +30,9 @@ export class CreatorMapComponent implements OnInit,OnDestroy {
   };
   public map?: Map;
   public zoom?: number;
+  public control!: Control;
 
-  constructor() { }
+  constructor(private routeCreatorService:RouteCreatorService) { }
 
   private defaultIcon: Icon = icon({
     iconUrl: "assets/marker-icon.png",
@@ -40,10 +43,32 @@ export class CreatorMapComponent implements OnInit,OnDestroy {
       L.control.mousePosition().addTo(this.map);
     }
     Marker.prototype.options.icon = this.defaultIcon;
+
+    if(this.routeCreatorService.subscription==undefined)
+    {
+      this.routeCreatorService.subscription=this.routeCreatorService.routeCreatorMap.subscribe(
+        (coords:Coordinates[])=>
+        {
+          this.addNewRoute(coords);
+        }
+      )
+      this.routeCreatorService.subscriptionRemove=this.routeCreatorService.routeCreatorMapRemove.subscribe(
+        ()=>{
+          this.remove();
+        }
+      )
+    }
   }
+
+  remove()
+  {
+    this.map?.removeControl(this.control);
+  }
+
   ngOnDestroy() {
     this.map?.clearAllEventListeners;
     this.map?.remove();
+
   };
 
   onMapReady(map: Map) {
@@ -57,5 +82,37 @@ export class CreatorMapComponent implements OnInit,OnDestroy {
   onMapZoomEnd(e: LeafletEvent) {
     this.zoom = e.target.getZoom();
     this.zoom$.emit(this.zoom);
+  }
+  addNewRoute(coords: Coordinates[]) {
+    if(this.map!=undefined) {
+
+      if (coords != undefined) {
+
+        //this.map?.removeControl(this.control);
+        this.control= L.Routing.control({
+
+          waypoints: [L.latLng(<number>coords[0].lat, <number>coords[0].lon),
+            L.latLng(<number>coords[1].lat, <number>coords[1].lon)],
+          routeWhileDragging: true,
+          showAlternatives: true,
+          lineOptions: {styles: [
+              {color: 'white', opacity: 0.9, weight: 9},
+              {color: coords[0].color, opacity: 1, weight: 3},
+            ], extendToWaypoints: false,
+            missingRouteTolerance: 0},
+          altLineOptions: {
+            styles: [
+              {color: '#646464', opacity: 0.9, weight: 5},
+              {color: '#CECECE', opacity: 1, weight: 3},
+            ], extendToWaypoints: false,
+            missingRouteTolerance: 0
+          },
+          fitSelectedRoutes: true
+
+        }).addTo(this.map);
+
+
+      }
+    }
   }
 }
