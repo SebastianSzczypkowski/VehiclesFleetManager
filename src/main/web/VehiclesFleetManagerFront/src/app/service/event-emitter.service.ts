@@ -12,7 +12,7 @@ export class EventEmitterService {
   infoRoute = new EventEmitter();
   subsVar!: Subscription;
   subsVar2! :Subscription;
-  subsRoadInfo!:Subscription
+  subsRoadInfo!:Subscription;
   constructor() { }
 
   onAddRouteClick(coordinates: Coordinates[]){

@@ -31,7 +31,7 @@
               "./node_modules/leaflet/dist/leaflet.css",
               "./node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css",
               "./node_modules/leaflet-mouse-position/src/L.Control.MousePosition.css",
-
+              "./node_modules/font-awesome/css/font-awesome.css",
               "src/styles.css",
               "node_modules/igniteui-angular/styles/igniteui-angular.css"
             ],

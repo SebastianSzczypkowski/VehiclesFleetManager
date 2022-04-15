@@ -29,6 +29,10 @@ import { CreatorMapComponent } from './componment/route-creator/creator-map/crea
 import {MaterialElevationDirective} from "./componment/route-creator/MaterialElevationDirective";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatTableModule} from "@angular/material/table";
+import { HomeComponent } from './componment/home/home.component';
+import { LoginComponent } from './componment/login/login.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {FontAwesomeTestingModule} from "@fortawesome/angular-fontawesome/testing";
 
 @NgModule({
   declarations: [
@@ -39,6 +43,8 @@ import {MatTableModule} from "@angular/material/table";
     RouteCreatorComponent,
     CreatorMapComponent,
     MaterialElevationDirective,
+    HomeComponent,
+    LoginComponent,
 
   ],
   imports: [
@@ -63,7 +69,10 @@ import {MatTableModule} from "@angular/material/table";
     MatDialogModule,
     MatStepperModule,
     MatTooltipModule,
-    MatTableModule
+    MatTableModule,
+    FontAwesomeModule,
+    FontAwesomeTestingModule
+
 
 
   ],

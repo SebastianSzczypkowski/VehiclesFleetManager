@@ -1,10 +1,10 @@
-<mat-stepper #stepper>
+<mat-stepper #stepper class="routecreator">
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup" (ngSubmit)="showRoute()">
       <ng-template matStepLabel>Wyznacz trasę</ng-template>
       <mat-form-field appearance="fill">
         <mat-label>Nazwa Trasy</mat-label>
-        <input matInput placeholder="Nazwa trasy" formControlName="nazwa" required>
+        <input matInput placeholder="Nazwa trasy" formControlName="name" required>
       </mat-form-field>
 
       <p>
