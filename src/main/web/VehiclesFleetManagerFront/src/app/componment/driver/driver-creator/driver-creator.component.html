@@ -1,0 +1,87 @@
+<mat-stepper #stepper class="drivercreator">
+  <mat-step >
+    <form [formGroup]="driverForm"  (ngSubmit)="onSubmit()">
+      <ng-template matStepLabel>Dane kierowcy</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Imię</mat-label>
+        <input matInput placeholder="Imię" formControlName="name" required>
+      </mat-form-field>
+
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Nazwisko</mat-label>
+          <input matInput placeholder="Nazwisko" formControlName="surname" required>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>PESEL</mat-label>
+          <input matInput placeholder="PESEL" formControlName="pesel" required>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Data urodzenia</mat-label>
+          <input matInput placeholder="Lokacja docelowa" formControlName="dateofbirth" required>
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Adres</mat-label>
+          <input matInput placeholder="Adres" formControlName="adress" required>
+        </mat-form-field>
+      </p>
+
+      <!--      <div style="margin-top: 2vh">-->
+      <!--        <button mat-raised-button color="primary" type="submit">pokaż</button>-->
+
+      <!--      </div>-->
+    </form>
+    <div style="margin-top: 2vh">
+      <button mat-raised-button color="primary" >resetuj</button>
+
+      <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
+    </div>
+
+  </mat-step>
+
+  <mat-step >
+    <form [formGroup]="permissionForm"  (ngSubmit)="onSubmit()">
+      <ng-template matStepLabel>Uprawnienia</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Wybierz rodzaj uprawnienia</mat-label>
+        <input matInput placeholder="Wybierz rodzaj uprawnienia" formControlName="name" required>
+      </mat-form-field>
+
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Data ważności</mat-label>
+          <input matInput placeholder="Data ważności" formControlName="expiryDate" required>
+        </mat-form-field>
+      </p>
+
+
+    </form>
+    <div style="margin-top: 2vh">
+      <button mat-raised-button color="primary" >resetuj</button>
+
+      <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
+    </div>
+
+  </mat-step>
+  <mat-step >
+    Dodać tabel z podsumowaniem
+      <ng-template matStepLabel>Podsumowanie</ng-template>
+
+    <div style="margin-top: 2vh">
+      <button mat-raised-button color="primary" >wróć</button>
+
+      <button mat-raised-button color="primary"  style="margin-left: 2vh">zapisz</button>
+    </div>
+
+  </mat-step>
+
+
+</mat-stepper>
+
