@@ -1,0 +1,99 @@
+<mat-stepper #stepper class="cargoCreator">
+
+
+  <mat-step >
+    <form [formGroup]="cargoForm"  (ngSubmit)="onSubmit()">
+      <ng-template matStepLabel>Dane ładunku</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Nazwa </mat-label>
+        <input matInput placeholder="Nazwa" formControlName="name" required>
+      </mat-form-field>
+
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Opis</mat-label>
+          <input matInput placeholder="Opis" formControlName="description" required>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Wrażliwość</mat-label>
+          <input matInput placeholder="Wrażliwość" formControlName="sensitivity"  required>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Specjalne uwagi</mat-label>
+          <input matInput placeholder="Specjalne uwagi" formControlName="specialRemarks"  required>
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Wysokość</mat-label>
+          <input matInput placeholder="Wysokość"  formControlName="height" required>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Szerokość</mat-label>
+          <input matInput placeholder="Szerokość"  formControlName="width" required>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Głębokość</mat-label>
+          <input matInput placeholder="Głębokość"  formControlName="depth" required>
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Waga</mat-label>
+          <input matInput placeholder="Waga"  formControlName="weight" required>
+        </mat-form-field>
+      </p>
+
+
+    </form>
+    <div style="margin-top: 2vh">
+      <button mat-raised-button color="primary" >resetuj</button>
+
+      <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
+    </div>
+
+
+  </mat-step>
+
+  <mat-step >
+
+    <ng-template matStepLabel>Wybierz typ ładunku</ng-template>
+    <mat-form-field appearance="fill">
+      <mat-label>Szukaj</mat-label>
+      <input matInput placeholder="Szukaj"  >
+    </mat-form-field>
+
+
+
+    <div style="margin-top: 2vh">
+      <button mat-raised-button color="primary" >resetuj</button>
+
+      <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
+    </div>
+
+  </mat-step>
+  <mat-step >
+    Dodać tabel z podsumowaniem
+    <ng-template matStepLabel>Podsumowanie</ng-template>
+
+    <div style="margin-top: 2vh">
+      <button mat-raised-button color="primary" >wróć</button>
+
+      <button mat-raised-button color="primary"  style="margin-left: 2vh">zapisz</button>
+    </div>
+
+  </mat-step>
+
+
+</mat-stepper>
+

@@ -1,0 +1,77 @@
+<mat-stepper #stepper class="vehicleinspectioncreator">
+  <mat-step >
+
+    <ng-template matStepLabel>Wybierz pojazd</ng-template>
+    <mat-form-field appearance="fill">
+      <mat-label>Szukaj</mat-label>
+      <input matInput placeholder="Szukaj"  >
+    </mat-form-field>
+
+
+
+    <div style="margin-top: 2vh">
+      <button mat-raised-button color="primary" >resetuj</button>
+
+      <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
+    </div>
+
+  </mat-step>
+
+
+  <mat-step >
+    <form [formGroup]="vehicleInspectionForm"  (ngSubmit)="onSubmit()">
+      <ng-template matStepLabel>Dane przeglądu</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Nazwa warztawtu</mat-label>
+        <input matInput placeholder="Nazwa warsztatu" formControlName="carRepairShopName" required>
+      </mat-form-field>
+
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Data wykonania</mat-label>
+          <input matInput placeholder="Data wykonania" formControlName="dataWykonania" required>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Ważność przeglądu</mat-label>
+          <input matInput placeholder="Ważność przeglądu"  required>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Opis</mat-label>
+          <input matInput placeholder="Opis" formControlName="description"  required>
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Wykonany przez</mat-label>
+          <input matInput placeholder="Wykonany przez"  required>
+        </mat-form-field>
+      </p>
+
+
+    </form>
+    <div style="margin-top: 2vh">
+      <button mat-raised-button color="primary" >resetuj</button>
+
+      <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
+    </div>
+
+  </mat-step>
+  <mat-step >
+    Dodać tabel z podsumowaniem
+    <ng-template matStepLabel>Podsumowanie</ng-template>
+
+    <div style="margin-top: 2vh">
+      <button mat-raised-button color="primary" >wróć</button>
+
+      <button mat-raised-button color="primary"  style="margin-left: 2vh">zapisz</button>
+    </div>
+
+  </mat-step>
+
+
+</mat-stepper>

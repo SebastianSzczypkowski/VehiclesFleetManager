@@ -33,6 +33,14 @@ import { HomeComponent } from './componment/home/home.component';
 import { LoginComponent } from './componment/login/login.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {FontAwesomeTestingModule} from "@fortawesome/angular-fontawesome/testing";
+import { VehicleComponent } from './componment/vehicle/vehicle.component';
+import { CreateVehicleComponent } from './componment/vehicle/create-vehicle/create-vehicle.component';
+import { DriverComponent } from './componment/driver/driver.component';
+import { DriverCreatorComponent } from './componment/driver/driver-creator/driver-creator.component';
+import { CargoComponent } from './componment/cargo/cargo.component';
+import { VehicleInspectionComponent } from './componment/vehicle-inspection/vehicle-inspection.component';
+import { VehicleInspectionCreatorComponent } from './componment/vehicle-inspection/vehicle-inspection-creator/vehicle-inspection-creator.component';
+import { CargoCreatorComponent } from './componment/cargo/cargo-creator/cargo-creator.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +53,14 @@ import {FontAwesomeTestingModule} from "@fortawesome/angular-fontawesome/testing
     MaterialElevationDirective,
     HomeComponent,
     LoginComponent,
+    VehicleComponent,
+    CreateVehicleComponent,
+    DriverComponent,
+    DriverCreatorComponent,
+    CargoComponent,
+    VehicleInspectionComponent,
+    VehicleInspectionCreatorComponent,
+    CargoCreatorComponent,
 
   ],
   imports: [

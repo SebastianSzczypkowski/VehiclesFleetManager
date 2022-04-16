@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {NavbarService} from "./service/navbar.service";
 
-declare var toggleTheme :any;
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,8 +11,11 @@ declare var toggleTheme :any;
 export class AppComponent implements OnInit{
   title = 'VehiclesFleetManagerFront';
 
+  constructor(public nav:NavbarService,
+              private cdr:ChangeDetectorRef) {
+  }
   ngOnInit(): void {
-    new toggleTheme();
+    this.cdr.detectChanges();
   }
 
 }

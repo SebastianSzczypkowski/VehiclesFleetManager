@@ -23,7 +23,7 @@ body::-webkit-scrollbar-track {
 }
 
 body::-webkit-scrollbar-thumb {
-  background: #6649b8;
+  background: #f2b200;
 }
 main{
   margin-left:5rem;
@@ -39,6 +39,7 @@ main{
   background-color: var(--bg-primary);
   transition: width 600ms ease;
   z-index: 1;
+  top:0;
 
 }
 
@@ -76,7 +77,6 @@ main{
 .link-text{
   display: none;
   margin-left: 1rem;
-
   margin-top: 1.5rem;
 }
 
@@ -90,7 +90,8 @@ main{
   width: 16rem;
 }
 .navbar:hover .link-text{
-  display: block;
+
+  display: inline;
 }
 
 .fa-primary{
@@ -124,13 +125,18 @@ main{
 }
 .navbar:hover .logo svg{
   transform: rotate(-180deg);
+  margin-left: 11rem;
+}
+.navbar:hover .logo-text
+{
+  left: 0px;
 }
 .logo-text
 {
   display: inline;
   position: absolute;
   left: -999px;
-  transition: var(--transition-speed);
+
 }
 
 /*!* Style dla ekranów poniże 600 px*!*/
@@ -156,31 +162,63 @@ main{
   --bg-primary:#23232e;
   --bg-secondary:#141418;
   --transition-speed: 600ms;
+  --form-height:550px;
+  --form-width: 900px;
+  --left-color: #1f1f1f;
+  --right-color: #f2b200;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-color: #b6b6b6;
+    --background: #ececec;
+  }
+}
 
-
-/* Tryb dzień noc*/
+@media (prefers-color-scheme: light) {
+  :root {
+    --text-color: #1f1f1f;
+    --background: #000000;
+  }
+}
 .dark {
-  --text-primary: #b6b6b6;
-  --text-secondary: #ececec;
-  --bg-primary: #23232e;
-  --bg-secondary: #141418;
+  --text-color: #b6b6b6;
+  --background: #ececec;
 }
 
 .light {
-  --text-primary: #1f1f1f;
-  --text-secondary: #000000;
-  --bg-primary: #ffffff;
-  --bg-secondary: #e4e4e4;
+  --text-color: #1f1f1f;
+  --background: #000000;
 }
 
 .solar {
-  --text-primary: #576e75;
-  --text-secondary: #35535c;
-  --bg-primary: #fdf6e3;
-  --bg-secondary: #f5e5b8;
+  --text-color: #576e75;
+  --background: #fdf6e3;
 }
+
+/* Tryb dzień noc*/
+
+
+/*.dark {*/
+/*  --text-primary: #b6b6b6;*/
+/*  --text-secondary: #ececec;*/
+/*  --bg-primary: #23232e;*/
+/*  --bg-secondary: #141418;*/
+/*}*/
+
+/*.light {*/
+/*  --text-primary: #1f1f1f;*/
+/*  --text-secondary: #000000;*/
+/*  --bg-primary: #ffffff;*/
+/*  --bg-secondary: #e4e4e4;*/
+/*}*/
+
+/*.solar {*/
+/*  --text-primary: #576e75;*/
+/*  --text-secondary: #35535c;*/
+/*  --bg-primary: #fdf6e3;*/
+/*  --bg-secondary: #f5e5b8;*/
+/*}*/
 
 /*.theme-icon {*/
 /*  display: none;*/
