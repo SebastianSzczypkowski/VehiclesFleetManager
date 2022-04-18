@@ -2,10 +2,9 @@ package pl.szczypkowski.vehiclesfleetmanager.cargo.controller;
 
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.cargo.model.Cargo;
+import pl.szczypkowski.vehiclesfleetmanager.cargo.model.CargoRequest;
 import pl.szczypkowski.vehiclesfleetmanager.cargo.service.CargoService;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 
@@ -33,5 +32,11 @@ public class CargoController {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie można pobrać listy wolnych ładunków"));
         }
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<?> save(@RequestBody CargoRequest cargoRequest)
+    {
+        return cargoService.save(cargoRequest);
     }
 }

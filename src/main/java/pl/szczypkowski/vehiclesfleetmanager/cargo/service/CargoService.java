@@ -2,9 +2,12 @@ package pl.szczypkowski.vehiclesfleetmanager.cargo.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.szczypkowski.vehiclesfleetmanager.cargo.model.Cargo;
+import pl.szczypkowski.vehiclesfleetmanager.cargo.model.CargoRequest;
 import pl.szczypkowski.vehiclesfleetmanager.cargo.repository.CargoRepository;
+import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 
 import java.util.List;
 
@@ -85,4 +88,39 @@ public class CargoService {
         }
     }
 
+    public ResponseEntity<?> save(CargoRequest cargoRequest) {
+
+        try{
+            Cargo cargo = new Cargo();
+            if(cargoRequest.getName()!=null)
+                cargo.setName(cargoRequest.getName());
+            if(cargoRequest.getDescription()!=null)
+                cargo.setDescription(cargoRequest.getDescription());
+            if(cargoRequest.getSensitivity()!=null)
+                cargo.setSensitivity(cargoRequest.getSensitivity());
+            if(cargoRequest.getDepth()!=null)
+                cargo.setDepth(cargoRequest.getDepth());
+            if(cargoRequest.getHeight()!=null)
+                cargo.setHeight(cargoRequest.getHeight());
+            if(cargoRequest.getWeight()!=null)
+                cargo.setWeight(cargoRequest.getWeight());
+            if(cargoRequest.getWidth()!=null)
+                cargo.setWidth(cargoRequest.getWidth());
+            if(cargoRequest.getSpecialRemarks()!=null)
+                cargo.setSpecialRemarks(cargoRequest.getSpecialRemarks());
+            cargo.setAssigned(false);
+            cargo.setDelivered(false);
+
+            //TODO przypisywanie typu ładunku
+            //cargo.setType();
+
+            Cargo saved =cargoRepository.save(cargo);
+            return ResponseEntity.ok().body(saved);
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się dodać ładunku"));
+        }
+    }
 }

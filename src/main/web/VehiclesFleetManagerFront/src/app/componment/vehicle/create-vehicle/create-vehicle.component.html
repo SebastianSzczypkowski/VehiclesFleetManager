@@ -1,42 +1,48 @@
 <mat-stepper #stepper class="drivercreator">
   <mat-step >
     <form [formGroup]="driverForm"  (ngSubmit)="onSubmit()">
-      <ng-template matStepLabel>Dane kierowcy</ng-template>
+      <ng-template matStepLabel>Dane pojazdu</ng-template>
       <mat-form-field appearance="fill">
-        <mat-label>Imię</mat-label>
-        <input matInput placeholder="Imię" formControlName="name" required>
+        <mat-label>Nazwa</mat-label>
+        <input matInput placeholder="Nazwa" formControlName="name" required>
       </mat-form-field>
 
       <p>
         <mat-form-field appearance="fill">
-          <mat-label>Nazwisko</mat-label>
-          <input matInput placeholder="Nazwisko" formControlName="surname" required>
+          <mat-label>Numer VIN</mat-label>
+          <input matInput placeholder="Numer VIN" formControlName="vin" required>
         </mat-form-field>
       </p>
       <p>
         <mat-form-field appearance="fill">
-          <mat-label>PESEL</mat-label>
-          <input matInput placeholder="PESEL" formControlName="pesel" required>
+          <mat-label>Numer rejestracyjny</mat-label>
+          <input matInput placeholder="Numer rejestracyjny" formControlName="registration" required>
         </mat-form-field>
       </p>
       <p>
         <mat-form-field appearance="fill">
-          <mat-label>Data urodzenia</mat-label>
-          <input matInput placeholder="Lokacja docelowa" formControlName="dateofbirth" required>
+          <mat-label>Przebieg</mat-label>
+          <input matInput placeholder="Przebieg" formControlName="mileage" >
         </mat-form-field>
       </p>
 
       <p>
         <mat-form-field appearance="fill">
-          <mat-label>Adres</mat-label>
-          <input matInput placeholder="Adres" formControlName="adress" required>
+          <mat-label> Ładowność</mat-label>
+          <input matInput placeholder="Ładowność" formControlName="loadCapacity" >
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label> Pojemność silnika</mat-label>
+          <input matInput placeholder="Pojemność silnika" formControlName="engineCapacity" >
         </mat-form-field>
       </p>
 
-<!--      <div style="margin-top: 2vh">-->
-<!--        <button mat-raised-button color="primary" type="submit">pokaż</button>-->
+      <div style="margin-top: 2vh">
+        <button mat-raised-button color="primary" type="submit">dodaj</button>
 
-<!--      </div>-->
+      </div>
     </form>
     <div style="margin-top: 2vh">
       <button mat-raised-button color="primary" >resetuj</button>

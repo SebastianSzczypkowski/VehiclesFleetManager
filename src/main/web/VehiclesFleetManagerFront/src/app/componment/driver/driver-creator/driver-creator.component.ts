@@ -18,7 +18,7 @@ export class DriverCreatorComponent implements OnInit {
       surname:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
       pesel:new FormControl(''),
       dateofbirth:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
-      adress:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
+      address:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
     });
     this.permissionForm=this._formBuilder.group(
       {

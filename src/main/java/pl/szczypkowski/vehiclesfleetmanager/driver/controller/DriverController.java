@@ -1,17 +1,16 @@
 package pl.szczypkowski.vehiclesfleetmanager.driver.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.driver.model.Driver;
+import pl.szczypkowski.vehiclesfleetmanager.driver.model.DriverRequest;
 import pl.szczypkowski.vehiclesfleetmanager.driver.service.DriverService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/driver")
+@CrossOrigin()
 public class DriverController {
 
     private DriverService driverService;
@@ -34,4 +33,13 @@ public class DriverController {
             return ResponseEntity.badRequest().body("Nir można pobrąc danych ");
         }
     }
+
+    @PostMapping("/save")
+    public ResponseEntity<?> save(@RequestBody DriverRequest driverRequest)
+    {
+        return driverService.save(driverRequest);
+    }
+
+
 }
+

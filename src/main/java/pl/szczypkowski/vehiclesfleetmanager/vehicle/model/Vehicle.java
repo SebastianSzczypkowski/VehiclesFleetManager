@@ -34,7 +34,7 @@ public class Vehicle {
     @Column(name = "number_of_seats")
     private Integer numberOfSeats;
 
-    @Column(name = "engineCapacity")
+    @Column(name = "engine_capacity")
     private Double engineCapacity;
 
     @Column(name = "average_fuel_consumption")
