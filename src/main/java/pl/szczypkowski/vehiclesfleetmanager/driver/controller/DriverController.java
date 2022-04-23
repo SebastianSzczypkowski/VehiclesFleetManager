@@ -9,8 +9,8 @@ import pl.szczypkowski.vehiclesfleetmanager.driver.service.DriverService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/driver")
-@CrossOrigin()
+@RequestMapping("/api/driver")
+@CrossOrigin(origins = "*")
 public class DriverController {
 
     private DriverService driverService;
@@ -20,7 +20,7 @@ public class DriverController {
     }
 
 
-    @GetMapping("/getAll")
+    @GetMapping("/get-all")
     public ResponseEntity<?> getAll()
     {
         try{

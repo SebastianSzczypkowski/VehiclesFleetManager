@@ -25,10 +25,13 @@ export class CreateVehicleComponent implements OnInit {
 
   onSubmit() {
 
-    this.vehicleService.add(this.driverForm).subscribe(
-      data=>{
+    this.vehicleService.add(this.driverForm.getRawValue()).subscribe(
 
-      }
     )
+  }
+
+  reset() {
+
+    this.driverForm.reset();
   }
 }

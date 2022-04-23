@@ -1,7 +1,7 @@
-<mat-stepper #stepper class="drivercreator">
+<mat-stepper #stepper   class="drivercreator">
   <mat-step >
     <form [formGroup]="driverForm"  (ngSubmit)="onSubmit()">
-      <ng-template matStepLabel>Dane pojazdu</ng-template>
+      <ng-template  matStepLabel>Dane pojazdu</ng-template>
       <mat-form-field appearance="fill">
         <mat-label>Nazwa</mat-label>
         <input matInput placeholder="Nazwa" formControlName="name" required>
@@ -45,7 +45,7 @@
       </div>
     </form>
     <div style="margin-top: 2vh">
-      <button mat-raised-button color="primary" >resetuj</button>
+      <button mat-raised-button color="primary"  (click)="reset()">resetuj</button>
 
       <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
     </div>

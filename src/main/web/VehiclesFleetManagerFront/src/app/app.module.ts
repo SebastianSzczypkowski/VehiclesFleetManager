@@ -87,7 +87,8 @@ import { CargoCreatorComponent } from './componment/cargo/cargo-creator/cargo-cr
     MatTooltipModule,
     MatTableModule,
     FontAwesomeModule,
-    FontAwesomeTestingModule
+    FontAwesomeTestingModule,
+
 
 
 

@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/cargo")
+@CrossOrigin(origins = "*")
 public class CargoController {
 
     private final CargoService cargoService;
@@ -31,6 +32,19 @@ public class CargoController {
         {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie można pobrać listy wolnych ładunków"));
+        }
+    }
+
+    @GetMapping("/get-all")
+    public ResponseEntity<?> getAll()
+    {
+        try{
+
+            return ResponseEntity.ok().body(cargoService.getAll());
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie można pobrać listy ładunków"));
         }
     }
 

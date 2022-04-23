@@ -24,8 +24,13 @@ public class VehicleInspection {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "performedBy")
+    @Column(name = "performed_by")
     private String performedBy;
+
+    @ManyToOne
+    @JoinColumn(name = "id_vehicle")
+    private Vehicle idVehicle;
+
 
     public VehicleInspection() {
     }

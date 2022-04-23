@@ -3,6 +3,7 @@ package pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.model.EntitlementstToTransport;
 import pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.service.EntitlementstotransportService;
 import pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.service.TypeOfPermissionsService;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
@@ -34,7 +35,15 @@ public class EntitlementstToTransportController {
         }
     }
 
-//    @PostMapping("save")
-//    public ResponseEntity<?> save(@RequestBody )
+    @PostMapping("save")
+    public ResponseEntity<?> save( @RequestBody EntitlementstToTransport entitlementstToTransport)
+    {
+        try {
+            return ResponseEntity.ok().body(entitlementstotransportService.save(entitlementstToTransport));
+        }catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało sie dodać uprawnień"));
+        }
+    }
 
 }

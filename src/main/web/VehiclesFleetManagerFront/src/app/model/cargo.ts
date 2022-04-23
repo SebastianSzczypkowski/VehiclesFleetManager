@@ -6,7 +6,7 @@ export class Cargo {
   description: string | undefined;
   type: string | undefined;
   sensitivity:string | undefined;
-  specialRemakrs:string | undefined;
+  specialRemarks:string | undefined;
   delivered!:boolean;
   assigned!:boolean;
   weight:number|undefined;

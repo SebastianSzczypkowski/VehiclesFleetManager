@@ -1,6 +1,4 @@
 
-
-
 .routecreator{
   margin-left: 10vh;
 }
@@ -42,26 +40,26 @@ mat-card{
 
 }
 
-.demo-table {
-  width: 100%;
-}
+/*.demo-table {*/
+/*  width: 100%;*/
+/*}*/
 
-th.mat-sort-header-sorted {
-  color: black;
-}
+/*th.mat-sort-header-sorted {*/
+/*  color: black;*/
+/*}*/
 
-.mat-row .mat-cell {
-  border-bottom: 1px solid transparent;
-  border-top: 1px solid transparent;
-  cursor: pointer;
-}
+/*.mat-row .mat-cell {*/
+/*  border-bottom: 1px solid transparent;*/
+/*  border-top: 1px solid transparent;*/
+/*  cursor: pointer;*/
+/*}*/
 
-.mat-row:hover .mat-cell {
-  border-color: #3f51b5;
-  border-width: 2px;
-  background-color: #4b5fcc;
-}
+/*.mat-row:hover .mat-cell {*/
+/*  border-color: #3f51b5;*/
+/*  border-width: 2px;*/
+/*  background-color: #4b5fcc;*/
+/*}*/
 
-.demo-row-is-clicked {
-  font-weight: bold;
-}
+/*.demo-row-is-clicked {*/
+/*  font-weight: bold;*/
+/*}*/

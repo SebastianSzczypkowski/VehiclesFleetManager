@@ -24,17 +24,23 @@ export class VehicleService {
     })
   }
 
+  // add(vehicle:any):Observable<any>
+  // {
+  //   return this.http.post<any>(AUTH_API+'save',{
+  //     name:vehicle.name,
+  //     vin:vehicle.vin,
+  //     registration:vehicle.registration,
+  //     mileage:vehicle.mileage,
+  //     loadCapacity:vehicle.loadCapacity,
+  //     engineCpacity:vehicle.engineCpacity
+  //
+  //   },httpOptions)
+  // }
   add(vehicle:any):Observable<any>
   {
-    return this.http.post(AUTH_API+'save',{
-      name:vehicle.name,
-      vin:vehicle.vin,
-      registration:vehicle.registration,
-      mileage:vehicle.mileage,
-      loadCapacity:vehicle.loadCapacity,
-      engineCpacity:vehicle.engineCpacity
+    return this.http.post(AUTH_API+'save',vehicle,{
 
-    },httpOptions)
+    })
   }
 
 }

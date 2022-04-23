@@ -3,6 +3,7 @@ package pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.model.EntitlementstToTransport;
 import pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.repository.EntitlementstotransportRepository;
@@ -38,4 +39,14 @@ public class EntitlementstotransportService {
     }
 
 
+    public EntitlementstToTransport save(EntitlementstToTransport entitlementstToTransport) {
+        try{
+
+           return entitlementstotransportRepository.save(entitlementstToTransport);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Vehicle} from "../../model/vehicle";
+import {VehicleInspectionService} from "./service/vehicle-inspection.service";
+import {Vehicleinspection} from "../../model/vehicleinspection";
 
 @Component({
   selector: 'app-vehicle-inspection',
@@ -8,11 +11,16 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class VehicleInspectionComponent implements OnInit {
 
-
-  constructor(private _formBuilder: FormBuilder) { }
+  dataSource:Vehicleinspection[]=[];
+  displayedColumns: string[] = ['position', 'nazwa','description','performedBy'];//, 'date', 'validityDate'
+  constructor(private _formBuilder: FormBuilder,private vehicleInspectionService:VehicleInspectionService) { }
 
   ngOnInit(): void {
 
+    this.vehicleInspectionService.getAll().subscribe(
+      data=>{
+        this.dataSource=data;
+      })
   }
 
   onSubmit() {

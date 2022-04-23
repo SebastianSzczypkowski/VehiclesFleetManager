@@ -2,14 +2,13 @@ package pl.szczypkowski.vehiclesfleetmanager.road.controller;
 
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.road.service.RoadService;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 
 @RestController
 @RequestMapping("/api/road")
+@CrossOrigin(origins = "*")
 public class RoadController {
 
     private final RoadService roadService;
@@ -31,5 +30,11 @@ public class RoadController {
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się pobrać listy aut"));
         }
     }
+
+//    @PostMapping("/save")
+//    public ResponseEntity<?> save()
+//    {
+//
+//    }
 
 }
