@@ -9,20 +9,20 @@ body {
 }
 
 
-.mat-horizontal-stepper-header-step{
-     background-color: green;
-      color:black;
-   }
+/*.mat-horizontal-stepper-header-step{*/
+/*     background-color: green;*/
+/*      color:black;*/
+/*   }*/
 
 
-   mat-stepper .card-body ul.stepper .step:before {
-     background-color: black;
-   }
+/*   mat-stepper .card-body ul.stepper .step:before {*/
+/*     background-color: black;*/
+/*   }*/
 
 
-   mat-stepper .card-body ul.stepper .step.active:before {
-     background-color: green;
-   }
+/*   mat-stepper .card-body ul.stepper .step.active:before {*/
+/*     background-color: green;*/
+/*   }*/
 /*Style dla mat step*/
 .table{
   margin-left: 10vh;
@@ -31,6 +31,10 @@ body {
 }
 .demo-table {
   width: 100%;
+}
+.demo-row-is-clicked {
+  font-weight: bold;
+  background-color: var(--right-color);
 }
 th.mat-sort-header-sorted {
   color: black;
@@ -54,9 +58,6 @@ th.mat-sort-header-sorted {
   background-color: #f2b200;
 }
 
-.demo-row-is-clicked {
-  font-weight: bold;
-}
 mat-dialog-container#modal-component {
   border: 3px solid #262626;
   border-radius: 11px;

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {CargoService} from "../service/cargo.service";
 
 @Component({
   selector: 'app-cargo-creator',
@@ -9,7 +10,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 export class CargoCreatorComponent implements OnInit {
 
   cargoForm!:FormGroup;
-  constructor(private _formBuilder: FormBuilder) { }
+  constructor(private _formBuilder: FormBuilder,private cargoService:CargoService) { }
 
   ngOnInit(): void {
     this.cargoForm=this._formBuilder.group({
@@ -26,5 +27,10 @@ export class CargoCreatorComponent implements OnInit {
 
     onSubmit() {
 
+    this.cargoService.add(this.cargoForm.getRawValue()).subscribe();
     }
+  reset() {
+
+    this.cargoForm.reset();
+  }
 }

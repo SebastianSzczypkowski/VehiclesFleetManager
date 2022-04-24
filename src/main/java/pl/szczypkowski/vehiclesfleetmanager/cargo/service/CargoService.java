@@ -2,6 +2,7 @@ package pl.szczypkowski.vehiclesfleetmanager.cargo.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.szczypkowski.vehiclesfleetmanager.cargo.model.Cargo;
@@ -121,6 +122,17 @@ public class CargoService {
         {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się dodać ładunku"));
+        }
+    }
+
+    public ResponseEntity<?> getAllPage(Pageable pageable) {
+        try{
+
+            return ResponseEntity.ok().body(cargoRepository.findAll(pageable));
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się pobrać listy ładunków"));
         }
     }
 }

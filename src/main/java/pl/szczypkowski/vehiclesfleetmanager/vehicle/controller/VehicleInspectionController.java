@@ -1,6 +1,7 @@
 package pl.szczypkowski.vehiclesfleetmanager.vehicle.controller;
 
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
@@ -28,6 +29,12 @@ public class VehicleInspectionController {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("nie udało się pobrać danych"));
         }
+    }
+
+    @GetMapping("/get-all-page")
+    public ResponseEntity<?> getAllPage(Pageable pageable)
+    {
+      return vehicleInspectionService.getAllPage(pageable);
     }
 
     @PostMapping("/save")

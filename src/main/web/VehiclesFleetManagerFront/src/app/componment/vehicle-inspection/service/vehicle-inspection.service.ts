@@ -22,6 +22,13 @@ export class VehicleInspectionService {
 
     })
   }
+  getAllPage(page:number,size:number)
+  {
+    return this.http.get<any>(AUTH_API+'get-all-page',{
+      params: {page,size}
+
+    })
+  }
 
 
   add(vehicle:any):Observable<any>

@@ -1,5 +1,6 @@
 package pl.szczypkowski.vehiclesfleetmanager.driver.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.driver.model.Driver;
@@ -33,6 +34,14 @@ public class DriverController {
             return ResponseEntity.badRequest().body("Nir można pobrąc danych ");
         }
     }
+    @GetMapping("/get-all-page")
+    public ResponseEntity<?> getAllPage(Pageable pageable)
+    {
+        return driverService.getAllPage(pageable);
+    }
+
+
+
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody DriverRequest driverRequest)

@@ -1,6 +1,7 @@
 package pl.szczypkowski.vehiclesfleetmanager.cargo.controller;
 
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.cargo.model.Cargo;
@@ -46,6 +47,13 @@ public class CargoController {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie można pobrać listy ładunków"));
         }
+    }
+    @GetMapping("/get-all-page")
+    public ResponseEntity<?> getAllPage(Pageable pageable)
+    {
+
+            return cargoService.getAllPage(pageable);
+
     }
 
     @PostMapping("/save")

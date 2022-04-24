@@ -1,5 +1,6 @@
 package pl.szczypkowski.vehiclesfleetmanager.vehicle.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
@@ -29,13 +30,20 @@ public class VehicleController {
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie można pobrac listy pojazdów"));
         }
     }
+
+    @GetMapping("/get-all-page")
+    public ResponseEntity<?> getAllPage(Pageable pageable)
+    {
+        return vehicleService.getAllPage(pageable);
+    }
+
     @GetMapping("/get-all-free")
     public ResponseEntity<?> getAllFree()
     {
         return ResponseEntity.ok().body(vehicleService.getAllNotOccupied());
     }
 
-    //TODO przerobić na MuliteValueMap
+
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody VehicleRequest vehicleRequest)
     {

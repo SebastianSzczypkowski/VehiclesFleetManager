@@ -4,7 +4,7 @@ public class DriverRequest {
 
     private String name;
     private String surname;
-    private Integer pesel;
+    private Long pesel;
     private String address;
 
     public String getName() {
@@ -23,11 +23,11 @@ public class DriverRequest {
         this.surname = surname;
     }
 
-    public Integer getPesel() {
+    public Long getPesel() {
         return pesel;
     }
 
-    public void setPesel(Integer pesel) {
+    public void setPesel(Long pesel) {
         this.pesel = pesel;
     }
 

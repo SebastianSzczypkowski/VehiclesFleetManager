@@ -9,19 +9,19 @@
         <input matInput placeholder="Nazwa" formControlName="name" required>
       </mat-form-field>
 
-      <p>
+      &nbsp;
         <mat-form-field appearance="fill">
           <mat-label>Opis</mat-label>
           <input matInput placeholder="Opis" formControlName="description" required>
         </mat-form-field>
-      </p>
+      &nbsp;
       <p>
         <mat-form-field appearance="fill">
           <mat-label>Wrażliwość</mat-label>
           <input matInput placeholder="Wrażliwość" formControlName="sensitivity"  required>
         </mat-form-field>
-      </p>
-      <p>
+
+        &nbsp;
         <mat-form-field appearance="fill">
           <mat-label>Specjalne uwagi</mat-label>
           <input matInput placeholder="Specjalne uwagi" formControlName="specialRemarks"  required>
@@ -33,14 +33,12 @@
           <mat-label>Wysokość</mat-label>
           <input matInput placeholder="Wysokość"  formControlName="height" required>
         </mat-form-field>
-      </p>
-      <p>
+        &nbsp;
         <mat-form-field appearance="fill">
           <mat-label>Szerokość</mat-label>
           <input matInput placeholder="Szerokość"  formControlName="width" required>
         </mat-form-field>
-      </p>
-      <p>
+        &nbsp;
         <mat-form-field appearance="fill">
           <mat-label>Głębokość</mat-label>
           <input matInput placeholder="Głębokość"  formControlName="depth" required>
@@ -54,10 +52,10 @@
         </mat-form-field>
       </p>
 
-
+      <button mat-raised-button color="primary" type="submit" >dodaj</button>
     </form>
     <div style="margin-top: 2vh">
-      <button mat-raised-button color="primary" >resetuj</button>
+      <button mat-raised-button color="primary" (click)="reset()" >resetuj</button>
 
       <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
     </div>

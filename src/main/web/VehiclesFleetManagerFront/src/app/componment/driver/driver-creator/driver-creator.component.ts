@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {DriverService} from "../service/driver.service";
+import {Entitlementstotransport} from "../../../model/entitlementstotransport";
 
 @Component({
   selector: 'app-driver-creator',
@@ -8,9 +10,11 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class DriverCreatorComponent implements OnInit {
 
+  entitlements:Entitlementstotransport[]=[];
   driverForm!:FormGroup;
   permissionForm!:FormGroup;
-  constructor(private _formBuilder: FormBuilder) { }
+  entitlementsColumns: string[] = [ 'documentTyp', 'typeofpermission'];
+  constructor(private _formBuilder: FormBuilder,private driverService:DriverService) { }
 
   ngOnInit(): void {
     this.driverForm = this._formBuilder.group({
@@ -30,5 +34,11 @@ export class DriverCreatorComponent implements OnInit {
 
   onSubmit() {
 
+    this.driverService.add(this.driverForm.getRawValue()).subscribe()
+  }
+
+  reset()
+  {
+    this.driverForm.reset();
   }
 }

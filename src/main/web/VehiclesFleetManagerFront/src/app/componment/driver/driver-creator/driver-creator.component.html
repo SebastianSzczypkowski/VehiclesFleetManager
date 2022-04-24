@@ -34,12 +34,12 @@
       </p>
 
       <!--      <div style="margin-top: 2vh">-->
-      <!--        <button mat-raised-button color="primary" type="submit">pokaż</button>-->
+              <button mat-raised-button color="primary" type="submit">dodaj</button>
 
       <!--      </div>-->
     </form>
     <div style="margin-top: 2vh">
-      <button mat-raised-button color="primary" >resetuj</button>
+      <button mat-raised-button color="primary" (click)="reset()">resetuj</button>
 
       <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
     </div>
@@ -63,6 +63,32 @@
 
 
     </form>
+    <table mat-table [dataSource]="entitlements"
+           class="mat-elevation-z8 demo-table " >
+
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="documentTyp">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by documentTyp">
+          Typ dokumentu
+        </th>
+        <td mat-cell *matCellDef="let element" > {{element.documentTyp}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="typeofpermission">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by typeofpermission" >
+          Uprawnienie do:
+        </th>
+        <td mat-cell *matCellDef="let element" > {{element.typeofpermission}} </td>
+      </ng-container>
+
+
+
+
+      <tr mat-header-row *matHeaderRowDef="entitlementsColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: entitlementsColumns;" ></tr>
+    </table>
     <div style="margin-top: 2vh">
       <button mat-raised-button color="primary" >resetuj</button>
 

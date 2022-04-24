@@ -1,6 +1,7 @@
 package pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.controller;
 
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.model.EntitlementstToTransport;
@@ -33,6 +34,11 @@ public class EntitlementstToTransportController {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się pobrać listy uprawnień"));
         }
+    }
+    @GetMapping("/get-all-page")
+    public ResponseEntity<?> getAllPage(Pageable pageable)
+    {
+        return entitlementstotransportService.getAllPage(pageable);
     }
 
     @PostMapping("save")

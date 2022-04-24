@@ -2,6 +2,7 @@ package pl.szczypkowski.vehiclesfleetmanager.driver.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.szczypkowski.vehiclesfleetmanager.driver.model.Driver;
@@ -64,6 +65,17 @@ public class DriverService {
         {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie można dodać kierowcy"));
+        }
+    }
+
+    public ResponseEntity<?> getAllPage(Pageable pageable) {
+        try{
+
+            return ResponseEntity.ok().body(driverRepository.findAll(pageable));
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się pobrać listy pojazdów"));
         }
     }
 }

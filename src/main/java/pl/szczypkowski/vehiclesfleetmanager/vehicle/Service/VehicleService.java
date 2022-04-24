@@ -4,6 +4,8 @@ package pl.szczypkowski.vehiclesfleetmanager.vehicle.Service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
@@ -85,6 +87,18 @@ public class VehicleService {
         {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie duał się dodać pojazdu "));
+        }
+    }
+
+    public ResponseEntity<?> getAllPage(Pageable pageable) {
+        try{
+
+            Page<Vehicle> vehiclePage =vehicleRepository.findAll(pageable);
+            return ResponseEntity.ok().body(vehiclePage);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("NIe udało  się pobrać listy pojazdów"));
         }
     }
 }

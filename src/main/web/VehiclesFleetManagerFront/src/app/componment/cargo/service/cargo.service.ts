@@ -24,6 +24,13 @@ export class CargoService {
     })
   }
 
+  getAllPage(page:number,size:number)
+  {
+    return this.http.get<any>(AUTH_API+'get-all-page',{
+      params: {page,size}
+
+    })
+  }
   add(cargo:any):Observable<any>
   {
     return this.http.post(AUTH_API+'save',cargo,{

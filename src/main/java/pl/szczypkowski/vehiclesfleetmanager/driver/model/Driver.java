@@ -22,7 +22,7 @@ public class Driver {
     private String surname;
 
     @Column(name = "pesel")
-    private Integer pesel;
+    private Long pesel;
 
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
@@ -39,7 +39,7 @@ public class Driver {
     public Driver() {
     }
 
-    public Driver(Long id, String name, String surname, Integer pesel, Date dateOfBirth, String address, EntitlementstToTransport entitlementstToTransport) {
+    public Driver(Long id, String name, String surname, Long pesel, Date dateOfBirth, String address, EntitlementstToTransport entitlementstToTransport) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -81,11 +81,11 @@ public class Driver {
         this.surname = surname;
     }
 
-    public Integer getPesel() {
+    public Long getPesel() {
         return pesel;
     }
 
-    public void setPesel(Integer pesel) {
+    public void setPesel(Long pesel) {
         this.pesel = pesel;
     }
 

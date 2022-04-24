@@ -41,6 +41,7 @@ import { CargoComponent } from './componment/cargo/cargo.component';
 import { VehicleInspectionComponent } from './componment/vehicle-inspection/vehicle-inspection.component';
 import { VehicleInspectionCreatorComponent } from './componment/vehicle-inspection/vehicle-inspection-creator/vehicle-inspection-creator.component';
 import { CargoCreatorComponent } from './componment/cargo/cargo-creator/cargo-creator.component';
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
   declarations: [
@@ -63,36 +64,35 @@ import { CargoCreatorComponent } from './componment/cargo/cargo-creator/cargo-cr
     CargoCreatorComponent,
 
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    MatToolbarModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatIconModule,
-    MatMenuModule,
-    MatButtonModule,
-    MatInputModule,
-    LeafletModule,
-    HttpClientModule,
-    MatListModule,
-    MatSlideToggleModule,
-    NgxColorsModule,
-    MatDialogModule,
-    MatStepperModule,
-    MatTooltipModule,
-    MatTableModule,
-    FontAwesomeModule,
-    FontAwesomeTestingModule,
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        MatToolbarModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatIconModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatInputModule,
+        LeafletModule,
+        HttpClientModule,
+        MatListModule,
+        MatSlideToggleModule,
+        NgxColorsModule,
+        MatDialogModule,
+        MatStepperModule,
+        MatTooltipModule,
+        MatTableModule,
+        FontAwesomeModule,
+        FontAwesomeTestingModule,
+        MatPaginatorModule,
 
 
-
-
-  ],
+    ],
   providers: [EventEmitterService],
   bootstrap: [AppComponent]
 })

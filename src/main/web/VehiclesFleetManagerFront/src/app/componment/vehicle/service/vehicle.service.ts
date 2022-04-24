@@ -17,9 +17,17 @@ export class VehicleService {
 
   constructor(private http:HttpClient) { }
 
+
   getAllVehilce()
   {
     return this.http.get<Vehicle[]>(AUTH_API+'get-all',{
+
+    })
+  }
+  getAllPage(page:number,size:number)
+  {
+    return this.http.get<any>(AUTH_API+'get-all-page',{
+      params: {page,size}
 
     })
   }

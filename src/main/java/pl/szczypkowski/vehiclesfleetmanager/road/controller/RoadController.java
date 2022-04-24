@@ -1,6 +1,7 @@
 package pl.szczypkowski.vehiclesfleetmanager.road.controller;
 
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.road.service.RoadService;
@@ -29,6 +30,11 @@ public class RoadController {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się pobrać listy aut"));
         }
+    }
+    @GetMapping("/get-all-page")
+    public ResponseEntity<?> getAllPage(Pageable pageable)
+    {
+        return roadService.getAllPage(pageable);
     }
 
 //    @PostMapping("/save")

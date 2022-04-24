@@ -1,7 +1,10 @@
 package pl.szczypkowski.vehiclesfleetmanager.vehicle.Service;
 
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.VehicleInspection;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.repository.VehicleInspectionRepository;
 
@@ -38,4 +41,13 @@ public class VehicleInspectionService {
     }
 
 
+    public ResponseEntity<?> getAllPage(Pageable pageable) {
+        try{
+
+            return ResponseEntity.ok().body(vehicleInspectionRepository.findAll(pageable));
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało sie pobrać listy przeglądów technicznych"));
+        }
+    }
 }

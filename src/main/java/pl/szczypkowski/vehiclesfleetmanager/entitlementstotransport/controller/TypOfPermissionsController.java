@@ -1,5 +1,6 @@
 package pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,11 @@ public class TypOfPermissionsController {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie można pobrać listy typów uprawnień"));
         }
+    }
+    @GetMapping("/get-all-page")
+    public ResponseEntity<?> getAllPage(Pageable pageable)
+    {
+       return typeOfPermissionsService.getAllPage(pageable);
     }
 
 }

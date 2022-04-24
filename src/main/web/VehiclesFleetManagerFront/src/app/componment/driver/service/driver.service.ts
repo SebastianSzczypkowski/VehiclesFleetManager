@@ -23,6 +23,13 @@ export class DriverService {
     })
   }
 
+  getAllPage(page:number,size:number)
+  {
+    return this.http.get<any>(AUTH_API+'get-all-page',{
+      params: {page,size}
+
+    })
+  }
   add(driver:any):Observable<any>
   {
     return this.http.post(AUTH_API+'save',driver,{
