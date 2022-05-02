@@ -74,15 +74,29 @@
       </mat-form-field>
 
       <p>
-        <mat-form-field appearance="fill">
+<!--        <mat-form-field appearance="fill">-->
+<!--          <mat-label>Data wykonania</mat-label>-->
+<!--          <input matInput placeholder="Data wykonania" formControlName="dataWykonania" required>-->
+<!--        </mat-form-field>-->
+        <mat-form-field color="primary" appearance="fill">
           <mat-label>Data wykonania</mat-label>
-          <input matInput placeholder="Data wykonania" formControlName="dataWykonania" required>
+          <input matInput [matDatepicker]="picker" formControlName="date" >
+
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field appearance="fill">
+<!--        <mat-form-field appearance="fill">-->
+<!--          <mat-label>Ważność przeglądu</mat-label>-->
+<!--          <input matInput placeholder="Ważność przeglądu"  required>-->
+<!--        </mat-form-field>-->
+        <mat-form-field color="primary" appearance="fill">
           <mat-label>Ważność przeglądu</mat-label>
-          <input matInput placeholder="Ważność przeglądu"  required>
+          <input matInput [matDatepicker]="picker" formControlName="validityOfTheVehicleInspection" >
+
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </p>
       <p>

@@ -10,7 +10,9 @@ import pl.szczypkowski.vehiclesfleetmanager.driver.model.DriverRequest;
 import pl.szczypkowski.vehiclesfleetmanager.driver.repository.DriverRepository;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 
+import java.lang.management.OperatingSystemMXBean;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DriverService {
@@ -48,18 +50,25 @@ public class DriverService {
     public ResponseEntity<?> save(DriverRequest driverRequest) {
         try
         {
-            Driver driver =new Driver();
-            if(driverRequest.getName()!=null)
-                driver.setName(driverRequest.getName());
-            if(driverRequest.getSurname()!=null)
-                driver.setSurname(driverRequest.getSurname());
-            if(driverRequest.getAddress()!=null)
-                driver.setAddress(driverRequest.getAddress());
-            if(driverRequest.getPesel()!=null)
-                driver.setPesel(driverRequest.getPesel());
-
-            Driver saved =driverRepository.save(driver);
-            return ResponseEntity.ok().body(saved);
+            Optional<Driver> optionalDriver=driverRepository.getDriverByPeselEquals(driverRequest.getPesel());
+            if(optionalDriver.isEmpty()) {
+                Driver driver = new Driver();
+                if (driverRequest.getName() != null)
+                    driver.setName(driverRequest.getName());
+                if (driverRequest.getSurname() != null)
+                    driver.setSurname(driverRequest.getSurname());
+                if (driverRequest.getAddress() != null)
+                    driver.setAddress(driverRequest.getAddress());
+                if (driverRequest.getPesel() != null)
+                    driver.setPesel(driverRequest.getPesel());
+                if (driverRequest.getDateofbirth() != null)
+                    driver.setDateOfBirth(driverRequest.getDateofbirth());
+                Driver saved = driverRepository.save(driver);
+                return ResponseEntity.ok().body(saved);
+            }else
+            {
+                return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Kierowca o tym numerze PESEL jest już w bazie"));
+            }
 
         }catch (Exception e)
         {

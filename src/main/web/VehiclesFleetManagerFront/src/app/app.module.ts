@@ -42,6 +42,10 @@ import { VehicleInspectionComponent } from './componment/vehicle-inspection/vehi
 import { VehicleInspectionCreatorComponent } from './componment/vehicle-inspection/vehicle-inspection-creator/vehicle-inspection-creator.component';
 import { CargoCreatorComponent } from './componment/cargo/cargo-creator/cargo-creator.component';
 import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatGridListModule} from "@angular/material/grid-list";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
+import { DriverInfoComponent } from './componment/driver/driver-info/driver-info.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +66,7 @@ import {MatPaginatorModule} from "@angular/material/paginator";
     VehicleInspectionComponent,
     VehicleInspectionCreatorComponent,
     CargoCreatorComponent,
+    DriverInfoComponent,
 
   ],
     imports: [
@@ -90,6 +95,9 @@ import {MatPaginatorModule} from "@angular/material/paginator";
         FontAwesomeModule,
         FontAwesomeTestingModule,
         MatPaginatorModule,
+        MatGridListModule,
+        MatDatepickerModule,
+      MatNativeDateModule
 
 
     ],

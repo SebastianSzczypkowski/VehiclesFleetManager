@@ -11,6 +11,7 @@ import {Entitlementstotransport} from "../../../model/entitlementstotransport";
 export class DriverCreatorComponent implements OnInit {
 
   entitlements:Entitlementstotransport[]=[];
+  entitle:Entitlementstotransport =new Entitlementstotransport() ;
   driverForm!:FormGroup;
   permissionForm!:FormGroup;
   entitlementsColumns: string[] = [ 'documentTyp', 'typeofpermission'];
@@ -21,7 +22,7 @@ export class DriverCreatorComponent implements OnInit {
       name:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
       surname:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
       pesel:new FormControl(''),
-      dateofbirth:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
+      dateofbirth:[new Date()],
       address:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
     });
     this.permissionForm=this._formBuilder.group(
@@ -33,12 +34,18 @@ export class DriverCreatorComponent implements OnInit {
   }
 
   onSubmit() {
-
-    this.driverService.add(this.driverForm.getRawValue()).subscribe()
+    console.log(this.driverForm.getRawValue());
+    this.driverService.add(this.driverForm.getRawValue()).subscribe();
   }
 
   reset()
   {
     this.driverForm.reset();
+  }
+
+  onSubmitPermission() {
+
+    this.entitle.typeofpermission=this.permissionForm.getRawValue().name;
+    this.entitlements.push(this.entitle);
   }
 }

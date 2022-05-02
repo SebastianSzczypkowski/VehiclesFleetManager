@@ -36,7 +36,8 @@ export class VehicleInspectionCreatorComponent implements OnInit,AfterViewInit {
   ngOnInit(): void {
     this.vehicleInspectionForm=this._formBuilder.group({
       carRepairShopName:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
-      dataWykonania:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
+      date:[new Date()],
+      validityOfTheVehicleInspection:[new Date()],
       description:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
       performedBy:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
       idVehicle:new FormControl(''),

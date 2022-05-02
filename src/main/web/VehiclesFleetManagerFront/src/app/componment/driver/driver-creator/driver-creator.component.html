@@ -20,9 +20,16 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field appearance="fill">
+<!--        <mat-form-field appearance="fill">-->
+<!--          <mat-label>Data urodzenia</mat-label>-->
+<!--          <input matInput placeholder="Lokacja docelowa" formControlName="dateofbirth" required>-->
+<!--        </mat-form-field>-->
+        <mat-form-field color="primary" appearance="fill">
           <mat-label>Data urodzenia</mat-label>
-          <input matInput placeholder="Lokacja docelowa" formControlName="dateofbirth" required>
+          <input matInput [matDatepicker]="picker" formControlName="dateofbirth">
+
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </p>
 
@@ -47,12 +54,15 @@
   </mat-step>
 
   <mat-step >
-    <form [formGroup]="permissionForm"  (ngSubmit)="onSubmit()">
+<!--    <mat-grid-list md-cols-xs="1" rowHeight="100px">-->
+<!--      <mat-grid-tile>-->
+    <form [formGroup]="permissionForm"  (ngSubmit)="onSubmitPermission()">
       <ng-template matStepLabel>Uprawnienia</ng-template>
       <mat-form-field appearance="fill">
         <mat-label>Wybierz rodzaj uprawnienia</mat-label>
         <input matInput placeholder="Wybierz rodzaj uprawnienia" formControlName="name" required>
       </mat-form-field>
+
 
       <p>
         <mat-form-field appearance="fill">
@@ -61,11 +71,18 @@
         </mat-form-field>
       </p>
 
-
+      <button mat-raised-button color="primary" type="submit" >dodaj</button>
     </form>
+
+        <div style="margin-top: 2vh">
+          <button mat-raised-button color="primary" >resetuj</button>
+
+          <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
+        </div>
+<!--        </mat-grid-tile>-->
+<!--      <mat-grid-tile>-->
     <table mat-table [dataSource]="entitlements"
            class="mat-elevation-z8 demo-table " >
-
 
       <!-- Position Column -->
       <ng-container matColumnDef="documentTyp">
@@ -84,17 +101,13 @@
       </ng-container>
 
 
-
-
       <tr mat-header-row *matHeaderRowDef="entitlementsColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: entitlementsColumns;" ></tr>
     </table>
-    <div style="margin-top: 2vh">
-      <button mat-raised-button color="primary" >resetuj</button>
 
-      <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
-    </div>
 
+<!--        </mat-grid-tile>-->
+<!--    </mat-grid-list>-->
   </mat-step>
   <mat-step >
     Dodać tabel z podsumowaniem

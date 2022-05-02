@@ -5,6 +5,10 @@ import {Driver} from "../../model/driver";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {PeriodicElement} from "../route-creator/route-creator.component";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {RoadInfoComponent} from "../set-route/road-info/road-info.component";
+import {DriverInfoComponent} from "./driver-info/driver-info.component";
+import {DriverEmmiterService} from "./service/driver-emmiter.service";
 
 @Component({
   selector: 'app-driver',
@@ -25,7 +29,8 @@ export class DriverComponent implements OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-  constructor(private driverService:DriverService) { }
+  constructor(private driverService:DriverService,public matDialog:MatDialog,
+              private driverEmmiter:DriverEmmiterService) { }
 
   ngOnInit(): void {
     // this.driverService.getAll().subscribe(
@@ -58,5 +63,20 @@ export class DriverComponent implements OnInit {
     else
       this.driverService.getAllPage(0,this.pageSize)
     return event;
+  }
+
+  getDriverDeatils(d:Driver)
+  {
+    console.log(d);
+    const dialogConfig = new MatDialogConfig();
+    // The user can't close the dialog by clicking outside its body
+    dialogConfig.disableClose = true;
+    dialogConfig.id = "driver-info-component";
+    dialogConfig.height = "350px";
+    dialogConfig.width = "600px";
+    const modalDialog = this.matDialog.open(DriverInfoComponent, dialogConfig);
+
+    this.driverEmmiter.onDriverDetailsEdit(d);
+    this.driverEmmiter.driverDetails.emit();
   }
 }
