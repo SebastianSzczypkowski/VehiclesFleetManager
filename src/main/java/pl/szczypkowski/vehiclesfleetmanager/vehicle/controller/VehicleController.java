@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.Service.VehicleService;
+import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.Vehicle;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.VehicleRequest;
 
 @CrossOrigin(origins = "*")
@@ -45,8 +46,8 @@ public class VehicleController {
 
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody VehicleRequest vehicleRequest)
+    public ResponseEntity<?> save(@RequestBody Vehicle vehicle)
     {
-        return vehicleService.save(vehicleRequest);
+        return vehicleService.save(vehicle);
     }
 }

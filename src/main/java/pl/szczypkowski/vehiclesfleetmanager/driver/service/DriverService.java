@@ -29,16 +29,6 @@ public class DriverService {
         return driverRepository.getById(id);
     }
 
-    public void save(Driver driver)
-    {
-        try {
-            driverRepository.save(driver);
-        }catch (Exception e)
-        {
-            e.getStackTrace();
-            logger.error("Wystąpił błąd podczas zapisu danych kierowcy");
-        }
-    }
 
 
     public ResponseEntity<?> getAll() {
@@ -47,27 +37,43 @@ public class DriverService {
         return ResponseEntity.ok().body(drivers);
     }
 
-    public ResponseEntity<?> save(DriverRequest driverRequest) {
+    public ResponseEntity<?> save(Driver driver) {
         try
         {
-            Optional<Driver> optionalDriver=driverRepository.getDriverByPeselEquals(driverRequest.getPesel());
-            if(optionalDriver.isEmpty()) {
-                Driver driver = new Driver();
-                if (driverRequest.getName() != null)
-                    driver.setName(driverRequest.getName());
-                if (driverRequest.getSurname() != null)
-                    driver.setSurname(driverRequest.getSurname());
-                if (driverRequest.getAddress() != null)
-                    driver.setAddress(driverRequest.getAddress());
-                if (driverRequest.getPesel() != null)
-                    driver.setPesel(driverRequest.getPesel());
-                if (driverRequest.getDateofbirth() != null)
-                    driver.setDateOfBirth(driverRequest.getDateofbirth());
-                Driver saved = driverRepository.save(driver);
-                return ResponseEntity.ok().body(saved);
-            }else
+
+            if(driver.getId()!=null)
             {
-                return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Kierowca o tym numerze PESEL jest już w bazie"));
+                Optional<Driver> getFromDb =driverRepository.findById(driver.getId());
+                if(getFromDb.isPresent())
+                {
+                    if(getFromDb.get().getName()==null || driver.getName()!=null &&!getFromDb.get().getName().equals(driver.getName()))
+                        getFromDb.get().setName(driver.getName());
+                    if(getFromDb.get().getSurname()==null ||driver.getSurname()!=null &&!getFromDb.get().getSurname().equals(driver.getSurname()))
+                        getFromDb.get().setSurname(driver.getSurname());
+                    if(getFromDb.get().getPesel()==null ||driver.getPesel()!=null &&!getFromDb.get().getPesel().equals(driver.getPesel()))
+                        getFromDb.get().setPesel(driver.getPesel());
+                    if(getFromDb.get().getAddress()==null ||driver.getAddress()!=null &&!getFromDb.get().getAddress().equals(driver.getAddress()))
+                        getFromDb.get().setAddress(driver.getAddress());
+                    if(getFromDb.get().getDateOfBirth()==null ||driver.getDateOfBirth()!=null && !getFromDb.get().getDateOfBirth().equals(driver.getDateOfBirth()))
+                        getFromDb.get().setDateOfBirth(driver.getDateOfBirth());
+
+                    Driver saved = driverRepository.save(getFromDb.get());
+                    return ResponseEntity.ok().body(saved);
+                }else
+                {
+                    return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie znaleziono kierowcy o ID: "+driver.getId()));
+                }
+
+            }
+            else {
+                Optional<Driver> optionalDriver = driverRepository.getDriverByPeselEquals(driver.getPesel());
+                if (optionalDriver.isEmpty()) {
+
+                    Driver saved = driverRepository.save(driver);
+                    return ResponseEntity.ok().body(saved);
+                } else {
+                    return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Kierowca o tym numerze PESEL jest już w bazie"));
+                }
             }
 
         }catch (Exception e)

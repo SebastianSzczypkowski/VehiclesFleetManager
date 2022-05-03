@@ -6,6 +6,12 @@ import {Vehicleinspection} from "../../model/vehicleinspection";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {PeriodicElement} from "../route-creator/route-creator.component";
+import {Driver} from "../../model/driver";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {DriverInfoComponent} from "../driver/driver-info/driver-info.component";
+import {VehicleEmmiterService} from "../vehicle/service/vehicle-emmiter.service";
+import {VehilceInspectionEmmiterService} from "./service/vehilce-inspection-emmiter.service";
+import {VehicleInspectionInfoComponent} from "./vehicle-inspection-info/vehicle-inspection-info.component";
 
 @Component({
   selector: 'app-vehicle-inspection',
@@ -24,10 +30,12 @@ export class VehicleInspectionComponent implements OnInit,AfterViewInit {
   displayedColumns: string[] = ['position', 'nazwa','description','performedBy'];//, 'date', 'validityDate'
   @ViewChild(MatPaginator) paginator!: MatPaginator
 
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-  constructor(private _formBuilder: FormBuilder,private vehicleInspectionService:VehicleInspectionService) { }
+  constructor(private _formBuilder: FormBuilder,private vehicleInspectionService:VehicleInspectionService,
+              public matDialog:MatDialog,private vehicleInspectionEmmiter:VehilceInspectionEmmiterService) { }
 
   ngOnInit(): void {
 
@@ -65,5 +73,18 @@ export class VehicleInspectionComponent implements OnInit,AfterViewInit {
     else
       this.vehicleInspectionService.getAllPage(0,this.pageSize)
     return event;
+  }
+  getVehicleInspectionDeatils(vI:Vehicleinspection)
+  {
+    const dialogConfig = new MatDialogConfig();
+    // The user can't close the dialog by clicking outside its body
+    dialogConfig.disableClose = true;
+    dialogConfig.id = "driver-info-component";
+    dialogConfig.height = "450px";
+    dialogConfig.width = "600px";
+    const modalDialog = this.matDialog.open(VehicleInspectionInfoComponent, dialogConfig);
+
+    this.vehicleInspectionEmmiter.setvehicleInspection(vI);
+    //this.driverEmmiter.driverDetails.emit();
   }
 }

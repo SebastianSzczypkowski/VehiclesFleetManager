@@ -25,6 +25,7 @@ export class DriverComponent implements OnInit {
   dataSource = new MatTableDataSource<PeriodicElement>();
   displayedColumns: string[] = ['position', 'name', 'surname', 'pesel','address'];
   @ViewChild(MatPaginator) paginator!: MatPaginator
+  private id!: number;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -67,16 +68,23 @@ export class DriverComponent implements OnInit {
 
   getDriverDeatils(d:Driver)
   {
-    console.log(d);
+
+
+
     const dialogConfig = new MatDialogConfig();
     // The user can't close the dialog by clicking outside its body
     dialogConfig.disableClose = true;
     dialogConfig.id = "driver-info-component";
-    dialogConfig.height = "350px";
+    dialogConfig.height = "450px";
     dialogConfig.width = "600px";
     const modalDialog = this.matDialog.open(DriverInfoComponent, dialogConfig);
 
-    this.driverEmmiter.onDriverDetailsEdit(d);
-    this.driverEmmiter.driverDetails.emit();
+    this.drivers.forEach(e=>{
+      if(e.id ==d.id)
+        this.id=e.id;
+    });
+    this.driverEmmiter.setdriverId(this.id);
+    this.driverEmmiter.setdriver(d);
+    //this.driverEmmiter.driverDetails.emit();
   }
 }

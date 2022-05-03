@@ -1,0 +1,50 @@
+<div id="modal-content-wrapper">
+  <header id="modal-header">
+    <h1 id="modal-title">{{vehicleInspectionData.carRepairShopName }}  </h1>
+  </header>
+  <section id="modal-body">
+
+    <form [formGroup]="vehicleInspectionDeatils"  (ngSubmit)="onSubmit()">
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Nazwa warsztatu</mat-label>
+        <input matInput type="text"  formControlName="carRepairShopName">
+        <button *ngIf="vehicleInspectionData.carRepairShopName" matSuffix mat-icon-button aria-label="Clear" (click)="vehicleInspectionData.carRepairShopName=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Opis</mat-label>
+        <input matInput type="text"  formControlName="description">
+        <button *ngIf="vehicleInspectionData.description" matSuffix mat-icon-button aria-label="Clear" (click)="vehicleInspectionData.description=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <p></p>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Wykonany przez</mat-label>
+        <input matInput type="text"  formControlName="performedBy">
+        <button *ngIf="vehicleInspectionData.performedBy" matSuffix mat-icon-button aria-label="Clear" (click)="vehicleInspectionData.performedBy=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Pojazd</mat-label>
+        <input matInput type="text"  formControlName="idVehicle">
+        <button *ngIf="vehicleInspectionData.idVehicle" matSuffix mat-icon-button aria-label="Clear" (click)="vehicleInspectionData.idVehicle=0">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <p></p>
+
+      <button mat-raised-button color="primary" style="margin-left: 52vh" type="submit" >zapisz</button>
+      <button mat-raised-button  style="background-color: var(--right-color)" (click)="closeModal()">Wyjdz</button>
+    </form>
+
+
+  </section>
+  <footer id="modal-footer">
+
+
+
+  </footer>
+</div>

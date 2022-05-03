@@ -44,9 +44,9 @@ public class DriverController {
 
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody DriverRequest driverRequest)
+    public ResponseEntity<?> save(@RequestBody Driver driver)
     {
-        return driverService.save(driverRequest);
+        return driverService.save(driver);
     }
 
 

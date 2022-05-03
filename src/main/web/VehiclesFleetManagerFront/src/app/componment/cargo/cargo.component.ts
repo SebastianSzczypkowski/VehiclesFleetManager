@@ -5,6 +5,10 @@ import {Cargo} from "../../model/cargo";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {PeriodicElement} from "../route-creator/route-creator.component";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {CargoEmmiterService} from "./service/cargo-emmiter.service";
+import {DriverInfoComponent} from "../driver/driver-info/driver-info.component";
+import {CargoInfoComponent} from "./cargo-info/cargo-info.component";
 
 @Component({
   selector: 'app-cargo',
@@ -21,11 +25,13 @@ export class CargoComponent implements OnInit {
   dataSource = new MatTableDataSource<PeriodicElement>();
   displayedColumns: string[] = ['position', 'name', 'description', 'type','specialRemarks','delivered','assigned'];
   @ViewChild(MatPaginator) paginator!: MatPaginator
+  private id!: number;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-  constructor(private cargoService:CargoService) { }
+  constructor(private cargoService:CargoService,public matDialog:MatDialog,
+              private cargoEmmiter:CargoEmmiterService) { }
 
   ngOnInit(): void {
     // this.cargoService.getAll().subscribe(
@@ -58,5 +64,23 @@ export class CargoComponent implements OnInit {
     else
       this.cargoService.getAllPage(0,this.pageSize)
     return event;
+  }
+  getCargoDeatils(c:Cargo)
+  {
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.id = "driver-info-component";
+    dialogConfig.height = "650px";
+    dialogConfig.width = "600px";
+    const modalDialog = this.matDialog.open(CargoInfoComponent, dialogConfig);
+
+    this.cargos.forEach(e=>{
+      if(e.id ==c.id)
+        this.id=e.id;
+    });
+    this.cargoEmmiter.setcargo(c);
+
+    //this.driverEmmiter.driverDetails.emit();
   }
 }

@@ -11,6 +11,7 @@ import pl.szczypkowski.vehiclesfleetmanager.cargo.repository.CargoRepository;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CargoService {
@@ -89,34 +90,56 @@ public class CargoService {
         }
     }
 
-    public ResponseEntity<?> save(CargoRequest cargoRequest) {
+    public ResponseEntity<?> save(Cargo cargoRequest) {
 
         try{
-            Cargo cargo = new Cargo();
-            if(cargoRequest.getName()!=null)
-                cargo.setName(cargoRequest.getName());
-            if(cargoRequest.getDescription()!=null)
-                cargo.setDescription(cargoRequest.getDescription());
-            if(cargoRequest.getSensitivity()!=null)
-                cargo.setSensitivity(cargoRequest.getSensitivity());
-            if(cargoRequest.getDepth()!=null)
-                cargo.setDepth(cargoRequest.getDepth());
-            if(cargoRequest.getHeight()!=null)
-                cargo.setHeight(cargoRequest.getHeight());
-            if(cargoRequest.getWeight()!=null)
-                cargo.setWeight(cargoRequest.getWeight());
-            if(cargoRequest.getWidth()!=null)
-                cargo.setWidth(cargoRequest.getWidth());
-            if(cargoRequest.getSpecialRemarks()!=null)
-                cargo.setSpecialRemarks(cargoRequest.getSpecialRemarks());
-            cargo.setAssigned(false);
-            cargo.setDelivered(false);
 
-            //TODO przypisywanie typu ładunku
-            //cargo.setType();
 
-            Cargo saved =cargoRepository.save(cargo);
-            return ResponseEntity.ok().body(saved);
+           if(cargoRequest.getId()!=null)
+           {
+               Optional<Cargo> cargoDb= cargoRepository.findById(cargoRequest.getId());
+               if(cargoDb.isPresent())
+               {
+                   if(cargoDb.get().getName()==null || cargoRequest.getName()!=null &&!cargoDb.get().getName().equals(cargoRequest.getName()))
+                       cargoDb.get().setName(cargoRequest.getName());
+                   if(cargoDb.get().getDescription()==null || cargoRequest.getDescription()!=null &&!cargoDb.get().getDescription().equals(cargoRequest.getDescription()))
+                       cargoDb.get().setDescription(cargoRequest.getDescription());
+                   if(cargoDb.get().getType()==null || cargoRequest.getType()!=null &&!cargoDb.get().getType().equals(cargoRequest.getType()))
+                       cargoDb.get().setType(cargoRequest.getType());
+                   if(cargoDb.get().getSensitivity()==null || cargoRequest.getSensitivity()!=null &&!cargoDb.get().getSensitivity().equals(cargoRequest.getSensitivity()))
+                       cargoDb.get().setSensitivity(cargoRequest.getSensitivity());
+                   if(cargoDb.get().getSpecialRemarks()==null || cargoRequest.getSpecialRemarks()!=null &&!cargoDb.get().getSpecialRemarks().equals(cargoRequest.getSpecialRemarks()))
+                       cargoDb.get().setSpecialRemarks(cargoRequest.getSpecialRemarks());
+                   if(cargoDb.get().getDelivered()==null || cargoRequest.getDelivered()!=null &&!cargoDb.get().getDelivered().equals(cargoRequest.getDelivered()))
+                       cargoDb.get().setDelivered(cargoRequest.getDelivered());
+                   if(cargoDb.get().getAssigned()==null || cargoRequest.getAssigned()!=null &&!cargoDb.get().getAssigned().equals(cargoRequest.getAssigned()))
+                       cargoDb.get().setAssigned(cargoRequest.getAssigned());
+                   if(cargoDb.get().getWeight()==null || cargoRequest.getWeight()!=null &&!cargoDb.get().getWeight().equals(cargoRequest.getWeight()))
+                       cargoDb.get().setWeight(cargoRequest.getWeight());
+                   if(cargoDb.get().getHeight()==null || cargoRequest.getHeight()!=null &&!cargoDb.get().getHeight().equals(cargoRequest.getHeight()))
+                       cargoDb.get().setHeight(cargoRequest.getHeight());
+                   if(cargoDb.get().getDepth()==null || cargoRequest.getDepth()!=null &&!cargoDb.get().getDepth().equals(cargoRequest.getDepth()))
+                       cargoDb.get().setDepth(cargoRequest.getDepth());
+
+                   Cargo saved =cargoRepository.save(cargoDb.get());
+                   return ResponseEntity.ok().body(saved);
+
+               }
+               else
+               {
+
+                   return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie znaleziono ładunku o ID: "+cargoRequest.getId()));
+               }
+
+
+           }else {
+
+               cargoRequest.setAssigned(false);
+               cargoRequest.setDelivered(false);
+
+               Cargo saved = cargoRepository.save(cargoRequest);
+               return ResponseEntity.ok().body(saved);
+           }
 
         }catch (Exception e)
         {

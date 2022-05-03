@@ -13,7 +13,9 @@ import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.Vehicle;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.VehicleRequest;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.repository.VehicleRepository;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VehicleService {
@@ -60,29 +62,56 @@ public class VehicleService {
         }
     }
 
-    public ResponseEntity<?> save(VehicleRequest vehicleRequest) {
+    public ResponseEntity<?> save(Vehicle vehicle) {
         try{
 
-            Vehicle vehicle = new Vehicle();
-            if(vehicleRequest.getName()!=null)
-            vehicle.setName(vehicleRequest.getName());
-            if(vehicleRequest.getEngineCapacity()!=null)
-                vehicle.setEngineCapacity(vehicleRequest.getEngineCapacity());
-            if(vehicleRequest.getLoadCapacity()!=null)
-                vehicle.setCarLoadCapacity(vehicleRequest.getLoadCapacity());
-            if(vehicleRequest.getRegistration()!=null)
-                vehicle.setRegistrationNumber(vehicleRequest.getRegistration());
-            if(vehicleRequest.getVin()!=null)
-                vehicle.setVin(vehicleRequest.getVin());
-            if(vehicleRequest.getMileage()!=null)
-                vehicle.setCarMileage(vehicleRequest.getMileage());
+            if(vehicle.getId()!=null)
+            {
+                Optional<Vehicle> vehicleDb = vehicleRepository.findById(vehicle.getId());
+                if(vehicleDb.isPresent())
+                {
+                    if(vehicleDb.get().getName()==null || vehicle.getName()!=null &&!vehicleDb.get().getName().equals(vehicle.getName()))
+                        vehicleDb.get().setName(vehicle.getName());
+                    if(vehicleDb.get().getAverageFuelConsumption()==null || vehicle.getAverageFuelConsumption()!=null &&!vehicleDb.get().getAverageFuelConsumption().equals(vehicle.getAverageFuelConsumption()))
+                        vehicleDb.get().setAverageFuelConsumption(vehicle.getAverageFuelConsumption());
+                    if(vehicleDb.get().getCarLoadCapacity()==null || vehicle.getCarLoadCapacity()!=null &&!vehicleDb.get().getCarLoadCapacity().equals(vehicle.getCarLoadCapacity()))
+                        vehicleDb.get().setCarLoadCapacity(vehicle.getCarLoadCapacity());
+                    if(vehicleDb.get().getCarMileage()==null || vehicle.getCarMileage()!=null &&!vehicleDb.get().getCarMileage().equals(vehicle.getCarMileage()))
+                        vehicleDb.get().setCarMileage(vehicle.getCarMileage());
+                    if(vehicleDb.get().getEngineCapacity()==null || vehicle.getEngineCapacity()!=null &&!vehicleDb.get().getEngineCapacity().equals(vehicle.getEngineCapacity()))
+                        vehicleDb.get().setEngineCapacity(vehicle.getEngineCapacity());
+                    if(vehicleDb.get().getLorrySemitrailer()==null || vehicle.getLorrySemitrailer()!=null &&!vehicleDb.get().getLorrySemitrailer().equals(vehicle.getLorrySemitrailer()))
+                        vehicleDb.get().setLorrySemitrailer(vehicle.getLorrySemitrailer());
+                    if(vehicleDb.get().getCarLoadCapacity()==null || vehicle.getCarLoadCapacity()!=null &&!vehicleDb.get().getCarLoadCapacity().equals(vehicle.getCarLoadCapacity()))
+                        vehicleDb.get().setCarLoadCapacity(vehicle.getCarLoadCapacity());
+                    if(vehicleDb.get().getOccupied()==null || vehicle.getOccupied()!=null &&!vehicleDb.get().getOccupied().equals(vehicle.getOccupied()))
+                        vehicleDb.get().setOccupied(vehicle.getOccupied());
+                    if(vehicleDb.get().getNumberOfSeats()==null || vehicle.getNumberOfSeats()!=null &&!vehicleDb.get().getNumberOfSeats().equals(vehicle.getNumberOfSeats()))
+                        vehicleDb.get().setNumberOfSeats(vehicle.getNumberOfSeats());
+                    if(vehicleDb.get().getRegistrationNumber()==null || vehicle.getRegistrationNumber()!=null &&!vehicleDb.get().getRegistrationNumber().equals(vehicle.getRegistrationNumber()))
+                        vehicleDb.get().setRegistrationNumber(vehicle.getRegistrationNumber());
+                    if(vehicleDb.get().getVin()==null || vehicle.getVin()!=null &&!vehicleDb.get().getVin().equals(vehicle.getVin()))
+                        vehicleDb.get().setVin(vehicle.getVin());
+                    if(vehicleDb.get().getRoadworthy()==null || vehicle.getRoadworthy()!=null &&!vehicleDb.get().getRoadworthy().equals(vehicle.getRoadworthy()))
+                        vehicleDb.get().setRoadworthy(vehicle.getRoadworthy());
 
-            vehicle.setOccupied(false);
-            vehicle.setRoadworthy(true);
+                    Vehicle saved =vehicleRepository.save(vehicleDb.get());
+                    return ResponseEntity.ok().body(saved);
 
-            Vehicle saved  = vehicleRepository.save(vehicle);
-            return ResponseEntity.ok().body(saved);
+                }
+                else {
+                    return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie znaleziono pojazdu ID: "+vehicle.getId()));
+                }
 
+            }
+            else {
+
+                vehicle.setOccupied(false);
+                vehicle.setRoadworthy(true);
+                Vehicle saved = vehicleRepository.save(vehicle);
+                return ResponseEntity.ok().body(saved);
+
+            }
         }catch (Exception e)
         {
             e.printStackTrace();

@@ -5,10 +5,16 @@ export class Driver {
   private _surname!:string;
   private _pesel!:string;
   private _address!:string;
+  private _dateOfBirth!:string;
 
 
+  get dateOfBirth(): string {
+    return this._dateOfBirth;
+  }
 
-
+  set dateOfBirth(value: string) {
+    this._dateOfBirth = value;
+  }
 
   get id(): number {
     return this._id;

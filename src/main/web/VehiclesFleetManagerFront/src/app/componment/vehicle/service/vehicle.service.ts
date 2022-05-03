@@ -15,8 +15,9 @@ const httpOptions={
 })
 export class VehicleService {
 
-  constructor(private http:HttpClient) { }
 
+
+  constructor(private http:HttpClient) { }
 
   getAllVehilce()
   {

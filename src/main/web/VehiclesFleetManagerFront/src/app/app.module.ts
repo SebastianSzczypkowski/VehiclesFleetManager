@@ -46,6 +46,9 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import { DriverInfoComponent } from './componment/driver/driver-info/driver-info.component';
+import { VehicleInfoComponent } from './componment/vehicle/vehicle-info/vehicle-info.component';
+import { CargoInfoComponent } from './componment/cargo/cargo-info/cargo-info.component';
+import { VehicleInspectionInfoComponent } from './componment/vehicle-inspection/vehicle-inspection-info/vehicle-inspection-info.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +70,9 @@ import { DriverInfoComponent } from './componment/driver/driver-info/driver-info
     VehicleInspectionCreatorComponent,
     CargoCreatorComponent,
     DriverInfoComponent,
+    VehicleInfoComponent,
+    CargoInfoComponent,
+    VehicleInspectionInfoComponent,
 
   ],
     imports: [

@@ -1,0 +1,90 @@
+<div id="modal-content-wrapper">
+  <header id="modal-header">
+    <h1 id="modal-title">{{cargoData.name }}  </h1>
+  </header>
+  <section id="modal-body">
+
+    <form [formGroup]="cargoDeatils"  (ngSubmit)="onSubmit()">
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Nazwa</mat-label>
+        <input matInput type="text"  formControlName="name">
+        <button *ngIf="cargoData.name" matSuffix mat-icon-button aria-label="Clear" (click)="cargoData.name=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Opis</mat-label>
+        <input matInput type="text"  formControlName="description">
+        <button *ngIf="cargoData.description" matSuffix mat-icon-button aria-label="Clear" (click)="cargoData.description=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <p></p>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Typ</mat-label>
+        <input matInput type="text"  formControlName="type">
+        <button *ngIf="cargoData.type" matSuffix mat-icon-button aria-label="Clear" (click)="cargoData.type=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Podatność</mat-label>
+        <input matInput type="text"  formControlName="sensitivity">
+        <button *ngIf="cargoData.sensitivity" matSuffix mat-icon-button aria-label="Clear" (click)="cargoData.sensitivity=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <p></p>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Specjalne wytyczne</mat-label>
+        <input matInput type="text"  formControlName="specialRemarks">
+        <button *ngIf="cargoData.specialRemarks" matSuffix mat-icon-button aria-label="Clear" (click)="cargoData.specialRemarks=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Waga</mat-label>
+        <input matInput type="number"  formControlName="weight">
+        <button *ngIf="cargoData.weight" matSuffix mat-icon-button aria-label="Clear" (click)="cargoData.weight=0">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <p></p>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Szerokość</mat-label>
+        <input matInput type="number"  formControlName="width">
+        <button *ngIf="cargoData.width" matSuffix mat-icon-button aria-label="Clear" (click)="cargoData.width=0">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Wysokość</mat-label>
+        <input matInput type="number"  formControlName="height">
+        <button *ngIf="cargoData.height" matSuffix mat-icon-button aria-label="Clear" (click)="cargoData.height=0">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <p></p>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Głębokość</mat-label>
+        <input matInput type="number"  formControlName="depth">
+        <button *ngIf="cargoData.depth" matSuffix mat-icon-button aria-label="Clear" (click)="cargoData.depth=0">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <p></p>
+
+
+      <button mat-raised-button color="primary" style="margin-left: 52vh" type="submit" >zapisz</button>
+      <button mat-raised-button  style="background-color: var(--right-color)" (click)="closeModal()">Wyjdz</button>
+    </form>
+
+
+  </section>
+  <footer id="modal-footer">
+
+
+
+  </footer>
+</div>
+

@@ -1,0 +1,87 @@
+<div id="modal-content-wrapper">
+  <header id="modal-header">
+    <h1 id="modal-title">{{vehicleData.name }}  </h1>
+  </header>
+  <section id="modal-body">
+
+    <form [formGroup]="vehicleDeatils"  (ngSubmit)="onSubmit()">
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Marka</mat-label>
+        <input matInput type="text"  formControlName="name">
+<!--        <button *ngIf="vehicleData.name" matSuffix mat-icon-button aria-label="Clear" >-->
+<!--          <mat-icon>close</mat-icon>-->
+<!--        </button>-->
+      </mat-form-field>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Numer VIN</mat-label>
+        <input matInput type="text"  formControlName="vin">
+<!--        <button *ngIf="vehicleData.vin" matSuffix mat-icon-button aria-label="Clear" (click)="vehicleData.vin">-->
+<!--          <mat-icon>close</mat-icon>-->
+<!--        </button>-->
+      </mat-form-field>
+      <p></p>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Numer Rejestracyjny</mat-label>
+        <input matInput type="text"  formControlName="registrationNumber">
+<!--        <button *ngIf="vehicleData.registrationNumber" matSuffix mat-icon-button aria-label="Clear" (click)="vehicleData.registrationNumber=''">-->
+<!--          <mat-icon>close</mat-icon>-->
+<!--        </button>-->
+      </mat-form-field>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Przebieg</mat-label>
+        <input matInput type="number"  formControlName="carMileage">
+<!--        <button *ngIf="vehicleData.carMileage" matSuffix mat-icon-button aria-label="Clear" (click)="vehicleData.carMileage">-->
+<!--          <mat-icon>close</mat-icon>-->
+<!--        </button>-->
+      </mat-form-field>
+      <p></p>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Ładowność</mat-label>
+        <input matInput type="number"  formControlName="carLoadCapacity">
+        <button *ngIf="vehicleData.carLoadCapacity" matSuffix mat-icon-button aria-label="Clear" (click)="vehicleData.carLoadCapacity">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>lorrySemitrailer</mat-label>
+        <input matInput type="text"  formControlName="lorrySemitrailer">
+        <button *ngIf="vehicleData.carMileage" matSuffix mat-icon-button aria-label="Clear" (click)="vehicleData.lorrySemitrailer">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <p></p>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Ilość miejsc</mat-label>
+        <input matInput type="number"  formControlName="numberOfSeats">
+        <button *ngIf="vehicleData.numberOfSeats" matSuffix mat-icon-button aria-label="Clear" (click)="vehicleData.numberOfSeats">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Pojemność silnika</mat-label>
+        <input matInput type="number"  formControlName="engineCapacity">
+        <button *ngIf="vehicleData.engineCapacity" matSuffix mat-icon-button aria-label="Clear" (click)="vehicleData.engineCapacity">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <p></p>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <mat-label>Średnie spalanie</mat-label>
+        <input matInput type="number"  formControlName="averageFuelConsumption">
+        <button *ngIf="vehicleData.averageFuelConsumption" matSuffix mat-icon-button aria-label="Clear" (click)="vehicleData.averageFuelConsumption">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" style="margin-left: 52vh" type="submit" >zapisz</button>
+      <button mat-raised-button  style="background-color: var(--right-color)" (click)="closeModal()">Wyjdz</button>
+    </form>
+
+
+  </section>
+  <footer id="modal-footer">
+
+
+
+  </footer>
+</div>

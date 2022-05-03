@@ -57,8 +57,8 @@ public class CargoController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody CargoRequest cargoRequest)
+    public ResponseEntity<?> save(@RequestBody Cargo cargo)
     {
-        return cargoService.save(cargoRequest);
+        return cargoService.save(cargo);
     }
 }
