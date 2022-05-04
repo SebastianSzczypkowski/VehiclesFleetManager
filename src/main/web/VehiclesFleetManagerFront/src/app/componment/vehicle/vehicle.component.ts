@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {VehicleService} from "./service/vehicle.service";
 import {Vehicle} from "../../model/vehicle";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {MatTableDataSource} from "@angular/material/table";
+import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {PeriodicElement} from "../route-creator/route-creator.component";
 import {Driver} from "../../model/driver";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
@@ -26,6 +26,7 @@ export class VehicleComponent implements OnInit,AfterViewInit {
   dataSource = new MatTableDataSource<PeriodicElement>();
   @ViewChild(MatPaginator) paginator!: MatPaginator
   private id!: number;
+  @ViewChild(MatTable) table!: MatTable<any>;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -90,5 +91,17 @@ export class VehicleComponent implements OnInit,AfterViewInit {
 
     //this.driverEmmiter.driverDetails.emit();
   }
+  search(event: any) {
 
+    this.vehicleService.getAllPageSearch(event.target.value,this.pageIndex,this.pageSize).subscribe(
+      data=>{
+        this.vehicles=data.content;
+        this.pageIndex=data.number;
+        this.pageSize=data.size;
+        this.length=data.totalElements;
+        this.table.renderRows();
+      }
+    );
+    this.table.renderRows();
+  }
 }

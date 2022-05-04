@@ -32,6 +32,13 @@ export class VehicleService {
 
     })
   }
+  getAllPageSearch(search:string ,page:number,size:number)
+  {
+    return this.http.get<any>(AUTH_API+'search',{
+      params: {search,page,size}
+
+    })
+  }
 
   // add(vehicle:any):Observable<any>
   // {

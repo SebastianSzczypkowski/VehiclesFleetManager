@@ -4,7 +4,7 @@ import {Vehicle} from "../../model/vehicle";
 import {VehicleInspectionService} from "./service/vehicle-inspection.service";
 import {Vehicleinspection} from "../../model/vehicleinspection";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {MatTableDataSource} from "@angular/material/table";
+import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {PeriodicElement} from "../route-creator/route-creator.component";
 import {Driver} from "../../model/driver";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
@@ -29,6 +29,7 @@ export class VehicleInspectionComponent implements OnInit,AfterViewInit {
   dataSource = new MatTableDataSource<PeriodicElement>();
   displayedColumns: string[] = ['position', 'nazwa','description','performedBy'];//, 'date', 'validityDate'
   @ViewChild(MatPaginator) paginator!: MatPaginator
+  @ViewChild(MatTable) table!: MatTable<any>;
 
 
   ngAfterViewInit() {
@@ -86,5 +87,18 @@ export class VehicleInspectionComponent implements OnInit,AfterViewInit {
 
     this.vehicleInspectionEmmiter.setvehicleInspection(vI);
     //this.driverEmmiter.driverDetails.emit();
+  }
+  search(event: any) {
+
+    this.vehicleInspectionService.getAllPageSearch(event.target.value,this.pageIndex,this.pageSize).subscribe(
+      data=>{
+        this.vehicleinspections=data.content;
+        this.pageIndex=data.number;
+        this.pageSize=data.size;
+        this.length=data.totalElements;
+        this.table.renderRows();
+      }
+    );
+    this.table.renderRows();
   }
 }

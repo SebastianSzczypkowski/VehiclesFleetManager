@@ -1,45 +1,48 @@
 package pl.szczypkowski.vehiclesfleetmanager.driver.model;
 
 
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.model.EntitlementstToTransport;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "driver")
+@Indexed
 public class Driver {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @FullTextField(analyzer = "name")
     @Column(name = "name")
     private String name;
-
+    @FullTextField(analyzer = "name")
     @Column(name = "surname")
     private String surname;
-
     @Column(name = "pesel")
     private Long pesel;
 
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
-
+    @FullTextField(analyzer = "name")
     @Column(name = "address")
     private String address;
 
-    @ManyToOne()
+    @OneToMany()
     @JoinColumn(name = "entitlemenstst")
-    private EntitlementstToTransport entitlementstToTransport;
-
-
+    private List<EntitlementstToTransport> entitlementstToTransport;
+    @Transient
+    private List<EntitleRequest>entitlement ;
 
     public Driver() {
     }
 
-    public Driver(Long id, String name, String surname, Long pesel, Date dateOfBirth, String address, EntitlementstToTransport entitlementstToTransport) {
+    public Driver(Long id, String name, String surname, Long pesel, Date dateOfBirth, String address, List<EntitlementstToTransport> entitlementstToTransport) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -49,12 +52,20 @@ public class Driver {
         this.entitlementstToTransport = entitlementstToTransport;
     }
 
-    public EntitlementstToTransport getEntitlementstToTransport() {
+    public List<EntitlementstToTransport> getEntitlementstToTransport() {
         return entitlementstToTransport;
     }
 
-    public void setEntitlementstToTransport(EntitlementstToTransport entitlementstToTransport) {
+    public void setEntitlementstToTransport(List<EntitlementstToTransport> entitlementstToTransport) {
         this.entitlementstToTransport = entitlementstToTransport;
+    }
+
+    public List<EntitleRequest> getEntitlement() {
+        return entitlement;
+    }
+
+    public void setEntitlement(List<EntitleRequest> entitlement) {
+        this.entitlement = entitlement;
     }
 
     public Long getId() {

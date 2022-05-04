@@ -1,17 +1,21 @@
 package pl.szczypkowski.vehiclesfleetmanager.vehicle.model;
 
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
 @Table(name = "vehicle_inspection")
 @Entity
+@Indexed
 public class VehicleInspection {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @FullTextField(analyzer = "name")
     @Column(name = "car_repair_shop_name")
     private String carRepairShopName;
 
@@ -20,10 +24,10 @@ public class VehicleInspection {
 
     @Column(name = "validity_of_the_vehicle_inspection")
     private Date validityOfTheVehicleInspection;
-
+    @FullTextField(analyzer = "name")
     @Column(name = "description")
     private String description;
-
+    @FullTextField(analyzer = "name")
     @Column(name = "performed_by")
     private String performedBy;
 

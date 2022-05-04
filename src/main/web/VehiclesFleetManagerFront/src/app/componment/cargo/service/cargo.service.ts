@@ -24,6 +24,13 @@ export class CargoService {
     })
   }
 
+  getAllPageSearch(search:string ,page:number,size:number)
+  {
+    return this.http.get<any>(AUTH_API+'search',{
+      params: {search,page,size}
+
+    })
+  }
   getAllPage(page:number,size:number)
   {
     return this.http.get<any>(AUTH_API+'get-all-page',{

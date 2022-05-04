@@ -50,4 +50,11 @@ public class VehicleController {
     {
         return vehicleService.save(vehicle);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchVehicle(@RequestParam("search") String search,Pageable pageable)
+    {
+        return vehicleService.searchVehicle(search,pageable);
+    }
+
 }

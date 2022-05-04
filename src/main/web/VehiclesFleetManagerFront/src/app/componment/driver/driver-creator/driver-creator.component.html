@@ -58,17 +58,32 @@
 <!--      <mat-grid-tile>-->
     <form [formGroup]="permissionForm"  (ngSubmit)="onSubmitPermission()">
       <ng-template matStepLabel>Uprawnienia</ng-template>
-      <mat-form-field appearance="fill">
-        <mat-label>Wybierz rodzaj uprawnienia</mat-label>
-        <input matInput placeholder="Wybierz rodzaj uprawnienia" formControlName="name" required>
+<!--      <mat-form-field appearance="fill">-->
+<!--        <mat-label>Wybierz rodzaj uprawnienia</mat-label>-->
+<!--        <input matInput placeholder="Wybierz rodzaj uprawnienia" formControlName="name" required>-->
+<!--      </mat-form-field>-->
+      <mat-form-field class="example-full-width"  style="width: 50vh" appearance="fill">
+        <mat-label>Uprawnienia</mat-label>
+        <input type="text" matInput [formControl]="permissions" [matAutocomplete]="auto"  formControlName="documentTyp" >
+        <mat-autocomplete #auto="matAutocomplete" >
+          <mat-option *ngFor="let typeofpermissions of typeofpermissions " [value]="typeofpermissions.name">
+            {{typeofpermissions.name}}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
 
 
       <p>
-        <mat-form-field appearance="fill">
-          <mat-label>Data ważności</mat-label>
-          <input matInput placeholder="Data ważności" formControlName="expiryDate" required>
-        </mat-form-field>
+<!--        <mat-form-field appearance="fill">-->
+<!--          <mat-label>Data ważności</mat-label>-->
+<!--          <input matInput placeholder="Data ważności" formControlName="expiryDate" required>-->
+<!--        </mat-form-field>-->
+        <mat-form-field color="primary" appearance="fill" style="width: 50vh">
+        <mat-label>Data ważności</mat-label>
+        <input matInput [matDatepicker]="picker2" formControlName="expiryDate" >
+        <mat-datepicker-toggle matSuffix [for]="picker2" ></mat-datepicker-toggle>
+        <mat-datepicker #picker2 ></mat-datepicker>
+      </mat-form-field>
       </p>
 
       <button mat-raised-button color="primary" type="submit" >dodaj</button>
@@ -93,11 +108,15 @@
       </ng-container>
 
       <!-- Name Column -->
-      <ng-container matColumnDef="typeofpermission">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by typeofpermission" >
+      <ng-container matColumnDef="expiryDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by expiryDate" >
           Uprawnienie do:
         </th>
-        <td mat-cell *matCellDef="let element" > {{element.typeofpermission}} </td>
+        <td mat-cell *matCellDef="let element" > {{element.expiryDate}}
+          <button mat-icon-button (click)="remove(element)">
+            <mat-icon>delete</mat-icon>
+          </button></td>
+
       </ng-container>
 
 

@@ -1,5 +1,7 @@
 package pl.szczypkowski.vehiclesfleetmanager.cargo.model;
 
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import pl.szczypkowski.vehiclesfleetmanager.driver.model.Driver;
 
 import javax.persistence.*;
@@ -7,24 +9,25 @@ import java.util.Date;
 
 @Entity
 @Table(name = "cargo")
+@Indexed
 public class Cargo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @FullTextField(analyzer = "name")
     @Column(name = "name")
     private String name;
-
+    @FullTextField(analyzer = "name")
     @Column(name = "description")
     private String description;
-
+    @FullTextField(analyzer = "name")
     @Column(name = "type")
     private String type;
-
+    @FullTextField(analyzer = "name")
     @Column(name = "sensitivity")
     private String sensitivity;
-
+    @FullTextField(analyzer = "name")
     @Column(name ="special_remarks")
     private String specialRemarks;
 

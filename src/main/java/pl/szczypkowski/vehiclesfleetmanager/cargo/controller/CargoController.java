@@ -61,4 +61,10 @@ public class CargoController {
     {
         return cargoService.save(cargo);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchVehicle(@RequestParam("search") String search,Pageable pageable)
+    {
+        return cargoService.searchCargo(search,pageable);
+    }
 }

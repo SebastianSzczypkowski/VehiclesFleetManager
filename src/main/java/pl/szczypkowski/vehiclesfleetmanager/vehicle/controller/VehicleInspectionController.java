@@ -48,4 +48,10 @@ public class VehicleInspectionController {
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się zapisać kontroli pojazdu"));
         }
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchVehicle(@RequestParam("search") String search,Pageable pageable)
+    {
+        return vehicleInspectionService.searchVehicleInspection(search,pageable);
+    }
 }

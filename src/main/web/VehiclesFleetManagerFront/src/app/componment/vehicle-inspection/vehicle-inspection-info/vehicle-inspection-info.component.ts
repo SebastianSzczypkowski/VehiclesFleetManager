@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatDialogRef} from "@angular/material/dialog";
 import {VehicleInspectionService} from "../service/vehicle-inspection.service";
 import {VehilceInspectionEmmiterService} from "../service/vehilce-inspection-emmiter.service";
 import {Driver} from "../../../model/driver";
 import {Vehicleinspection} from "../../../model/vehicleinspection";
+import {MatTable} from "@angular/material/table";
 
 @Component({
   selector: 'app-vehicle-inspection-info',
@@ -17,7 +18,6 @@ export class VehicleInspectionInfoComponent implements OnInit {
               private vehicleInspectionService:VehicleInspectionService,private vehilceInspectionEmmiyer:VehilceInspectionEmmiterService) { }
 
   vehicleInspectionData!: Vehicleinspection;
-
   vehicleInspectionDeatils!:FormGroup;
 
   ngOnInit(): void {

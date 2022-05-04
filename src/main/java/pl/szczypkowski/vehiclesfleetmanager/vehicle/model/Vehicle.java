@@ -1,24 +1,32 @@
 package pl.szczypkowski.vehiclesfleetmanager.vehicle.model;
 
 
+
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
 @Table(name = "vehicle")
 @Entity
+@Indexed
 public class Vehicle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @FullTextField(analyzer = "english")
     @Column(name = "name")
     private String name;
 
+    @FullTextField(analyzer = "name")
     @Column(name = "vin")
     private String vin;
 
+    @FullTextField(analyzer = "name")
     @Column(name = "registration_number")
     private String registrationNumber;
 

@@ -3,7 +3,7 @@ import {Driver} from "../../model/driver";
 import {CargoService} from "./service/cargo.service";
 import {Cargo} from "../../model/cargo";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {MatTableDataSource} from "@angular/material/table";
+import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {PeriodicElement} from "../route-creator/route-creator.component";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {CargoEmmiterService} from "./service/cargo-emmiter.service";
@@ -26,6 +26,7 @@ export class CargoComponent implements OnInit {
   displayedColumns: string[] = ['position', 'name', 'description', 'type','specialRemarks','delivered','assigned'];
   @ViewChild(MatPaginator) paginator!: MatPaginator
   private id!: number;
+  @ViewChild(MatTable) table!: MatTable<any>;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -82,5 +83,19 @@ export class CargoComponent implements OnInit {
     this.cargoEmmiter.setcargo(c);
 
     //this.driverEmmiter.driverDetails.emit();
+  }
+
+  search(event: any) {
+
+    this.cargoService.getAllPageSearch(event.target.value,this.pageIndex,this.pageSize).subscribe(
+      data=>{
+        this.cargos=data.content;
+        this.pageIndex=data.number;
+        this.pageSize=data.size;
+        this.length=data.totalElements;
+        this.table.renderRows();
+      }
+    );
+    this.table.renderRows();
   }
 }

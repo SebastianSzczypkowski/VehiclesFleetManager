@@ -2,6 +2,7 @@ package pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.controller;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +11,7 @@ import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 
 @RestController
 @RequestMapping("/api/typ-of-permissions")
+@CrossOrigin(origins = "*")
 public class TypOfPermissionsController {
 
     private final TypeOfPermissionsService typeOfPermissionsService;

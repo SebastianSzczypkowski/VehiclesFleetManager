@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Vehicle} from "../../../model/vehicle";
-import {Observable} from "rxjs";
-import {Driver} from "../../../model/driver";
+import {Coordinates} from "../model/coordinates";
+import {Typeofpermission} from "../model/typeofpermission";
 
-const AUTH_API = 'http://localhost:8080/api/driver/';
+const AUTH_API = 'http://localhost:8080/api/typ-of-permissions/';
 const httpOptions={
   headers:new HttpHeaders({'Content-Type':'application/json',
     'Access-Control-Allow-Origin': '*',
@@ -13,35 +12,20 @@ const httpOptions={
 @Injectable({
   providedIn: 'root'
 })
-export class DriverService {
+export class TypofpermissionServiceService {
 
   constructor(private http:HttpClient) { }
-
-  getAllPageSearch(search:string ,page:number,size:number)
-  {
-    return this.http.get<any>(AUTH_API+'search',{
-      params: {search,page,size}
-
-    })
-  }
-
   getAll()
   {
-    return this.http.get<Driver[]>(AUTH_API+'get-all',{
+    return this.http.get<Typeofpermission[]>(AUTH_API+'get-all',{
 
     })
-  }
 
+  }
   getAllPage(page:number,size:number)
   {
     return this.http.get<any>(AUTH_API+'get-all-page',{
       params: {page,size}
-
-    })
-  }
-  add(driver:any):Observable<any>
-  {
-    return this.http.post(AUTH_API+'save',driver,{
 
     })
   }

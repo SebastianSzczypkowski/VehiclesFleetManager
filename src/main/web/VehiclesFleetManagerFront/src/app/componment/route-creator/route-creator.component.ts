@@ -12,12 +12,17 @@ import {
 } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {STEPPER_GLOBAL_OPTIONS} from "@angular/cdk/stepper";
-import {MatTableDataSource} from "@angular/material/table";
+import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {MatSort, Sort} from "@angular/material/sort";
 import {RouteCreatorService} from "./service/route-creator.service";
 import {MapService} from "../../service/map.service";
 import {Coordinates} from "../../model/coordinates";
+import {Driver} from "../../model/driver";
+import {DriverService} from "../driver/service/driver.service";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {Vehicle} from "../../model/vehicle";
+import {VehicleService} from "../vehicle/service/vehicle.service";
 
 export interface PeriodicElement {
   name: string;
@@ -52,7 +57,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   ],
 })
 
-export class RouteCreatorComponent implements OnInit,AfterViewInit {
+export class RouteCreatorComponent implements OnInit,AfterViewInit{
 
 
   firstFormGroup!: FormGroup;
@@ -61,13 +66,28 @@ export class RouteCreatorComponent implements OnInit,AfterViewInit {
   raisedElevation = 8;
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
+  drivers:Driver[]=[];
+  driversEvent: PageEvent = new PageEvent;
+  driversIndex=0;
+  driversSize=10;
+  driversLength!:number;
+  driversSource = new MatTableDataSource<PeriodicElement>();
+  vehicles:Vehicle[]=[];
+  vehiclesEvent: PageEvent = new PageEvent;
+  vehiclesIndex=0;
+  vehiclesSize=10;
+  vehiclesLength!:number;
 
   coordinates:Coordinates[]=[];
+  @ViewChild(MatTable) table!: MatTable<any>;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   constructor(private _formBuilder: FormBuilder,private _liveAnnouncer: LiveAnnouncer
               ,private routeCreatorService:RouteCreatorService,
-              private mapService:MapService) {
+              private mapService:MapService,private driverService:DriverService,
+              private vehicleService:VehicleService) {
 
   }
+
 
   ngOnInit(): void {
 
@@ -80,12 +100,31 @@ export class RouteCreatorComponent implements OnInit,AfterViewInit {
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required],
     });
+
+    this.driverService.getAllPage(this.driversIndex,this.driversSize).subscribe(
+      data=>{
+        this.drivers=data.content;
+        this.driversIndex=data.number;
+        this.driversSize=data.size;
+        this.driversLength=data.totalElements;
+      }
+    )
+    this.vehicleService.getAllPage(this.vehiclesIndex,this.vehiclesSize).subscribe(
+      data=>{
+        this.vehicles=data.content;
+        this.vehiclesIndex=data.number;
+        this.vehiclesSize=data.size;
+        this.vehiclesLength=data.totalElements;
+      }
+    )
+
   }
 
   @ViewChild(MatSort) sort!: MatSort;
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+    this.driversSource.paginator = this.paginator;
   }
 
 
@@ -124,4 +163,66 @@ export class RouteCreatorComponent implements OnInit,AfterViewInit {
     this.routeCreatorService.routeCreatorRemove();
   }
 
+  getServerDataDrivers(event: PageEvent) {
+    if(event?.pageIndex!=null)
+      this.driverService.getAllPage(event?.pageIndex,event.pageSize).subscribe(
+        response=>
+        {
+          this.drivers=response.content;
+          this.driversIndex=response.number;
+          this.driversSize=response.size;
+          this.driversLength=response.totalElements;
+          this.driversIndex=event.pageIndex;
+          this.driversSize=event.pageSize;
+        }
+      )
+    else
+      this.driverService.getAllPage(0,this.driversSize)
+    return event;
+  }
+
+  getServerDataVehicles(event: any) {
+    if(event?.pageIndex!=null)
+      this.vehicleService.getAllPage(event?.pageIndex,event.pageSize).subscribe(
+        response=>
+        {
+          this.vehicles=response.content;
+          this.vehiclesIndex=response.number;
+          this.vehiclesSize=response.size;
+          this.vehiclesLength=response.totalElements;
+          this.vehiclesIndex=event.pageIndex;
+          this.vehiclesSize=event.pageSize;
+        }
+      )
+    else
+      this.driverService.getAllPage(0,this.driversSize)
+    return event;
+  }
+
+  search(event: any) {
+    this.driverService.getAllPageSearch(event.target.value,this.driversIndex,this.driversSize).subscribe(
+      data=>{
+        this.drivers=data.content;
+        this.driversIndex=data.number;
+        this.driversSize=data.size;
+        this.driversLength=data.totalElements;
+        this.table.renderRows();
+      }
+    );
+    this.table.renderRows();
+
+  }
+  searchVehicles(event: any) {
+    this.vehicleService.getAllPageSearch(event.target.value,this.vehiclesIndex,this.vehiclesSize).subscribe(
+      data=>{
+        this.vehicles=data.content;
+        this.vehiclesIndex=data.number;
+        this.vehiclesSize=data.size;
+        this.vehiclesLength=data.totalElements;
+        this.table.renderRows();
+      }
+    );
+    this.table.renderRows();
+
+  }
 }

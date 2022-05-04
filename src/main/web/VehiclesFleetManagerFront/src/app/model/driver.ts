@@ -1,3 +1,5 @@
+import {Entitlementstotransport} from "./entitlementstotransport";
+
 export class Driver {
 
   private _id!: number;
@@ -6,6 +8,7 @@ export class Driver {
   private _pesel!:string;
   private _address!:string;
   private _dateOfBirth!:string;
+
 
 
   get dateOfBirth(): string {

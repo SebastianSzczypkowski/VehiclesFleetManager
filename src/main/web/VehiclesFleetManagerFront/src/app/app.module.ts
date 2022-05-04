@@ -49,6 +49,7 @@ import { DriverInfoComponent } from './componment/driver/driver-info/driver-info
 import { VehicleInfoComponent } from './componment/vehicle/vehicle-info/vehicle-info.component';
 import { CargoInfoComponent } from './componment/cargo/cargo-info/cargo-info.component';
 import { VehicleInspectionInfoComponent } from './componment/vehicle-inspection/vehicle-inspection-info/vehicle-inspection-info.component';
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 @NgModule({
   declarations: [
@@ -103,7 +104,8 @@ import { VehicleInspectionInfoComponent } from './componment/vehicle-inspection/
         MatPaginatorModule,
         MatGridListModule,
         MatDatepickerModule,
-      MatNativeDateModule
+        MatNativeDateModule,
+        MatAutocompleteModule
 
 
     ],

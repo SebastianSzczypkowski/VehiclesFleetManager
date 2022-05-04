@@ -29,9 +29,10 @@
 
           </button>
         </a>
-        <button mat-fab style="background-color: var(--right-color)" aria-label="">
-          filter
-        </button>
+        <mat-form-field appearance="fill">
+          <mat-label>Szukaj</mat-label>
+          <input matInput placeholder="Szukaj"  (input)="search($event)"  >
+        </mat-form-field>
       </div>
 
     </div>

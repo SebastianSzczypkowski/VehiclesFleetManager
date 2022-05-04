@@ -3,7 +3,7 @@ import {Vehicle} from "../../model/vehicle";
 import {DriverService} from "./service/driver.service";
 import {Driver} from "../../model/driver";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {MatTableDataSource} from "@angular/material/table";
+import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {PeriodicElement} from "../route-creator/route-creator.component";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {RoadInfoComponent} from "../set-route/road-info/road-info.component";
@@ -25,6 +25,7 @@ export class DriverComponent implements OnInit {
   dataSource = new MatTableDataSource<PeriodicElement>();
   displayedColumns: string[] = ['position', 'name', 'surname', 'pesel','address'];
   @ViewChild(MatPaginator) paginator!: MatPaginator
+  @ViewChild(MatTable) table!: MatTable<any>;
   private id!: number;
 
   ngAfterViewInit() {
@@ -69,14 +70,13 @@ export class DriverComponent implements OnInit {
   getDriverDeatils(d:Driver)
   {
 
-
-
     const dialogConfig = new MatDialogConfig();
     // The user can't close the dialog by clicking outside its body
     dialogConfig.disableClose = true;
     dialogConfig.id = "driver-info-component";
     dialogConfig.height = "450px";
     dialogConfig.width = "600px";
+
     const modalDialog = this.matDialog.open(DriverInfoComponent, dialogConfig);
 
     this.drivers.forEach(e=>{
@@ -86,5 +86,18 @@ export class DriverComponent implements OnInit {
     this.driverEmmiter.setdriverId(this.id);
     this.driverEmmiter.setdriver(d);
     //this.driverEmmiter.driverDetails.emit();
+  }
+
+  search(event: any) {
+    this.driverService.getAllPageSearch(event.target.value,this.pageIndex,this.pageSize).subscribe(
+      data=>{
+        this.drivers=data.content;
+        this.pageIndex=data.number;
+        this.pageSize=data.size;
+        this.length=data.totalElements;
+        this.table.renderRows();
+      }
+    );
+    this.table.renderRows();
   }
 }

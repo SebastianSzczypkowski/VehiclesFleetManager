@@ -4,20 +4,19 @@
     <ng-template matStepLabel>Wybierz pojazd</ng-template>
     <mat-form-field appearance="fill">
       <mat-label>Szukaj</mat-label>
-      <input matInput placeholder="Szukaj"  >
+      <input matInput placeholder="Szukaj"  (input)="search($event)"  >
     </mat-form-field>
 
 
     <table mat-table [dataSource]="vehicles"
            class="mat-elevation-z8 demo-table " >
 
-
       <!-- Position Column -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">
           No.
         </th>
-        <td mat-cell *matCellDef="let element" (click)="onRawClick(element)" > {{element.id}} </td>
+        <td mat-cell *matCellDef="let element" > {{element.id}} </td>
       </ng-container>
 
       <!-- Name Column -->
@@ -25,7 +24,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by nazwa" >
           Nazwa
         </th>
-        <td mat-cell *matCellDef="let element" (click)="onRawClick(element)"> {{element.name}} </td>
+        <td mat-cell *matCellDef="let element" > {{element.name}} </td>
       </ng-container>
 
       <!-- Weight Column -->
@@ -33,7 +32,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by vin">
           Numer VIN
         </th>
-        <td mat-cell *matCellDef="let element" (click)="onRawClick(element)"> {{element.vin}} </td>
+        <td mat-cell *matCellDef="let element" > {{element.vin}} </td>
       </ng-container>
 
       <!-- Symbol Column -->
@@ -41,12 +40,12 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by rejestracja">
           Numer Rejestracyjny
         </th>
-        <td mat-cell *matCellDef="let element" (click)="onRawClick(element) "> {{element.registrationNumber}} </td>
+        <td mat-cell *matCellDef="let element" > {{element.registrationNumber}} </td>
       </ng-container>
 
 
       <tr mat-header-row *matHeaderRowDef="vehicleColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: vehicleColumns;" (click)="clickedRow.clear();clickedRow.add(row)"
+      <tr mat-row *matRowDef="let row; columns: vehicleColumns;" (click)="clickedRow.clear();clickedRow.add(row)" (click)="onRawClick(row) "
           [class.demo-row-is-clicked]="clickedRow.has(row)"></tr>
     </table>
     <mat-paginator  #paginator
@@ -93,10 +92,10 @@
 <!--        </mat-form-field>-->
         <mat-form-field color="primary" appearance="fill">
           <mat-label>Ważność przeglądu</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="validityOfTheVehicleInspection" >
+          <input matInput [matDatepicker]="picker2" formControlName="validityOfTheVehicleInspection" >
 
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
         </mat-form-field>
       </p>
       <p>

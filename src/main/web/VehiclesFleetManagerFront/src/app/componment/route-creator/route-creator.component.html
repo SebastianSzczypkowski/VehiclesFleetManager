@@ -45,7 +45,7 @@
       <ng-template matStepLabel>Wybierz kierowce</ng-template>
       <mat-form-field appearance="fill">
         <mat-label>Wybierz kierowce</mat-label>
-        <input matInput formControlName="secondCtrl" placeholder="kierowca"
+        <input matInput formControlName="secondCtrl" placeholder="kierowca" (input)="search($event)"
                required>
       </mat-form-field>
       <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh">wróć</button>
@@ -53,7 +53,7 @@
 
       <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh">dalej</button>
     </form>
-      <table mat-table [dataSource]="dataSource"
+      <table mat-table [dataSource]="drivers"
              class="mat-elevation-z8 demo-table ">
 
         <!-- Position Column -->
@@ -94,6 +94,13 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
+    <mat-paginator  #paginator
+                    [length]="driversLength"
+                    [pageIndex]="driversIndex"
+                    [pageSize]="driversSize"
+                    [pageSizeOptions]="[5, 10, 25, 100]"
+                    (page)="driversEvent = getServerDataDrivers($event)">
+    </mat-paginator>
 <!--      <div>-->
 <!--        <button mat-button matStepperPrevious>Back</button>-->
 <!--        <button mat-button matStepperNext>Next</button>-->
@@ -136,7 +143,7 @@
       <ng-template matStepLabel>Wybierz pojazd</ng-template>
       <mat-form-field appearance="fill">
         <mat-label>Wybierz pojazd</mat-label>
-        <input matInput formControlName="secondCtrl" placeholder="pojazd"
+        <input matInput formControlName="secondCtrl" placeholder="pojazd" (input)="getServerDataVehicles($event)"
                required>
       </mat-form-field>
       <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh">wróć</button>
@@ -154,7 +161,7 @@
     <!--      <button mat-button matStepperPrevious>Back</button>-->
     <!--      <button mat-button (click)="stepper.reset()">Reset</button>-->
     <!--    </div>-->
-    <table mat-table [dataSource]="dataSource"
+    <table mat-table [dataSource]="vehicles"
            class="mat-elevation-z8 demo-table ">
 
       <!-- Position Column -->
@@ -194,6 +201,13 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    <mat-paginator  #paginator
+                    [length]="vehiclesLength"
+                    [pageIndex]="vehiclesIndex"
+                    [pageSize]="vehiclesSize"
+                    [pageSizeOptions]="[5, 10, 25, 100]"
+                    (page)="vehiclesEvent = getServerDataVehicles($event)">
+    </mat-paginator>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Wybierz ładunek</ng-template>

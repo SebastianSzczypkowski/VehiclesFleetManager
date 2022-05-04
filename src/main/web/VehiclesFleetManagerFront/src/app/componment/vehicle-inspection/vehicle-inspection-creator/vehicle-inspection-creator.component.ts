@@ -4,7 +4,7 @@ import {VehicleService} from "../../vehicle/service/vehicle.service";
 import {VehicleInspectionService} from "../service/vehicle-inspection.service";
 import {Vehicle} from "../../../model/vehicle";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {MatTableDataSource} from "@angular/material/table";
+import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {PeriodicElement} from "../../route-creator/route-creator.component";
 
 @Component({
@@ -21,11 +21,13 @@ export class VehicleInspectionCreatorComponent implements OnInit,AfterViewInit {
   pageIndex=0;
   pageSize=10;
   length!:number;
+  searchKeyWord!:string;
   vehicleSelected!:Vehicle;
   dataSource = new MatTableDataSource<PeriodicElement>();
   vehicleColumns: string[] = ['id', 'nazwa', 'vin', 'rejestracja'];
   clickedRow = new Set<PeriodicElement>();
-  @ViewChild(MatPaginator) paginator!: MatPaginator
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatTable) table!: MatTable<any>;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -85,4 +87,20 @@ export class VehicleInspectionCreatorComponent implements OnInit,AfterViewInit {
       this.vehicleService.getAllPage(0,this.pageSize)
     return event;
   }
+
+  search(event: any) {
+
+    this.vehicleService.getAllPageSearch(event.target.value,this.pageIndex,this.pageSize).subscribe(
+      data=>{
+        this.vehicles=data.content;
+        this.pageIndex=data.number;
+        this.pageSize=data.size;
+        this.length=data.totalElements;
+        this.table.renderRows();
+      }
+    );
+    this.table.renderRows();
+  }
+
+
 }

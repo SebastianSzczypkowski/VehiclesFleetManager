@@ -4,10 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.driver.model.Driver;
-import pl.szczypkowski.vehiclesfleetmanager.driver.model.DriverRequest;
 import pl.szczypkowski.vehiclesfleetmanager.driver.service.DriverService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/driver")
@@ -47,6 +44,12 @@ public class DriverController {
     public ResponseEntity<?> save(@RequestBody Driver driver)
     {
         return driverService.save(driver);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchVehicle(@RequestParam("search") String search,Pageable pageable)
+    {
+        return driverService.searchDriver(search,pageable);
     }
 
 

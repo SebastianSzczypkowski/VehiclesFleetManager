@@ -1,7 +1,13 @@
 package pl.szczypkowski.vehiclesfleetmanager.cargo.service;
 
+import org.hibernate.search.engine.search.query.SearchResult;
+import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.mapper.orm.massindexing.MassIndexer;
+import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -9,15 +15,19 @@ import pl.szczypkowski.vehiclesfleetmanager.cargo.model.Cargo;
 import pl.szczypkowski.vehiclesfleetmanager.cargo.model.CargoRequest;
 import pl.szczypkowski.vehiclesfleetmanager.cargo.repository.CargoRepository;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
+import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.Vehicle;
 
-import java.util.List;
-import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.*;
 
 @Service
 public class CargoService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(CargoService.class);
     private final CargoRepository cargoRepository;
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
     public CargoService(CargoRepository cargoRepository) {
@@ -157,5 +167,37 @@ public class CargoService {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się pobrać listy ładunków"));
         }
+    }
+
+    public ResponseEntity<?> searchCargo(String search, Pageable pageable) {
+        try {
+
+            SearchSession searchSession = Search.session( entityManager );
+
+            MassIndexer indexer = searchSession.massIndexer( Cargo.class )
+                    .threadsToLoadObjects( 7 );
+            indexer.startAndWait();
+
+            SearchResult<Cargo> result = Search.session(entityManager).search(
+                    Cargo.class).where(f->f.wildcard().fields("name","description","type","sensitivity",
+                    "specialRemarks").matching(
+                    search+"*"
+            )).fetchAll();
+
+
+            List<Cargo> results = result.hits();
+            Set<Cargo> cargoSet = new HashSet<>(results);
+            results = new ArrayList<>(cargoSet);
+
+            final int start = (int)pageable.getOffset();
+            final int end = Math.min((start + pageable.getPageSize()), results.size());
+            final Page<Cargo> page = new PageImpl<>(results.subList(start, end), pageable, results.size());
+            return ResponseEntity.ok().body(page);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się znaleść wyników"));
+        }
+
     }
 }
