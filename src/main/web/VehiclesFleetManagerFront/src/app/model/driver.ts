@@ -8,7 +8,7 @@ export class Driver {
   private _pesel!:string;
   private _address!:string;
   private _dateOfBirth!:string;
-
+  private imageUrl!:string;
 
 
   get dateOfBirth(): string {

@@ -86,16 +86,17 @@ public class DriverService {
 
                     List<EntitleRequest> listToSave =driver.getEntitlement();
                     Driver saved = driverRepository.save(driver);
-                    for(EntitleRequest request:listToSave)
-                    {
-                        EntitlementstToTransport driverEntitle = new EntitlementstToTransport();
-                        driverEntitle.setIdDriver(saved.getId());
-                        driverEntitle.setDrivers(driver);
-                        if(request.getDocumentTyp()!=null)
-                        driverEntitle.setDocumentTyp(request.getDocumentTyp());
-                        if(request.getExpiryDate()!=null)
-                        driverEntitle.setExpiryDate(request.getExpiryDate());
-                        entitlementstotransportRepository.save(driverEntitle);
+                    if(listToSave.size()>0) {
+                        for (EntitleRequest request : listToSave) {
+                            EntitlementstToTransport driverEntitle = new EntitlementstToTransport();
+                            driverEntitle.setIdDriver(saved.getId());
+                            driverEntitle.setDrivers(driver);
+                            if (request.getDocumentTyp() != null)
+                                driverEntitle.setDocumentTyp(request.getDocumentTyp());
+                            if (request.getExpiryDate() != null)
+                                driverEntitle.setExpiryDate(request.getExpiryDate());
+                            entitlementstotransportRepository.save(driverEntitle);
+                        }
                     }
                     return ResponseEntity.ok().body(saved);
                 } else {

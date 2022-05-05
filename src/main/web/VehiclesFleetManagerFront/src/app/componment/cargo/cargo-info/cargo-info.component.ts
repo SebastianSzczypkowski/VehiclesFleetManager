@@ -6,6 +6,7 @@ import {CargoEmmiterService} from "../service/cargo-emmiter.service";
 import {CargoService} from "../service/cargo.service";
 import {Driver} from "../../../model/driver";
 import {Cargo} from "../../../model/cargo";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-cargo-info',
@@ -15,7 +16,7 @@ import {Cargo} from "../../../model/cargo";
 export class CargoInfoComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,public dialogRef:MatDialogRef<DriverInfoComponent>,
-              private cargoEmmiter:CargoEmmiterService,private cargoService:CargoService) { }
+              private cargoEmmiter:CargoEmmiterService,private cargoService:CargoService,private toaster:ToastrService) { }
 
   cargoData!: Cargo;
   cargoDeatils!:FormGroup;
@@ -56,6 +57,13 @@ export class CargoInfoComponent implements OnInit {
 
   onSubmit() {
 
-    this.cargoService.add(this.cargoDeatils.getRawValue()).subscribe();
+    this.cargoService.add(this.cargoDeatils.getRawValue()).subscribe(
+      data=>{
+        this.toaster.success("Zapisano zmiany");
+      },
+      err=>{
+        this.toaster.error("Nie udało się zapisać zmian");
+      }
+    );
   }
 }

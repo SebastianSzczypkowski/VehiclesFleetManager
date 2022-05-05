@@ -1,5 +1,8 @@
 <mat-stepper #stepper class="drivercreator">
   <mat-step >
+    <mat-grid-list cols="2" rowHeight="1:1" >
+      <mat-grid-tile >
+        <div class="container2">
     <form [formGroup]="driverForm"  (ngSubmit)="onSubmit()">
       <ng-template matStepLabel>Dane kierowcy</ng-template>
       <mat-form-field appearance="fill">
@@ -41,88 +44,115 @@
       </p>
 
       <!--      <div style="margin-top: 2vh">-->
-              <button mat-raised-button color="primary" type="submit">dodaj</button>
+              <button mat-raised-button color="primary" type="submit" >dodaj</button>
+
 
       <!--      </div>-->
     </form>
     <div style="margin-top: 2vh">
       <button mat-raised-button color="primary" (click)="reset()">resetuj</button>
+      <button style="margin-left: 2vh"  type="button" color="primary"  mat-raised-button (click)="fileInput.click()">Wybierz zdjęcie</button>
+      <input #file hidden (change)="handleFileInput(file.files)" #fileInput type="file" id="file">
+      <button mat-raised-button color="primary"  style="margin-left: 2vh" (click)="goForward(stepper)">dalej</button>
 
-      <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
     </div>
 
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+    <img [src]="imgURL" height="300" *ngIf="imgURL">
+      </mat-grid-tile>
+
+    </mat-grid-list>
   </mat-step>
 
   <mat-step >
 <!--    <mat-grid-list md-cols-xs="1" rowHeight="100px">-->
 <!--      <mat-grid-tile>-->
-    <form [formGroup]="permissionForm"  (ngSubmit)="onSubmitPermission()">
-      <ng-template matStepLabel>Uprawnienia</ng-template>
-<!--      <mat-form-field appearance="fill">-->
-<!--        <mat-label>Wybierz rodzaj uprawnienia</mat-label>-->
-<!--        <input matInput placeholder="Wybierz rodzaj uprawnienia" formControlName="name" required>-->
-<!--      </mat-form-field>-->
-      <mat-form-field class="example-full-width"  style="width: 50vh" appearance="fill">
-        <mat-label>Uprawnienia</mat-label>
-        <input type="text" matInput [formControl]="permissions" [matAutocomplete]="auto"  formControlName="documentTyp" >
-        <mat-autocomplete #auto="matAutocomplete" >
-          <mat-option *ngFor="let typeofpermissions of typeofpermissions " [value]="typeofpermissions.name">
-            {{typeofpermissions.name}}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
+    <mat-grid-list cols="2" rowHeight="1:1" >
+      <mat-grid-tile >
+
+        <div class="container">
+        <form [formGroup]="permissionForm"  (ngSubmit)="onSubmitPermission()">
+          <ng-template matStepLabel>Uprawnienia</ng-template>
+          <!--      <mat-form-field appearance="fill">-->
+          <!--        <mat-label>Wybierz rodzaj uprawnienia</mat-label>-->
+          <!--        <input matInput placeholder="Wybierz rodzaj uprawnienia" formControlName="name" required>-->
+          <!--      </mat-form-field>-->
+          <mat-form-field class="example-full-width"  style="width: 50vh" appearance="fill">
+            <mat-label>Uprawnienia</mat-label>
+            <input type="text" matInput [formControl]="permissions" [matAutocomplete]="auto"  formControlName="documentTyp" >
+            <mat-autocomplete #auto="matAutocomplete" >
+              <mat-option *ngFor="let typeofpermissions of typeofpermissions " [value]="typeofpermissions.name">
+                {{typeofpermissions.name}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
 
 
-      <p>
-<!--        <mat-form-field appearance="fill">-->
-<!--          <mat-label>Data ważności</mat-label>-->
-<!--          <input matInput placeholder="Data ważności" formControlName="expiryDate" required>-->
-<!--        </mat-form-field>-->
-        <mat-form-field color="primary" appearance="fill" style="width: 50vh">
-        <mat-label>Data ważności</mat-label>
-        <input matInput [matDatepicker]="picker2" formControlName="expiryDate" >
-        <mat-datepicker-toggle matSuffix [for]="picker2" ></mat-datepicker-toggle>
-        <mat-datepicker #picker2 ></mat-datepicker>
-      </mat-form-field>
-      </p>
+          <p>
+            <!--        <mat-form-field appearance="fill">-->
+            <!--          <mat-label>Data ważności</mat-label>-->
+            <!--          <input matInput placeholder="Data ważności" formControlName="expiryDate" required>-->
+            <!--        </mat-form-field>-->
+            <mat-form-field color="primary" appearance="fill" style="width: 50vh">
+              <mat-label>Data ważności</mat-label>
+              <input matInput [matDatepicker]="picker2" formControlName="expiryDate" >
+              <mat-datepicker-toggle matSuffix [for]="picker2" ></mat-datepicker-toggle>
+              <mat-datepicker #picker2 ></mat-datepicker>
+            </mat-form-field>
+          </p>
 
-      <button mat-raised-button color="primary" type="submit" >dodaj</button>
-    </form>
+          <button mat-raised-button color="primary" type="submit" >dodaj</button>
+          <div style="margin-top: 2vh">
+            <button mat-raised-button color="primary" >resetuj</button>
+            <button mat-raised-button color="primary"  style="margin-left: 2vh" (click)="goBack(stepper)">wroć</button>
 
-        <div style="margin-top: 2vh">
-          <button mat-raised-button color="primary" >resetuj</button>
+            <button mat-raised-button color="primary"  style="margin-left: 2vh" (click)="goForward(stepper)">dalej</button>
+          </div>
+        </form>
 
-          <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
         </div>
+      </mat-grid-tile>
+      <mat-grid-tile  >
+        <div class="demo-table">
+        <table mat-table [dataSource]="entitlements"
+               class="mat-elevation-z8 demo-table " >
+
+          <!-- Position Column -->
+          <ng-container matColumnDef="documentTyp">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by documentTyp">
+              Typ dokumentu
+            </th>
+            <td mat-cell *matCellDef="let element" > {{element.documentTyp}} </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="expiryDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by expiryDate" >
+              Uprawnienie do:
+            </th>
+            <td mat-cell *matCellDef="let element" > {{element.expiryDate}}
+              <button mat-icon-button (click)="remove(element)">
+                <mat-icon>delete</mat-icon>
+              </button></td>
+
+          </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="entitlementsColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: entitlementsColumns;" ></tr>
+        </table>
+        </div>
+      </mat-grid-tile>
+
+    </mat-grid-list>
+
+
+
 <!--        </mat-grid-tile>-->
 <!--      <mat-grid-tile>-->
-    <table mat-table [dataSource]="entitlements"
-           class="mat-elevation-z8 demo-table " >
 
-      <!-- Position Column -->
-      <ng-container matColumnDef="documentTyp">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by documentTyp">
-          Typ dokumentu
-        </th>
-        <td mat-cell *matCellDef="let element" > {{element.documentTyp}} </td>
-      </ng-container>
-
-      <!-- Name Column -->
-      <ng-container matColumnDef="expiryDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by expiryDate" >
-          Uprawnienie do:
-        </th>
-        <td mat-cell *matCellDef="let element" > {{element.expiryDate}}
-          <button mat-icon-button (click)="remove(element)">
-            <mat-icon>delete</mat-icon>
-          </button></td>
-
-      </ng-container>
-
-
-      <tr mat-header-row *matHeaderRowDef="entitlementsColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: entitlementsColumns;" ></tr>
-    </table>
 
 
 <!--        </mat-grid-tile>-->
@@ -133,7 +163,7 @@
       <ng-template matStepLabel>Podsumowanie</ng-template>
 
     <div style="margin-top: 2vh">
-      <button mat-raised-button color="primary" >wróć</button>
+      <button mat-raised-button color="primary" (click)="goBack(stepper)" >wróć</button>
 
       <button mat-raised-button color="primary"  style="margin-left: 2vh">zapisz</button>
     </div>

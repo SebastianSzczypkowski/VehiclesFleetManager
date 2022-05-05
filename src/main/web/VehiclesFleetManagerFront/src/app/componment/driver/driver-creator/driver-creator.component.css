@@ -3,6 +3,16 @@
 }
 .demo-table{
 
-  margin-left: 60vh;
-  width: 65%;
+  width: 100%;
+  margin-top: -30vh;
+}
+
+.container{
+  margin-left: -40vh;
+  margin-top: -50vh;
+
+}
+.container2{
+  margin-left: -50vh;
+  margin-top: -10vh;
 }

@@ -4,6 +4,7 @@ package pl.szczypkowski.vehiclesfleetmanager.road.controller;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.szczypkowski.vehiclesfleetmanager.road.model.Road;
 import pl.szczypkowski.vehiclesfleetmanager.road.service.RoadService;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 
@@ -37,10 +38,10 @@ public class RoadController {
         return roadService.getAllPage(pageable);
     }
 
-//    @PostMapping("/save")
-//    public ResponseEntity<?> save()
-//    {
-//
-//    }
+    @PostMapping("/save")
+    public ResponseEntity<?> save(@RequestBody Road road)
+    {
+        return roadService.saveRoad(road);
+    }
 
 }

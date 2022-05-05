@@ -33,6 +33,9 @@ public class Driver {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @OneToMany()
     @JoinColumn(name = "entitlemenstst")
     private List<EntitlementstToTransport> entitlementstToTransport;
@@ -50,6 +53,15 @@ public class Driver {
         this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.entitlementstToTransport = entitlementstToTransport;
+    }
+
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public List<EntitlementstToTransport> getEntitlementstToTransport() {

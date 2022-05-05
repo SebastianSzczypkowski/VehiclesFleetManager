@@ -104,7 +104,7 @@ public class MapService {
             if(list.size()>0) {
                 Coordinates start = coordinatesRepository.save(list.get(0));
                 Coordinates end = coordinatesRepository.save(list.get(1));
-                roadService.save(start.getId(), end.getId());
+                roadService.save(start, end);
                 return ResponseEntity.ok().body(ToJsonString.toJsonString("Pomyślnie zapisano trase"));
             }
             else

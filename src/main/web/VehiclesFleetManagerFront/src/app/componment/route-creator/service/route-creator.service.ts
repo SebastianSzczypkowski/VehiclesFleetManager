@@ -38,10 +38,24 @@ export class RouteCreatorService {
 
     })
   }
-
-  add(driver:any):Observable<any>
+  getAllPage(page:number,size:number)
   {
-    return this.http.post(AUTH_API+'save',driver,{
+    return this.http.get<any>(AUTH_API+'get-all-page',{
+      params: {page,size}
+
+    })
+  }
+  getAllPageSearch(search:string ,page:number,size:number)
+  {
+    return this.http.get<any>(AUTH_API+'search',{
+      params: {search,page,size}
+
+    })
+  }
+
+  add(road:any):Observable<any>
+  {
+    return this.http.post<any>(AUTH_API+'save',road,{
 
     })
   }

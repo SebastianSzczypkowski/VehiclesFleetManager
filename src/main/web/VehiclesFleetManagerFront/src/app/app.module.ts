@@ -50,6 +50,10 @@ import { VehicleInfoComponent } from './componment/vehicle/vehicle-info/vehicle-
 import { CargoInfoComponent } from './componment/cargo/cargo-info/cargo-info.component';
 import { VehicleInspectionInfoComponent } from './componment/vehicle-inspection/vehicle-inspection-info/vehicle-inspection-info.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {ToastrModule} from "ngx-toastr";
+import { RoadTabelComponent } from './componment/route-creator/road-tabel/road-tabel.component';
+import { RoadDeatilsComponent } from './componment/route-creator/road-deatils/road-deatils.component';
+import {MatTabsModule} from "@angular/material/tabs";
 
 @NgModule({
   declarations: [
@@ -74,41 +78,46 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
     VehicleInfoComponent,
     CargoInfoComponent,
     VehicleInspectionInfoComponent,
+    RoadTabelComponent,
+    RoadInfoComponent,
+    RoadDeatilsComponent,
 
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        MatToolbarModule,
-        ReactiveFormsModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatIconModule,
-        MatMenuModule,
-        MatButtonModule,
-        MatInputModule,
-        LeafletModule,
-        HttpClientModule,
-        MatListModule,
-        MatSlideToggleModule,
-        NgxColorsModule,
-        MatDialogModule,
-        MatStepperModule,
-        MatTooltipModule,
-        MatTableModule,
-        FontAwesomeModule,
-        FontAwesomeTestingModule,
-        MatPaginatorModule,
-        MatGridListModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatAutocompleteModule
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    MatToolbarModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatIconModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatInputModule,
+    LeafletModule,
+    HttpClientModule,
+    MatListModule,
+    MatSlideToggleModule,
+    NgxColorsModule,
+    MatDialogModule,
+    MatStepperModule,
+    MatTooltipModule,
+    MatTableModule,
+    FontAwesomeModule,
+    FontAwesomeTestingModule,
+    MatPaginatorModule,
+    MatGridListModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatAutocompleteModule,
+    ToastrModule.forRoot(),
+    MatTabsModule
 
 
-    ],
+  ],
   providers: [EventEmitterService],
   bootstrap: [AppComponent]
 })

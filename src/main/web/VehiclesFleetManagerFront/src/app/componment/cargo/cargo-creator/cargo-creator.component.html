@@ -57,7 +57,7 @@
     <div style="margin-top: 2vh">
       <button mat-raised-button color="primary" (click)="reset()" >resetuj</button>
 
-      <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
+      <button mat-raised-button color="primary"  style="margin-left: 2vh" (click)="goForward(stepper)">dalej</button>
     </div>
 
 
@@ -75,8 +75,8 @@
 
     <div style="margin-top: 2vh">
       <button mat-raised-button color="primary" >resetuj</button>
-
-      <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
+      <button mat-raised-button color="primary" (click)="goBack(stepper)" >wróć</button>
+      <button mat-raised-button color="primary"  style="margin-left: 2vh" (click)="goForward(stepper)">dalej</button>
     </div>
 
   </mat-step>
@@ -85,7 +85,7 @@
     <ng-template matStepLabel>Podsumowanie</ng-template>
 
     <div style="margin-top: 2vh">
-      <button mat-raised-button color="primary" >wróć</button>
+      <button mat-raised-button color="primary" (click)="goBack(stepper)" >wróć</button>
 
       <button mat-raised-button color="primary"  style="margin-left: 2vh">zapisz</button>
     </div>

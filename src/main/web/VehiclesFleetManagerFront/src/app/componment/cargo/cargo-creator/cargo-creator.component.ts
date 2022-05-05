@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {CargoService} from "../service/cargo.service";
+import {MatStepper} from "@angular/material/stepper";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-cargo-creator',
@@ -10,7 +12,7 @@ import {CargoService} from "../service/cargo.service";
 export class CargoCreatorComponent implements OnInit {
 
   cargoForm!:FormGroup;
-  constructor(private _formBuilder: FormBuilder,private cargoService:CargoService) { }
+  constructor(private _formBuilder: FormBuilder,private cargoService:CargoService,private toaster:ToastrService) { }
 
   ngOnInit(): void {
     this.cargoForm=this._formBuilder.group({
@@ -27,10 +29,25 @@ export class CargoCreatorComponent implements OnInit {
 
     onSubmit() {
 
-    this.cargoService.add(this.cargoForm.getRawValue()).subscribe();
+    this.cargoService.add(this.cargoForm.getRawValue()).subscribe(
+      data=>{
+        this.toaster.success("Dodano ładunek");
+      },
+      err=>{
+        this.toaster.error("Nie udało się dodać ładunku");
+      }
+    );
     }
   reset() {
 
     this.cargoForm.reset();
+  }
+
+  goBack(stepper: MatStepper){
+    stepper.previous();
+  }
+
+  goForward(stepper: MatStepper){
+    stepper.next();
   }
 }

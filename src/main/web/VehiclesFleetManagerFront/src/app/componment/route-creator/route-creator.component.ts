@@ -23,6 +23,10 @@ import {DriverService} from "../driver/service/driver.service";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {Vehicle} from "../../model/vehicle";
 import {VehicleService} from "../vehicle/service/vehicle.service";
+import {Cargo} from "../../model/cargo";
+import {CargoService} from "../cargo/service/cargo.service";
+import {MatStepper} from "@angular/material/stepper";
+import {ToastrService} from "ngx-toastr";
 
 export interface PeriodicElement {
   name: string;
@@ -61,10 +65,12 @@ export class RouteCreatorComponent implements OnInit,AfterViewInit{
 
 
   firstFormGroup!: FormGroup;
-  secondFormGroup!: FormGroup ;
+  roadFormGroup!: FormGroup ;
   defaultElevation = 2;
   raisedElevation = 8;
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  driversColumns: string[] = ['id', 'name', 'surname', 'pesel','address'];
+  vehiclesColumns: string[] = ['id', 'name', 'vin', 'registrationNumber','engineCapacity','averageFuelConsumptio'];
+  cargosColumns: string[] = ['id', 'name', 'description', 'type','sensitivity','specialRemarks'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
   drivers:Driver[]=[];
   driversEvent: PageEvent = new PageEvent;
@@ -77,14 +83,26 @@ export class RouteCreatorComponent implements OnInit,AfterViewInit{
   vehiclesIndex=0;
   vehiclesSize=10;
   vehiclesLength!:number;
+  cargos:Cargo[]=[];
+  cargosEvent: PageEvent = new PageEvent;
+  cargosIndex=0;
+  cargosSize=10;
+  cargosLength!:number;
 
+  clickedDriver = new Set<PeriodicElement>();
+  driverSelected!:Driver;
+  clickedVehilce = new Set<PeriodicElement>();
+  vehicleSelected!:Vehicle;
+  clickedCargo = new Set<PeriodicElement>();
+  cargoSelected!:Cargo;
   coordinates:Coordinates[]=[];
   @ViewChild(MatTable) table!: MatTable<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   constructor(private _formBuilder: FormBuilder,private _liveAnnouncer: LiveAnnouncer
               ,private routeCreatorService:RouteCreatorService,
               private mapService:MapService,private driverService:DriverService,
-              private vehicleService:VehicleService) {
+              private vehicleService:VehicleService,private cargoService:CargoService,
+              private toaster:ToastrService) {
 
   }
 
@@ -97,8 +115,11 @@ export class RouteCreatorComponent implements OnInit,AfterViewInit{
       color:new FormControl(''),
       name:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
     });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required],
+    this.roadFormGroup = this._formBuilder.group({
+      start:[],
+      end:[],
+      driver:[],
+      cargo:[],
     });
 
     this.driverService.getAllPage(this.driversIndex,this.driversSize).subscribe(
@@ -115,6 +136,14 @@ export class RouteCreatorComponent implements OnInit,AfterViewInit{
         this.vehiclesIndex=data.number;
         this.vehiclesSize=data.size;
         this.vehiclesLength=data.totalElements;
+      }
+    )
+    this.cargoService.getAllPage(this.vehiclesIndex,this.vehiclesSize).subscribe(
+      data=>{
+        this.cargos=data.content;
+        this.cargosIndex=data.number;
+        this.cargosSize=data.size;
+        this.cargosLength=data.totalElements;
       }
     )
 
@@ -150,17 +179,25 @@ export class RouteCreatorComponent implements OnInit,AfterViewInit{
         // // @ts-ignore
         // this.map.addNewRoute();
         this.routeCreatorService.routeCreatorShow(this.coordinates);
-        // console.log("Retrieved DATA: " + JSON.stringify(data));
+
+          this.toaster.success("Pobrano trasę");
+
+          // console.log("Retrieved DATA: " + JSON.stringify(data));
         // console.log("Retrieved DATA: " + JSON.stringify(this.coordinates));
         // console.log("Retrieved DATA: " + JSON.stringify(this.coordinates[1]));
 
+      },err=>{
+        this.toaster.error("Nie udało się pobrać trasy");
       }
+
     )
   }
 
 
   remove() {
     this.routeCreatorService.routeCreatorRemove();
+      this.toaster.info("Usunięto trasę");
+
   }
 
   getServerDataDrivers(event: PageEvent) {
@@ -198,6 +235,23 @@ export class RouteCreatorComponent implements OnInit,AfterViewInit{
       this.driverService.getAllPage(0,this.driversSize)
     return event;
   }
+  getServerDataCargos(event: any) {
+    if(event?.pageIndex!=null)
+      this.cargoService.getAllPage(event?.pageIndex,event.pageSize).subscribe(
+        response=>
+        {
+          this.cargos=response.content;
+          this.cargosIndex=response.number;
+          this.cargosSize=response.size;
+          this.cargosLength=response.totalElements;
+          this.cargosIndex=event.pageIndex;
+          this.cargosSize=event.pageSize;
+        }
+      )
+    else
+      this.cargoService.getAllPage(0,this.cargosSize)
+    return event;
+  }
 
   search(event: any) {
     this.driverService.getAllPageSearch(event.target.value,this.driversIndex,this.driversSize).subscribe(
@@ -224,5 +278,52 @@ export class RouteCreatorComponent implements OnInit,AfterViewInit{
     );
     this.table.renderRows();
 
+  }
+  searchCargos(event: any) {
+    this.cargoService.getAllPageSearch(event.target.value,this.cargosIndex,this.cargosSize).subscribe(
+      data=>{
+        this.cargos=data.content;
+        this.cargosIndex=data.number;
+        this.cargosSize=data.size;
+        this.cargosLength=data.totalElements;
+        this.table.renderRows();
+      }
+    );
+    this.table.renderRows();
+
+  }
+  goBack(stepper: MatStepper){
+    stepper.previous();
+  }
+
+  goForward(stepper: MatStepper){
+    stepper.next();
+  }
+
+  onDriverClick(element:Driver) {
+    this.driverSelected=element;
+  }
+
+  onVehicleClick(element:Vehicle) {
+    this.vehicleSelected=element;
+
+  }
+
+  onCargoClick(element:Cargo) {
+    this.cargoSelected=element;
+  }
+
+  save() {
+
+    this.roadFormGroup.patchValue({start:this.coordinates[0],
+    end:this.coordinates[1],driver:this.driverSelected,cargo:this.cargoSelected});
+    this.routeCreatorService.add(this.roadFormGroup.getRawValue()).subscribe(
+      data=>{
+        this.toaster.success("Dodano trasę");
+      },
+      err=>{
+        this.toaster.error("Nie udało się dodać trasy");
+      }
+    )
   }
 }

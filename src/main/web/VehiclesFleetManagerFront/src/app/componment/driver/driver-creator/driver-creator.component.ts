@@ -7,6 +7,8 @@ import {PageEvent} from "@angular/material/paginator";
 import {Typeofpermission} from "../../../model/typeofpermission";
 import {Observable, startWith,map} from "rxjs";
 import {MatTable} from "@angular/material/table";
+import {MatStepper} from "@angular/material/stepper";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-driver-creator',
@@ -15,6 +17,9 @@ import {MatTable} from "@angular/material/table";
 })
 export class DriverCreatorComponent implements OnInit {
 
+
+  fileToUpload: File | null = null;
+  srcResult!: File;
   permissions = new FormControl();
   pageEvent: PageEvent = new PageEvent;
   pageIndex=0;
@@ -26,11 +31,16 @@ export class DriverCreatorComponent implements OnInit {
   driverForm!:FormGroup;
   permissionForm!:FormGroup;
   filteredOptions!: Observable<Typeofpermission[]>;
+
+  imagePath!:string;
+  imgURL: any;
+  message!: string;
+
   entitlementsColumns: string[] = [ 'documentTyp', 'expiryDate'];
   @ViewChild(MatTable) table!: MatTable<any>;
   constructor(private _formBuilder: FormBuilder,private driverService:DriverService,
               private typOfPermissionsService:TypofpermissionServiceService,
-              private changeDetectorRefs: ChangeDetectorRef) { }
+              private changeDetectorRefs: ChangeDetectorRef,private toaster:ToastrService) { }
 
   ngOnInit(): void {
     this.filteredOptions = this.permissions.valueChanges.pipe(
@@ -45,7 +55,9 @@ export class DriverCreatorComponent implements OnInit {
       pesel:new FormControl(''),
       dateofbirth:[new Date()],
       address:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
+      file: [],
       entitlement: [],
+
     });
     this.permissionForm=this._formBuilder.group(
       {
@@ -75,8 +87,15 @@ export class DriverCreatorComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.driverForm.getRawValue());
-    this.driverService.add(this.driverForm.getRawValue()).subscribe();
+    this.driverService.add(this.driverForm.getRawValue()).subscribe(
+      data=>{
+        this.toaster.success("Dodano kierowce");
+      },
+      err =>{
+        this.toaster.error("Nie udało się dodać kierowcy");
+      }
+    );
+
   }
 
   reset()
@@ -96,7 +115,7 @@ export class DriverCreatorComponent implements OnInit {
     //this.entitle.typeofpermission=this.permissionForm.getRawValue().name;
     this.driverForm.patchValue({entitlement:this.entitlements});
     this.entitlements.push(this.permissionForm.getRawValue());
-
+    this.toaster.success("Dodano pozycje");
     this.table.renderRows();
     // this.permissionForm.reset();
 
@@ -108,10 +127,46 @@ export class DriverCreatorComponent implements OnInit {
       if(value.id==element.id) {
 
         this.entitlements = this.entitlements.filter(item=>item!==element);
+        this.toaster.info("Usunięto pozycje");
         this.table.renderRows();
 
       }
     })
 
   }
+
+  goBack(stepper: MatStepper){
+    stepper.previous();
+  }
+
+  goForward(stepper: MatStepper){
+    stepper.next();
+  }
+
+  handleFileInput(files: any) {
+
+
+    this.fileToUpload = files.item(0);
+    if (files.length === 0)
+      return;
+
+    var mimeType = files[0].type;
+    if (mimeType.match(/image\/*/) == null) {
+      this.message = "Only images are supported.";
+      return;
+    }
+
+    var reader = new FileReader();
+    this.imagePath = files;
+    reader.readAsDataURL(files[0]);
+    reader.onload = (_event) => {
+      this.imgURL = reader.result;
+    }
+    this.toaster.success("Dodano zdjęcie");
+    this.driverForm.patchValue({file:this.fileToUpload});
+  }
+
+
+
+
 }

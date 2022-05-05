@@ -8,6 +8,10 @@
     </mat-form-field>
 
 
+      <button mat-raised-button color="primary"  style="margin-left: 2vh" (click)="goForward(stepper)">dalej</button>
+
+
+
     <table mat-table [dataSource]="vehicles"
            class="mat-elevation-z8 demo-table " >
 
@@ -56,10 +60,7 @@
                     (page)="pageEvent = getServerData($event)">
     </mat-paginator>
 
-    <div style="margin-top: 2vh">
 
-      <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
-    </div>
 
   </mat-step>
 
@@ -116,8 +117,8 @@
     </form>
     <div style="margin-top: 2vh">
       <button mat-raised-button color="primary" >resetuj</button>
-
-      <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
+      <button mat-raised-button color="primary" (click)="goBack(stepper)" >wróć</button>
+      <button mat-raised-button color="primary"  style="margin-left: 2vh" (click)="goForward(stepper)">dalej</button>
     </div>
 
   </mat-step>
@@ -126,7 +127,7 @@
     <ng-template matStepLabel>Podsumowanie</ng-template>
 
     <div style="margin-top: 2vh">
-      <button mat-raised-button color="primary" >wróć</button>
+      <button mat-raised-button color="primary" (click)="goBack(stepper)" >wróć</button>
 
       <button mat-raised-button color="primary"  style="margin-left: 2vh">zapisz</button>
     </div>

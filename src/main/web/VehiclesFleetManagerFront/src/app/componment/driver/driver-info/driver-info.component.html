@@ -1,0 +1,56 @@
+<div id="modal-content-wrapper">
+  <header id="modal-header">
+    <h1 id="modal-title">{{driverData.name }}  {{driverData.surname}}</h1>
+  </header>
+  <section id="modal-body">
+
+    <form [formGroup]="driverDeatils"  (ngSubmit)="onSubmit()">
+    <mat-form-field class="example-form-field" appearance="fill">
+      <mat-label>Imię</mat-label>
+      <input matInput type="text"  formControlName="name">
+      <button *ngIf="driverData.name" matSuffix mat-icon-button aria-label="Clear" (click)="driverData.name=''">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-form-field class="example-form-field" appearance="fill">
+      <mat-label>Nazwisko</mat-label>
+      <input matInput type="text"  formControlName="surname">
+      <button *ngIf="driverData.surname" matSuffix mat-icon-button aria-label="Clear" (click)="driverData.surname=''">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <p></p>
+    <mat-form-field class="example-form-field" appearance="fill">
+      <mat-label>PESEL</mat-label>
+      <input matInput type="text"  formControlName="pesel">
+      <button *ngIf="driverData.pesel" matSuffix mat-icon-button aria-label="Clear" (click)="driverData.pesel=''">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-form-field class="example-form-field" appearance="fill">
+      <mat-label>Adres zamieszkania</mat-label>
+      <input matInput type="text"  formControlName="address">
+      <button *ngIf="driverData.address" matSuffix mat-icon-button aria-label="Clear" (click)="driverData.address=''">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+      <p></p>
+      <mat-form-field color="primary" appearance="fill">
+        <mat-label>Data urodzenia</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" >
+
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <button mat-raised-button color="primary" style="margin-left: 52vh" type="submit" >zapisz</button>
+      <button mat-raised-button  style="background-color: var(--right-color)" (click)="closeModal()">Wyjdz</button>
+    </form>
+
+
+  </section>
+  <footer id="modal-footer">
+
+
+
+  </footer>
+</div>

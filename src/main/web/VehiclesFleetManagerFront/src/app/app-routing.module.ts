@@ -13,6 +13,7 @@ import {VehicleInspectionComponent} from "./componment/vehicle-inspection/vehicl
 import {VehicleInspectionCreatorComponent} from "./componment/vehicle-inspection/vehicle-inspection-creator/vehicle-inspection-creator.component";
 import {CargoComponent} from "./componment/cargo/cargo.component";
 import {CargoCreatorComponent} from "./componment/cargo/cargo-creator/cargo-creator.component";
+import {RoadTabelComponent} from "./componment/route-creator/road-tabel/road-tabel.component";
 
 const routes: Routes = [
   {path:'',component:HomeComponent},
@@ -28,6 +29,7 @@ const routes: Routes = [
   {path:'vehicleInspectionCreator',component:VehicleInspectionCreatorComponent},
   {path:'cargo',component:CargoComponent},
   {path:'cargoCreator',component:CargoCreatorComponent},
+  {path:'roadTabel',component:RoadTabelComponent},
 
 ];
 

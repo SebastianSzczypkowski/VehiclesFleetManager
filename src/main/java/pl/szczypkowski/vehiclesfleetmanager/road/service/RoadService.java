@@ -2,24 +2,30 @@ package pl.szczypkowski.vehiclesfleetmanager.road.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.szczypkowski.vehiclesfleetmanager.map.model.Coordinates;
+import pl.szczypkowski.vehiclesfleetmanager.map.repository.CoordinatesRepository;
 import pl.szczypkowski.vehiclesfleetmanager.road.model.Road;
 import pl.szczypkowski.vehiclesfleetmanager.road.repository.RoadRepository;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoadService {
 
     private final RoadRepository roadRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(RoadService.class);
+    private final CoordinatesRepository coordinatesRepository;
 
-    public RoadService(RoadRepository roadRepository) {
+    public RoadService(RoadRepository roadRepository, CoordinatesRepository coordinatesRepository) {
         this.roadRepository = roadRepository;
+        this.coordinatesRepository = coordinatesRepository;
     }
 
 
@@ -28,7 +34,7 @@ public class RoadService {
         return roadRepository.findAll();
     }
 
-    public void save (Long start,Long end)
+    public void save (Coordinates start, Coordinates end)
     {
         try
         {
@@ -48,12 +54,77 @@ public class RoadService {
     public ResponseEntity<?> getAllPage(Pageable pageable) {
         try{
 
-            return ResponseEntity.ok().body(roadRepository.findAll(pageable));
+            Page<Road>roadPage =roadRepository.findAll(pageable);
+            return ResponseEntity.ok().body(roadPage);
 
         }catch (Exception e)
         {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało sie pobrać listy tras"));
+        }
+    }
+
+    public ResponseEntity<?> saveRoad(Road road) {
+
+        try{
+
+            if(road!=null)
+            {
+
+                Coordinates startDb =null;
+                if(road.getStart()!=null)
+                    startDb =coordinatesRepository.save(road.getStart());
+                Coordinates endDb=null ;
+                if(road.getEnd()!=null)
+                    endDb=coordinatesRepository.save(road.getEnd());
+
+                if(road.getId()!=null)
+                {
+                    Optional<Road> dbRoad =roadRepository.findById(road.getId());
+                    if(dbRoad.isPresent())
+                    {
+                        if( road.getCargo()!=null )
+                            dbRoad.get().setCargo(road.getCargo());
+                        if(road.getDriver()!=null)
+                            dbRoad.get().setDriver(road.getDriver());
+                        if(startDb!=null)
+                            dbRoad.get().setStart(startDb);
+                        if(endDb!=null)
+                            dbRoad.get().setEnd(endDb);
+                        dbRoad.get().setUpdateDate(LocalDate.now());
+
+                        Road saved =roadRepository.save(dbRoad.get());
+
+                        return ResponseEntity.ok().body(saved);
+                    }
+                    else {
+                        return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało sie zaktualizować trasy od ID:"+road.getId()));
+                    }
+
+                }else
+                {
+                    if(startDb!=null)
+                        road.setStart(startDb);
+                    if(endDb!=null)
+                        road.setEnd(endDb);
+                    road.setUpdateDate(LocalDate.now());
+                    road.setCreationDate(LocalDate.now());
+                    road.setFinished(false);
+                    Road saved = roadRepository.save(road);
+                    return ResponseEntity.ok().body(saved);
+                }
+
+            }
+            else
+            {
+                return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało sie zapisać trasy [piste dane]"));
+            }
+
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało sie zapisać trasy"));
         }
     }
 }

@@ -6,6 +6,8 @@ import {Vehicle} from "../../../model/vehicle";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {PeriodicElement} from "../../route-creator/route-creator.component";
+import {MatStepper} from "@angular/material/stepper";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-vehicle-inspection-creator',
@@ -33,7 +35,7 @@ export class VehicleInspectionCreatorComponent implements OnInit,AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
   constructor(private _formBuilder: FormBuilder,private vehicleService:VehicleService,
-              private vehicleinspectionService:VehicleInspectionService) { }
+              private vehicleinspectionService:VehicleInspectionService,private toaster:ToastrService) { }
 
   ngOnInit(): void {
     this.vehicleInspectionForm=this._formBuilder.group({
@@ -60,6 +62,7 @@ export class VehicleInspectionCreatorComponent implements OnInit,AfterViewInit {
 
     this.vehicleSelected=element;
     this.vehicleInspectionForm.patchValue({idVehicle:element.id});
+    this.toaster.success("Wybrano pojazd");
     // this.vehicles.forEach(e=>{
     //   if(element==e)
     //     this.addClass=true;
@@ -67,6 +70,12 @@ export class VehicleInspectionCreatorComponent implements OnInit,AfterViewInit {
   }
   onSubmit() {
     this.vehicleinspectionService.add(this.vehicleInspectionForm.getRawValue()).subscribe(
+      data=>{
+        this.toaster.success("Dodano wpis o inspekcji pojazdu");
+      },
+      err=>{
+        this.toaster.error("Nie udało się dodać naprawy");
+      }
     )
   }
 
@@ -81,6 +90,9 @@ export class VehicleInspectionCreatorComponent implements OnInit,AfterViewInit {
         this.length=response.totalElements;
         this.pageIndex=event.pageIndex;
         this.pageSize=event.pageSize;
+      },
+      err=>{
+        this.toaster.error("Nie udało się poprać danych");
       }
     )
     else
@@ -97,10 +109,19 @@ export class VehicleInspectionCreatorComponent implements OnInit,AfterViewInit {
         this.pageSize=data.size;
         this.length=data.totalElements;
         this.table.renderRows();
+      },err=>{
+        this.toaster.error("Nie udało się poprać danych");
       }
     );
     this.table.renderRows();
   }
 
+  goBack(stepper: MatStepper){
+    stepper.previous();
+  }
+
+  goForward(stepper: MatStepper){
+    stepper.next();
+  }
 
 }

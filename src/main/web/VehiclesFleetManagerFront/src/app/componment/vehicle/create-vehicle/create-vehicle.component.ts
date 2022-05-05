@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {VehicleService} from "../service/vehicle.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-create-vehicle',
@@ -10,7 +11,8 @@ import {VehicleService} from "../service/vehicle.service";
 export class CreateVehicleComponent implements OnInit {
 
   driverForm!:FormGroup;
-  constructor(private _formBuilder: FormBuilder,private vehicleService:VehicleService) { }
+  constructor(private _formBuilder: FormBuilder,private vehicleService:VehicleService,
+              private toaster:ToastrService) { }
 
   ngOnInit(): void {
     this.driverForm = this._formBuilder.group({
@@ -26,6 +28,12 @@ export class CreateVehicleComponent implements OnInit {
   onSubmit() {
 
     this.vehicleService.add(this.driverForm.getRawValue()).subscribe(
+      data=>{
+        this.toaster.success("Dodano pojazd");
+      },
+      err=>{
+        this.toaster.error("Nie udało się dodać pojazdu");
+      }
 
     )
   }

@@ -36,51 +36,57 @@
     <div style="margin-top: 2vh">
     <button mat-raised-button color="primary" (click)="remove()">resetuj</button>
 
-    <button mat-raised-button color="primary"  style="margin-left: 2vh">dalej</button>
+    <button mat-raised-button color="primary"  style="margin-left: 2vh" (click)="goForward(stepper)">dalej</button>
     </div>
     <app-creator-map></app-creator-map>
   </mat-step>
-  <mat-step [stepControl]="secondFormGroup">
-    <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel>Wybierz kierowce</ng-template>
-      <mat-form-field appearance="fill">
-        <mat-label>Wybierz kierowce</mat-label>
-        <input matInput formControlName="secondCtrl" placeholder="kierowca" (input)="search($event)"
-               required>
-      </mat-form-field>
-      <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh">wróć</button>
-      <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh">resetuj</button>
+  <mat-step >
+    <mat-form-field appearance="fill">
+      <mat-label>Wybierz kierowce</mat-label>
+      <input matInput formControlName="secondCtrl" placeholder="kierowca" (input)="search($event)">
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh" (click)="goBack(stepper)">wróć</button>
+    <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh" (click)="goForward(stepper)">dalej</button>
 
-      <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh">dalej</button>
-    </form>
+      <ng-template matStepLabel>Wybierz kierowce</ng-template>
+
       <table mat-table [dataSource]="drivers"
              class="mat-elevation-z8 demo-table ">
 
-        <!-- Position Column -->
-        <ng-container matColumnDef="position">
+        <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
-            No.
+            ID
           </th>
-          <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
         </ng-container>
 
-        <!-- Name Column -->
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
-            Imie Nazwisko
+            Imie
           </th>
           <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
-
-        <!-- Weight Column -->
-        <ng-container matColumnDef="weight">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by driverLicenc">
-            Prawojazdy
+        <ng-container matColumnDef="surname">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by surname">
+            Nazwisko
           </th>
-          <td mat-cell *matCellDef="let element"> {{element.driverLicenc}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
         </ng-container>
 
-        <!-- Symbol Column -->
+        <ng-container matColumnDef="pesel">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by pesel">
+            PESEL
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.pesel}} </td>
+        </ng-container>
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by address">
+            Adres
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+        </ng-container>
+
+
         <ng-container matColumnDef="symbol">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by additionalPermissions">
             Dodatkowe uprawnienia
@@ -91,8 +97,9 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-header-row *matHeaderRowDef="driversColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: driversColumns;" (click)="clickedDriver.clear();clickedDriver.add(row)" (click)="onDriverClick(row) "
+            [class.demo-row-is-clicked]="clickedDriver.has(row)"></tr>
       </table>
     <mat-paginator  #paginator
                     [length]="driversLength"
@@ -107,55 +114,53 @@
 <!--      </div>-->
 
   </mat-step>
-  <mat-step>
-    <ng-template matStepLabel>Wybierz rodzaj pojazu</ng-template>
+<!--  <mat-step>-->
+<!--    <ng-template matStepLabel>Wybierz rodzaj pojazu</ng-template>-->
 
-    <div class="img-continer">
+<!--    <div class="img-continer">-->
 
-      <div class="example-card">
-    <mat-card appMaterialElevation [defaultElevation]="defaultElevation"  matTooltip="smaochód osobowy" matTooltipPosition="above">
+<!--      <div class="example-card">-->
+<!--    <mat-card appMaterialElevation [defaultElevation]="defaultElevation"  matTooltip="smaochód osobowy" matTooltipPosition="above">-->
 
-        <img mat-card-image src="assets/car.png" alt="smaochód osobowy">
-    </mat-card>
+<!--        <img mat-card-image src="assets/car.png" alt="smaochód osobowy">-->
+<!--    </mat-card>-->
 
-      <mat-card appMaterialElevation [defaultElevation]="defaultElevation" matTooltip="smaochód dostawczy" matTooltipPosition="above">
-        <img mat-card-image src="assets/truck.png" alt="smaochód dostawczy" >
-      </mat-card>
-      </div>
-      <div class="example-card">
-      <mat-card appMaterialElevation [defaultElevation]="defaultElevation" >
-        <img mat-card-image src="assets/truck2.png" alt="ciężarówka powyżej 3.5tony" matTooltip="ciężarówka" matTooltipPosition="above">
-      </mat-card>
-      <mat-card appMaterialElevation [defaultElevation]="defaultElevation" matTooltip="tir" matTooltipPosition="above">
-        <img mat-card-image src="assets/truck3.png" alt="tir">
-      </mat-card>
-      </div>
-    </div>
-<!--    <div>-->
-<!--      <button mat-button matStepperPrevious>Back</button>-->
-<!--      <button mat-button (click)="stepper.reset()">Reset</button>-->
+<!--      <mat-card appMaterialElevation [defaultElevation]="defaultElevation" matTooltip="smaochód dostawczy" matTooltipPosition="above">-->
+<!--        <img mat-card-image src="assets/truck.png" alt="smaochód dostawczy" >-->
+<!--      </mat-card>-->
+<!--      </div>-->
+<!--      <div class="example-card">-->
+<!--      <mat-card appMaterialElevation [defaultElevation]="defaultElevation" >-->
+<!--        <img mat-card-image src="assets/truck2.png" alt="ciężarówka powyżej 3.5tony" matTooltip="ciężarówka" matTooltipPosition="above">-->
+<!--      </mat-card>-->
+<!--      <mat-card appMaterialElevation [defaultElevation]="defaultElevation" matTooltip="tir" matTooltipPosition="above">-->
+<!--        <img mat-card-image src="assets/truck3.png" alt="tir">-->
+<!--      </mat-card>-->
+<!--      </div>-->
 <!--    </div>-->
-  </mat-step>
+<!--&lt;!&ndash;    <div>&ndash;&gt;-->
+<!--&lt;!&ndash;      <button mat-button matStepperPrevious>Back</button>&ndash;&gt;-->
+<!--&lt;!&ndash;      <button mat-button (click)="stepper.reset()">Reset</button>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--  </mat-step>-->
   <mat-step>
     <ng-template matStepLabel>Wybierz pojazd</ng-template>
 
-    <form [formGroup]="secondFormGroup">
+<!--    <form [formGroup]="secondFormGroup">-->
       <ng-template matStepLabel>Wybierz pojazd</ng-template>
       <mat-form-field appearance="fill">
         <mat-label>Wybierz pojazd</mat-label>
-        <input matInput formControlName="secondCtrl" placeholder="pojazd" (input)="getServerDataVehicles($event)"
-               required>
+        <input matInput formControlName="secondCtrl" placeholder="pojazd" (input)="searchVehicles($event)">
       </mat-form-field>
-      <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh">wróć</button>
-      <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh">resetuj</button>
+      <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh" (click)="goBack(stepper)">wróć</button>
 
-      <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh">dalej</button>
+      <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh" (click)="goForward(stepper)">dalej</button>
 
       <!--      <div>-->
       <!--        <button mat-button matStepperPrevious>Back</button>-->
       <!--        <button mat-button matStepperNext>Next</button>-->
       <!--      </div>-->
-    </form>
+<!--    </form>-->
 
     <!--    <div>-->
     <!--      <button mat-button matStepperPrevious>Back</button>-->
@@ -165,41 +170,57 @@
            class="mat-elevation-z8 demo-table ">
 
       <!-- Position Column -->
-      <ng-container matColumnDef="position">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">
           No.
         </th>
-        <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
       </ng-container>
 
       <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
-          Imie Nazwisko
+          Nazwa
         </th>
         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
       </ng-container>
 
-      <!-- Weight Column -->
-      <ng-container matColumnDef="weight">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by driverLicenc">
-          Prawojazdy
+      <ng-container matColumnDef="vin">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by vin">
+          Numer VIN
         </th>
-        <td mat-cell *matCellDef="let element"> {{element.driverLicenc}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.vin}} </td>
       </ng-container>
 
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="symbol">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by additionalPermissions">
-          Dodatkowe uprawnienia
+      <ng-container matColumnDef="registrationNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by registrationNumber">
+          Number Rejestracyjny
         </th>
         <td mat-cell *matCellDef="let element">
-          {{element.driverLicenc}}
+          {{element.registrationNumber}}
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <ng-container matColumnDef="engineCapacity">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by engineCapacity">
+          Pojemność silnika
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.engineCapacity}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="averageFuelConsumptio">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by averageFuelConsumptio">
+          Średnie spalanie
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.averageFuelConsumptio}}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="vehiclesColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: vehiclesColumns;" (click)="clickedVehilce.clear();clickedVehilce.add(row)" (click)="onVehicleClick(row) "
+          [class.demo-row-is-clicked]="clickedVehilce.has(row)"></tr>
     </table>
     <mat-paginator  #paginator
                     [length]="vehiclesLength"
@@ -212,68 +233,86 @@
   <mat-step>
     <ng-template matStepLabel>Wybierz ładunek</ng-template>
 
-    <form [formGroup]="secondFormGroup">
+<!--    <form [formGroup]="secondFormGroup">-->
       <ng-template matStepLabel>Wybierz ładunek</ng-template>
       <mat-form-field appearance="fill">
         <mat-label>Wybierz ładunek</mat-label>
-        <input matInput formControlName="secondCtrl" placeholder="ładunek"
-               required>
+        <input matInput formControlName="secondCtrl" placeholder="ładunek" (input)="searchCargos($event)">
       </mat-form-field>
       <!--      <div>-->
       <!--        <button mat-button matStepperPrevious>Back</button>-->
       <!--        <button mat-button matStepperNext>Next</button>-->
       <!--      </div>-->
 
-      <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh">wróć</button>
-      <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh">resetuj</button>
+      <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh" (click)="goBack(stepper)">wróć</button>
 
-      <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh">zakończ</button>
-    </form>
+      <button mat-raised-button color="primary" type="submit" style="margin-left: 2vh" (click)="save()">zakończ</button>
+<!--    </form>-->
 
     <!--    <div>-->
     <!--      <button mat-button matStepperPrevious>Back</button>-->
     <!--      <button mat-button (click)="stepper.reset()">Reset</button>-->
     <!--    </div>-->
-    <table mat-table [dataSource]="dataSource"
+    <table mat-table [dataSource]="cargos"
            class="mat-elevation-z8 demo-table ">
 
-      <!-- Position Column -->
-      <ng-container matColumnDef="position">
+      <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
-          No.
+          ID
         </th>
-        <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
       </ng-container>
 
-      <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
-          Imie Nazwisko
+          Nazwa
         </th>
         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
       </ng-container>
 
-      <!-- Weight Column -->
-      <ng-container matColumnDef="weight">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by driverLicenc">
-          Prawojazdy
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by description">
+          Opis
         </th>
-        <td mat-cell *matCellDef="let element"> {{element.driverLicenc}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
       </ng-container>
 
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="symbol">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by additionalPermissions">
-          Dodatkowe uprawnienia
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by type">
+          Typ
         </th>
         <td mat-cell *matCellDef="let element">
-          {{element.driverLicenc}}
+          {{element.type}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="sensitivity">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by sensitivity">
+          Wrażliwość
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.sensitivity}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="specialRemarks">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by specialRemarks">
+          Specjalne wytyczne
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.specialRemarks}}
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-header-row *matHeaderRowDef="cargosColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: cargosColumns;" (click)="clickedCargo.clear();clickedCargo.add(row)" (click)="onCargoClick(row) "
+          [class.demo-row-is-clicked]="clickedCargo.has(row)"></tr>
     </table>
+    <mat-paginator  #paginator
+                    [length]="cargosLength"
+                    [pageIndex]="cargosIndex"
+                    [pageSize]="cargosSize"
+                    [pageSizeOptions]="[5, 10, 25, 100]"
+                    (page)="cargosEvent = getServerDataCargos($event)">
+    </mat-paginator>
   </mat-step>
 
 </mat-stepper>

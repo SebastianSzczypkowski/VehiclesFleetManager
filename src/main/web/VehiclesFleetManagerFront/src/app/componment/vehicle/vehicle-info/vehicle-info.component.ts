@@ -4,6 +4,7 @@ import {MatDialogRef} from "@angular/material/dialog";
 import {VehicleEmmiterService} from "../service/vehicle-emmiter.service";
 import {VehicleService} from "../service/vehicle.service";
 import {Vehicle} from "../../../model/vehicle";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-vehicle-info',
@@ -16,7 +17,7 @@ export class VehicleInfoComponent implements OnInit {
   vehicleDeatils!:FormGroup;
   vehicleData!:Vehicle;
   constructor(private _formBuilder: FormBuilder,public dialogRef:MatDialogRef<VehicleInfoComponent>,
-              private vehicleEmmiter:VehicleEmmiterService,private vehicleService:VehicleService) { }
+              private vehicleEmmiter:VehicleEmmiterService,private vehicleService:VehicleService,private toaster:ToastrService) { }
 
 
   ngOnInit(): void {
@@ -37,7 +38,6 @@ export class VehicleInfoComponent implements OnInit {
 
     })
     this.vehicleData=this.vehicleEmmiter.getvehilce();
-    console.log(this.vehicleData);
     this.vehicleDeatils.patchValue({name:this.vehicleEmmiter.getvehilce().name});
     this.vehicleDeatils.patchValue({vin:this.vehicleEmmiter.getvehilce().vin});
     this.vehicleDeatils.patchValue({registrationNumber:this.vehicleEmmiter.getvehilce().registrationNumber});
@@ -56,7 +56,14 @@ export class VehicleInfoComponent implements OnInit {
   }
 
   onSubmit() {
-    this.vehicleService.add(this.vehicleDeatils.getRawValue()).subscribe();
+    this.vehicleService.add(this.vehicleDeatils.getRawValue()).subscribe(
+      data=>{
+        this.toaster.success("Zapisano zmiany");
+      },
+      err=>{
+        this.toaster.error("Nie udało się zapisać zmian");
+      }
+    );
   }
 
 

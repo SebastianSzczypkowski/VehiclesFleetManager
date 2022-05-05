@@ -1,9 +1,14 @@
+import {Driver} from "./driver";
+import {Coordinates} from "./coordinates";
+import {Cargo} from "./cargo";
+
 export class Road {
 
   id!:number;
-  driver!:string;
-  end!:string;
+  driver!:Driver;
+  end!:Coordinates;
   finished!:boolean;
-  start!:string;
+  start!:Coordinates;
+  cargo!:Cargo;
 
 }
