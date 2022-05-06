@@ -2,7 +2,6 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {Vehicle} from "../../../model/vehicle";
 import {MatTable, MatTableDataSource} from "@angular/material/table";
-import {PeriodicElement} from "../route-creator.component";
 import {Road} from "../../../model/road";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {RouteCreatorService} from "../service/route-creator.service";
@@ -24,7 +23,7 @@ export class RoadTabelComponent implements OnInit,AfterViewInit  {
   length!:number;
   roads:Road[]=[];
   displayedColumns: string[] = ['id', 'start', 'end',"driver","cargo"];
-  dataSource = new MatTableDataSource<PeriodicElement>();
+  dataSource = new MatTableDataSource<Road>();
   @ViewChild(MatPaginator) paginator!: MatPaginator
   private id!: number;
   @ViewChild(MatTable) table!: MatTable<any>;
@@ -77,8 +76,8 @@ export class RoadTabelComponent implements OnInit,AfterViewInit  {
     // The user can't close the dialog by clicking outside its body
     dialogConfig.disableClose = true;
     dialogConfig.id = "driver-info-component";
-    dialogConfig.height = "700px";
-    dialogConfig.width = "700px";
+    dialogConfig.height = "80%";
+    dialogConfig.width = "70%";
     const modalDialog = this.matDialog.open(RoadDeatilsComponent, dialogConfig);
 
     this.roads.forEach(e=>{

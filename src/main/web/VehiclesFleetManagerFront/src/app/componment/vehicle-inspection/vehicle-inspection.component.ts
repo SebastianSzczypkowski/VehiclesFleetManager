@@ -5,7 +5,6 @@ import {VehicleInspectionService} from "./service/vehicle-inspection.service";
 import {Vehicleinspection} from "../../model/vehicleinspection";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatTable, MatTableDataSource} from "@angular/material/table";
-import {PeriodicElement} from "../route-creator/route-creator.component";
 import {Driver} from "../../model/driver";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {DriverInfoComponent} from "../driver/driver-info/driver-info.component";
@@ -26,7 +25,7 @@ export class VehicleInspectionComponent implements OnInit,AfterViewInit {
   pageSize=10;
   length!:number;
   vehicleinspections:Vehicleinspection[]=[];
-  dataSource = new MatTableDataSource<PeriodicElement>();
+  dataSource = new MatTableDataSource<Vehicleinspection>();
   displayedColumns: string[] = ['position', 'nazwa','description','performedBy'];//, 'date', 'validityDate'
   @ViewChild(MatPaginator) paginator!: MatPaginator
   @ViewChild(MatTable) table!: MatTable<any>;

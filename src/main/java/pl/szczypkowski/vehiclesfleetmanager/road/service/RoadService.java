@@ -6,13 +6,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.szczypkowski.vehiclesfleetmanager.cargo.repository.CargoRepository;
+import pl.szczypkowski.vehiclesfleetmanager.driver.repository.DriverRepository;
 import pl.szczypkowski.vehiclesfleetmanager.map.model.Coordinates;
 import pl.szczypkowski.vehiclesfleetmanager.map.repository.CoordinatesRepository;
 import pl.szczypkowski.vehiclesfleetmanager.road.model.Road;
 import pl.szczypkowski.vehiclesfleetmanager.road.repository.RoadRepository;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
+import pl.szczypkowski.vehiclesfleetmanager.vehicle.repository.VehicleRepository;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,10 +26,16 @@ public class RoadService {
     private final RoadRepository roadRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(RoadService.class);
     private final CoordinatesRepository coordinatesRepository;
+    private final CargoRepository cargoRepository;
+    private final DriverRepository driverRepository;
+    private final VehicleRepository vehicleRepository;
 
-    public RoadService(RoadRepository roadRepository, CoordinatesRepository coordinatesRepository) {
+    public RoadService(RoadRepository roadRepository, CoordinatesRepository coordinatesRepository, CargoRepository cargoRepository, DriverRepository driverRepository, VehicleRepository vehicleRepository) {
         this.roadRepository = roadRepository;
         this.coordinatesRepository = coordinatesRepository;
+        this.cargoRepository = cargoRepository;
+        this.driverRepository = driverRepository;
+        this.vehicleRepository = vehicleRepository;
     }
 
 
@@ -78,19 +88,32 @@ public class RoadService {
                 if(road.getEnd()!=null)
                     endDb=coordinatesRepository.save(road.getEnd());
 
+
                 if(road.getId()!=null)
                 {
                     Optional<Road> dbRoad =roadRepository.findById(road.getId());
                     if(dbRoad.isPresent())
                     {
-                        if( road.getCargo()!=null )
+                        if( road.getCargo()!=null ) {
                             dbRoad.get().setCargo(road.getCargo());
-                        if(road.getDriver()!=null)
+                            dbRoad.get().getCargo().setAssigned(true);
+                            dbRoad.get().setUpdateDate(LocalDate.now());
+                            dbRoad.get().getCargo().setAssignedDate(new Date());
+                            cargoRepository.save(dbRoad.get().getCargo());
+
+                        }
+                        if(road.getDriver()!=null) {
                             dbRoad.get().setDriver(road.getDriver());
+                        }
                         if(startDb!=null)
                             dbRoad.get().setStart(startDb);
                         if(endDb!=null)
                             dbRoad.get().setEnd(endDb);
+                        if(road.getVehicle()!=null)
+                        {
+                            dbRoad.get().setVehicle(road.getVehicle());
+                            dbRoad.get().getVehicle().setOccupied(true);
+                        }
                         dbRoad.get().setUpdateDate(LocalDate.now());
 
                         Road saved =roadRepository.save(dbRoad.get());
@@ -107,6 +130,16 @@ public class RoadService {
                         road.setStart(startDb);
                     if(endDb!=null)
                         road.setEnd(endDb);
+                    if(road.getVehicle()!=null) {
+                        road.getVehicle().setOccupied(true);
+                        vehicleRepository.save(road.getVehicle());
+                    }
+                    if(road.getCargo()!=null)
+                    {
+                        road.getCargo().setAssigned(true);
+                        road.getCargo().setAssignedDate(new Date());
+                        cargoRepository.save(road.getCargo());
+                    }
                     road.setUpdateDate(LocalDate.now());
                     road.setCreationDate(LocalDate.now());
                     road.setFinished(false);

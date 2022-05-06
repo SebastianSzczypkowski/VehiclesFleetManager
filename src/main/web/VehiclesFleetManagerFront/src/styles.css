@@ -118,6 +118,20 @@ mat-step{
 .nav-item:last-child{
   margin-top: auto;
 }
+.exit{
+
+  color: var(--text-primary);
+  text-decoration: none;
+  filter: grayscale(100%) opacity(0.7);
+  transition: var(--transition-speed);
+  height: 5vh;
+  width: 5vh;
+
+}
+.exit:hover{
+  filter: grayscale(0%) opacity(1);
+  color:var(--text-secondary);
+}
 .nav-link{
   display: flex;
   algin-items:center;

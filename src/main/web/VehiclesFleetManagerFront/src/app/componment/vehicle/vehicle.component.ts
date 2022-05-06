@@ -3,7 +3,6 @@ import {VehicleService} from "./service/vehicle.service";
 import {Vehicle} from "../../model/vehicle";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatTable, MatTableDataSource} from "@angular/material/table";
-import {PeriodicElement} from "../route-creator/route-creator.component";
 import {Driver} from "../../model/driver";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {DriverInfoComponent} from "../driver/driver-info/driver-info.component";
@@ -23,7 +22,7 @@ export class VehicleComponent implements OnInit,AfterViewInit {
   length!:number;
   vehicles:Vehicle[]=[];
   displayedColumns: string[] = ['position', 'nazwa', 'vin', 'rejestracja'];
-  dataSource = new MatTableDataSource<PeriodicElement>();
+  dataSource = new MatTableDataSource<Vehicle>();
   @ViewChild(MatPaginator) paginator!: MatPaginator
   private id!: number;
   @ViewChild(MatTable) table!: MatTable<any>;

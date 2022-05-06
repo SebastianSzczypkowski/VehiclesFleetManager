@@ -54,6 +54,7 @@ import {ToastrModule} from "ngx-toastr";
 import { RoadTabelComponent } from './componment/route-creator/road-tabel/road-tabel.component';
 import { RoadDeatilsComponent } from './componment/route-creator/road-deatils/road-deatils.component';
 import {MatTabsModule} from "@angular/material/tabs";
+import { RoadDeatilsMapComponent } from './componment/route-creator/road-deatils-map/road-deatils-map.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,7 @@ import {MatTabsModule} from "@angular/material/tabs";
     RoadTabelComponent,
     RoadInfoComponent,
     RoadDeatilsComponent,
+    RoadDeatilsMapComponent,
 
   ],
   imports: [

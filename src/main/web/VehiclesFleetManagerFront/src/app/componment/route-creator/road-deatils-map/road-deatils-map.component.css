@@ -4,7 +4,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  margin-left: 50vh;
+  margin-top: 2vh;
+  margin-left: 40vh;
+  margin-bottom: 0vh;
+  margin-right: 5vh;
+
 
 
 }
@@ -17,4 +21,3 @@
 #map {
   height: 100%;
 }
-

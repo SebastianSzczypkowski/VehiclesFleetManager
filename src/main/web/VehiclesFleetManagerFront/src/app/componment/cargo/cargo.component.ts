@@ -4,7 +4,7 @@ import {CargoService} from "./service/cargo.service";
 import {Cargo} from "../../model/cargo";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatTable, MatTableDataSource} from "@angular/material/table";
-import {PeriodicElement} from "../route-creator/route-creator.component";
+
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {CargoEmmiterService} from "./service/cargo-emmiter.service";
 import {DriverInfoComponent} from "../driver/driver-info/driver-info.component";
@@ -22,7 +22,7 @@ export class CargoComponent implements OnInit {
   pageSize=10;
   length!:number;
   cargos:Cargo[]=[];
-  dataSource = new MatTableDataSource<PeriodicElement>();
+  dataSource = new MatTableDataSource<Cargo>();
   displayedColumns: string[] = ['position', 'name', 'description', 'type','specialRemarks','delivered','assigned'];
   @ViewChild(MatPaginator) paginator!: MatPaginator
   private id!: number;

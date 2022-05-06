@@ -4,7 +4,7 @@ import {DriverService} from "./service/driver.service";
 import {Driver} from "../../model/driver";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatTable, MatTableDataSource} from "@angular/material/table";
-import {PeriodicElement} from "../route-creator/route-creator.component";
+
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {RoadInfoComponent} from "../set-route/road-info/road-info.component";
 import {DriverInfoComponent} from "./driver-info/driver-info.component";
@@ -22,7 +22,7 @@ export class DriverComponent implements OnInit {
   pageSize=10;
   length!:number;
   drivers:Driver[]=[];
-  dataSource = new MatTableDataSource<PeriodicElement>();
+  dataSource = new MatTableDataSource<Driver>();
   displayedColumns: string[] = ['position', 'name', 'surname', 'pesel','address'];
   @ViewChild(MatPaginator) paginator!: MatPaginator
   @ViewChild(MatTable) table!: MatTable<any>;

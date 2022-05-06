@@ -169,7 +169,6 @@
     <table mat-table [dataSource]="vehicles"
            class="mat-elevation-z8 demo-table ">
 
-      <!-- Position Column -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">
           No.
@@ -177,7 +176,6 @@
         <td mat-cell *matCellDef="let element"> {{element.id}} </td>
       </ng-container>
 
-      <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
           Nazwa

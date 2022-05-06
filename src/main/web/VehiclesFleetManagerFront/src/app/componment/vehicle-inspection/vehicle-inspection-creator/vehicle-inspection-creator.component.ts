@@ -5,7 +5,6 @@ import {VehicleInspectionService} from "../service/vehicle-inspection.service";
 import {Vehicle} from "../../../model/vehicle";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatTable, MatTableDataSource} from "@angular/material/table";
-import {PeriodicElement} from "../../route-creator/route-creator.component";
 import {MatStepper} from "@angular/material/stepper";
 import {ToastrService} from "ngx-toastr";
 
@@ -25,9 +24,9 @@ export class VehicleInspectionCreatorComponent implements OnInit,AfterViewInit {
   length!:number;
   searchKeyWord!:string;
   vehicleSelected!:Vehicle;
-  dataSource = new MatTableDataSource<PeriodicElement>();
+  dataSource = new MatTableDataSource<Vehicle>();
   vehicleColumns: string[] = ['id', 'nazwa', 'vin', 'rejestracja'];
-  clickedRow = new Set<PeriodicElement>();
+  clickedRow = new Set<Vehicle>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatTable) table!: MatTable<any>;
 
