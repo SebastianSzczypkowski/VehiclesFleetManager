@@ -107,7 +107,9 @@ export class CreatorMapComponent implements OnInit,OnDestroy {
             ], extendToWaypoints: false,
             missingRouteTolerance: 0
           },
-          fitSelectedRoutes: true
+          fitSelectedRoutes: true,
+
+
 
         }).addTo(this.map);
 

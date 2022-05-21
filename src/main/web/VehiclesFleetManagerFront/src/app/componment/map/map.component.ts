@@ -21,12 +21,17 @@ import {style} from "@angular/animations";
 import {SetRouteComponent} from "../set-route/set-route.component";
 import {EventEmitterService} from "../../service/event-emitter.service";
 import {Coordinates} from "../../model/coordinates";
+import {MapService} from "./map-service/map.service";
 
 @Component({
   selector: 'app-map',
    //templateUrl: './map.component.html',
   styleUrls: ['./map.component.css'],
-  template: `<div class="map-container" leaflet
+  template: `
+    <button mat-raised-button style="background-color: var(--right-color) ;margin-left: 10vh;margin-top: 2vh" aria-label="add" (click)="getLocation()" >
+      Zlokalizuj mnie
+    </button>
+    <div class="map-container" leaflet
      [leafletOptions]="options"
      (leafletMapReady)="onMapReady($event)"
      (leafletMapZoomEnd)="onMapZoomEnd($event)"
@@ -57,7 +62,7 @@ export class MapComponent implements OnInit,OnDestroy {
 
 
 
-  constructor(private eventEmitterService:EventEmitterService) {
+  constructor(private eventEmitterService:EventEmitterService,private mapService:MapService) {
   }
 
   private defaultIcon: Icon = icon({
@@ -86,6 +91,50 @@ export class MapComponent implements OnInit,OnDestroy {
       )
     }
 
+  }
+
+  getLocation()
+  {
+    if(!navigator.geolocation){
+      console.log('location is not supported');
+    }
+    navigator.geolocation.getCurrentPosition((position) => {
+      const coords = position.coords;
+      const latLong = [coords.latitude, coords.longitude];
+      console.log(
+        `lat: ${position.coords.latitude}, lon: ${position.coords.longitude}`
+      );
+      this.mapService.setlat(position.coords.latitude);
+      this.mapService.setlon(position.coords.longitude);
+
+      if(this.map!=undefined) {
+
+        var marker =L.marker(([coords.latitude,coords.longitude])).addTo(this.map)
+        marker.bindPopup('<b>Twoja pozycja</b>').openPopup();
+      }
+    })
+  }
+  watchPosition() {
+    let desLat = 0;
+    let desLon = 0;
+    let id = navigator.geolocation.watchPosition(
+      (position) => {
+        console.log(
+          `lat: ${position.coords.latitude}, lon: ${position.coords.longitude}`
+        );
+        if (position.coords.latitude === desLat) {
+          navigator.geolocation.clearWatch(id);
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      }
+    );
   }
 
 

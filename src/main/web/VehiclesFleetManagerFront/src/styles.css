@@ -41,7 +41,7 @@ body {
 }
 .demo-row-is-clicked {
   font-weight: bold;
-  background-color: var(--right-color);
+  background-color: #3f51b5;
 }
 th.mat-sort-header-sorted {
   color: black;
