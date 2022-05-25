@@ -40,8 +40,6 @@ import {MapService} from "./map-service/map.service";
 })
 export class MapComponent implements OnInit,OnDestroy {
 
-
-
   @Output() map$: EventEmitter<Map> = new EventEmitter;
   @Output() zoom$: EventEmitter<number> = new EventEmitter;
   @Input() options: MapOptions= {
@@ -61,6 +59,9 @@ export class MapComponent implements OnInit,OnDestroy {
   public controls: Control[] = [];
 
 
+// <button mat-raised-button style="background-color: var(--right-color) ;margin-left: 10vh;margin-top: 2vh" aria-label="add" (click)="getLocation()" >
+//     Zlokalizuj mnie
+//   </button>
 
   constructor(private eventEmitterService:EventEmitterService,private mapService:MapService) {
   }

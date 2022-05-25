@@ -57,6 +57,9 @@ import {MatTabsModule} from "@angular/material/tabs";
 import { RoadDeatilsMapComponent } from './componment/route-creator/road-deatils-map/road-deatils-map.component';
 import { DriverEvaluationComponent } from './componment/driver-evaluation/driver-evaluation.component';
 import { MapOptionsComponent } from './componment/map/map-options/map-options.component';
+import {environment} from "../environments/environment";
+import {authInterceptorProviders} from "./service/auth.interceptor";
+import { RegisterComponent } from './componment/register/register.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +90,7 @@ import { MapOptionsComponent } from './componment/map/map-options/map-options.co
     RoadDeatilsMapComponent,
     DriverEvaluationComponent,
     MapOptionsComponent,
+    RegisterComponent,
 
   ],
   imports: [
@@ -120,11 +124,12 @@ import { MapOptionsComponent } from './componment/map/map-options/map-options.co
     MatNativeDateModule,
     MatAutocompleteModule,
     ToastrModule.forRoot(),
-    MatTabsModule
+    MatTabsModule,
+
 
 
   ],
-  providers: [EventEmitterService],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule {
