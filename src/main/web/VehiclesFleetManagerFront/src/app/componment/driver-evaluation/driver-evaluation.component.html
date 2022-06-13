@@ -1,1 +1,232 @@
-<p>driver-evaluation works!</p>
+
+<!--<div class="table">-->
+
+<!--  <section>-->
+
+<!--    <div class="example-flex-container">-->
+
+<!--      <div>-->
+<!--        <a href="routeCreator" >-->
+<!--          <button mat-fab style="background-color: var(&#45;&#45;right-color)" aria-label="add">-->
+<!--            add-->
+<!--          </button>-->
+<!--        </a>-->
+<!--        <mat-form-field appearance="fill">-->
+<!--          <mat-label>Szukaj</mat-label>-->
+<!--          <input matInput placeholder="Szukaj"   >-->
+<!--        </mat-form-field>-->
+<!--      </div>-->
+
+<!--    </div>-->
+
+<!--  </section>-->
+<!--  <p></p>-->
+<!--  <mat-divider></mat-divider>-->
+
+<!--  <table mat-table [dataSource]="roads"-->
+<!--         class="mat-elevation-z8 demo-table ">-->
+
+<!--    <ng-container matColumnDef="id">-->
+<!--      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">-->
+<!--        ID-->
+<!--      </th>-->
+<!--      <td mat-cell *matCellDef="let element"> {{element.id}} </td>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container matColumnDef="start">-->
+<!--      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by start">-->
+<!--        Lokalizacja startowa-->
+<!--      </th>-->
+<!--      <td mat-cell *matCellDef="let element"> {{element.start.details}} </td>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container matColumnDef="end">-->
+<!--      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by end">-->
+<!--        Lokalizacja końcowa-->
+<!--      </th>-->
+<!--      <td mat-cell *matCellDef="let element"> {{element.end.details}} </td>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container matColumnDef="driver">-->
+<!--      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by driver">-->
+<!--        Kierowca-->
+<!--      </th>-->
+<!--      <td mat-cell *matCellDef="let element"> {{element.driver.name}} </td>-->
+<!--    </ng-container>-->
+<!--    <ng-container matColumnDef="cargo">-->
+<!--      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by cargo">-->
+<!--        Ładunek-->
+<!--      </th>-->
+<!--      <td mat-cell *matCellDef="let element"> {{element.cargo.name}} </td>-->
+<!--    </ng-container>-->
+
+<!--    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
+<!--    <tr mat-row *matRowDef="let row; columns: displayedColumns;"  ></tr>-->
+<!--  </table>-->
+<!--  <mat-paginator  #paginator-->
+<!--                  [length]="length"-->
+<!--                  [pageIndex]="pageIndex"-->
+<!--                  [pageSize]="pageSize"-->
+<!--                  [pageSizeOptions]="[5, 10, 25, 100]"-->
+<!--                  (page)="pageEvent = getServerData($event)">-->
+<!--  </mat-paginator>-->
+<!--</div>-->
+
+
+
+  <mat-card class="container">
+
+    <mat-grid-list cols="4" rowHeight="100%" >
+      <mat-grid-tile  colspan="1">
+        <div style="margin-top: -50vh;margin-left:
+       5vh">
+    <img [src]="imgURL" height="200" *ngIf="imgURL">
+<p></p>
+<!--    <button style="margin-left: 4vh"  type="button" color="primary"  mat-raised-button (click)="fileInput.click()">Wybierz zdjęcie</button>-->
+<!--      <input #file hidden (change)="handleFileInput(file.files)" #fileInput type="file" id="file">-->
+        </div>
+        </mat-grid-tile>
+      <mat-grid-tile colspan="3">
+        <div style="margin-top: -30vh;margin-left: -40vh">
+          <section id="modal-body">
+    <mat-tab-group >
+      <mat-tab label="Dane osobowe">
+
+            <div style="margin-top: 5vh">
+              Imię : {{driver.name}}
+              <p>
+              </p>
+
+           Nazwisko :  {{driver.surname}}
+              <p>
+              </p>
+          Data urodzenia: {{driver.dateOfBirth.slice(0,10)}}
+              <p>
+              </p>
+           PESEL : 88030412349
+              <p>
+              </p>
+              Adres zamieszkania:{{driver.address}}
+
+              <h2>Uprawnienia:</h2>
+
+              <div >{{typeOfPermissonList[2].name}} </div>
+              <div >{{typeOfPermissonList[4].name}} </div>
+              <div >{{typeOfPermissonList[6].name}} </div>
+              <div >{{typeOfPermissonList[12].name}} </div>
+
+            </div>
+
+
+      </mat-tab>
+      <mat-tab label="Trasy"  >
+
+        <div class="table">
+
+<!--          <section>-->
+
+<!--            <div class="example-flex-container">-->
+
+<!--&lt;!&ndash;              <div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <a href="routeCreator" >&ndash;&gt;-->
+<!--&lt;!&ndash;                  <button mat-fab style="background-color: var(&#45;&#45;right-color)" aria-label="add">&ndash;&gt;-->
+<!--&lt;!&ndash;                    add&ndash;&gt;-->
+<!--&lt;!&ndash;                  </button>&ndash;&gt;-->
+<!--&lt;!&ndash;                </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                <mat-form-field appearance="fill">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <mat-label>Szukaj</mat-label>&ndash;&gt;-->
+<!--&lt;!&ndash;                  <input matInput placeholder="Szukaj"   >&ndash;&gt;-->
+<!--&lt;!&ndash;                </mat-form-field>&ndash;&gt;-->
+<!--&lt;!&ndash;              </div>&ndash;&gt;-->
+
+<!--            </div>-->
+
+<!--          </section>-->
+<!--          <p></p>-->
+<!--          <mat-divider></mat-divider>-->
+
+          <table mat-table [dataSource]="roads"
+                 class="mat-elevation-z8 demo-table " >
+
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">
+                ID
+              </th>
+              <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="start">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by start">
+                Lokalizacja startowa
+              </th>
+              <td mat-cell *matCellDef="let element"> {{element.start.details.slice(0,20)}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="end">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by end">
+                Lokalizacja końcowa
+              </th>
+              <td mat-cell *matCellDef="let element"> {{element.end.details.slice(0,20)}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="cargo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by cargo">
+                Ładunek
+              </th>
+              <td mat-cell *matCellDef="let element"> {{element.cargo.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="ocena">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by ocena">
+                Ocena
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="list-inline rating-list" *ngIf="element.cargo.name=='CARGO123+'">
+                <i class="fa fa-star" style="color: #ffd700"></i>
+                <i class="fa fa-star" style="color: #ffd700"></i>
+                <i class="fa fa-star" style="color: #ffd700"></i>
+                <i class="fa fa-star" style="color: #ffd700"></i>
+                <i class="fa fa-star"></i>
+                </div>
+                <div class="list-inline rating-list" *ngIf="element.cargo.name=='CARGO556'">
+                  <i class="fa fa-star" style="color: #ffd700"></i>
+                  <i class="fa fa-star" style="color: #ffd700"></i>
+                  <i class="fa fa-star" style="color: #ffd700"></i>
+                  <i class="fa fa-star" ></i>
+                  <i class="fa fa-star"></i>
+                </div>
+                <div class="list-inline rating-list" *ngIf="element.cargo.name=='Odzież'">
+                  <i class="fa fa-star" style="color: #ffd700"></i>
+                  <i class="fa fa-star" style="color: #ffd700"></i>
+                  <i class="fa fa-star" style="color: #ffd700"></i>
+                  <i class="fa fa-star" style="color: #ffd700"></i>
+                  <i class="fa fa-star" style="color: #ffd700"></i>
+                </div>
+
+
+               </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"  ></tr>
+          </table>
+          <mat-paginator  #paginator
+                          [length]="length"
+                          [pageIndex]="pageIndex"
+                          [pageSize]="pageSize"
+                          [pageSizeOptions]="[5, 10, 25, 100]"
+                          (page)="pageEvent = getServerData($event)">
+          </mat-paginator>
+        </div>
+
+
+      </mat-tab>
+    </mat-tab-group>
+          </section>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card>
+
+

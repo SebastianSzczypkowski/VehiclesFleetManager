@@ -1,4 +1,10 @@
 export class Coordinates {
+  constructor(_lat: number | undefined, lon: number | undefined) {
+    this._lat=_lat;
+    this._lon=lon;
+
+  }
+
 
   _lon: number | undefined;
    _lat: number | undefined;

@@ -16,8 +16,7 @@ import {RoadInfoComponent} from "./road-info/road-info.component";
 })
 export class SetRouteComponent implements OnInit {
 
-  coordinates1: Coordinates = new Coordinates;
-  coordinates2: Coordinates = new Coordinates;
+
   color: string | undefined;
   coordinates: Coordinates[] = [];
   allCoordinates: Coordinates[] = [];

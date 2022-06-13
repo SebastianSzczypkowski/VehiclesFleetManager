@@ -109,10 +109,7 @@ export class CreatorMapComponent implements OnInit,OnDestroy {
           },
           fitSelectedRoutes: true,
 
-
-
         }).addTo(this.map);
-
 
       }
     }

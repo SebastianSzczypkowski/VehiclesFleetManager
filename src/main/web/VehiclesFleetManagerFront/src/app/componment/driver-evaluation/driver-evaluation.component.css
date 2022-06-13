@@ -1,0 +1,26 @@
+.container{
+  width: 150vh;
+  height: 85vh;
+  position: relative;
+  margin: auto;
+  box-shadow: 2px 10px 40px rgba(22,20,19,0.4);
+  border-radius: 10px;
+  margin-top: 5vh;
+}
+
+.rating-list li {
+  float: right;
+  color: #ddd;
+  padding: 1px 1px;
+
+}
+
+.rating-list li:hover,
+.rating-list li:hover ~ li, .rating-list li.selected {
+  color: #ffd700;
+}
+
+.rating-list {
+  display: inline-block;
+  list-style: none;
+}

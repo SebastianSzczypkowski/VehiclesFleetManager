@@ -22,6 +22,10 @@ import {SetRouteComponent} from "../set-route/set-route.component";
 import {EventEmitterService} from "../../service/event-emitter.service";
 import {Coordinates} from "../../model/coordinates";
 import {MapService} from "./map-service/map.service";
+import {RouteCreatorService} from "../route-creator/service/route-creator.service";
+import {Road} from "../../model/road";
+import {ToastrService} from "ngx-toastr";
+import {startExpression} from "@igniteui/material-icons-extended";
 
 @Component({
   selector: 'app-map',
@@ -31,6 +35,16 @@ import {MapService} from "./map-service/map.service";
     <button mat-raised-button style="background-color: var(--right-color) ;margin-left: 10vh;margin-top: 2vh" aria-label="add" (click)="getLocation()" >
       Zlokalizuj mnie
     </button>
+<p></p>
+    <mat-form-field appearance="fill" style="margin-left: 10vh">
+      <mat-label>Szukaj</mat-label>
+      <input matInput placeholder="Szukaj"    >
+    </mat-form-field>
+    <p></p>
+    <mat-form-field appearance="fill" style="margin-left: 10vh">
+      <mat-label>Wyszukaj wiele</mat-label>
+      <input matInput placeholder="Wyszukaj wiele"   >
+    </mat-form-field>
     <div class="map-container" leaflet
      [leafletOptions]="options"
      (leafletMapReady)="onMapReady($event)"
@@ -55,14 +69,17 @@ export class MapComponent implements OnInit,OnDestroy {
    // center:latLng(0,0)
     center: latLng(57.74, 11.94)
   };
-  public map?: Map;
+  public map!: Map;
   public zoom?: number;
   @Input() setRoute: SetRouteComponent | undefined;
   public controls: Control[] = [];
+  roads:Road[]=[];
+  coordsDB: Coordinates[]=[];
 
 
 
-  constructor(private eventEmitterService:EventEmitterService,private mapService:MapService) {
+  constructor(private eventEmitterService:EventEmitterService,private mapService:MapService,
+              private routeService:RouteCreatorService,private toaster:ToastrService) {
   }
 
   private defaultIcon: Icon = icon({
@@ -90,6 +107,41 @@ export class MapComponent implements OnInit,OnDestroy {
         }
       )
     }
+    this.routeService.getAll().subscribe(
+      data=>
+      {
+        console.log(data)
+        this.roads=data;
+      },
+      error => {
+        this.toaster.error("Nie udało się pobrać tras")
+      }
+    )
+    this.roads.forEach(e=>{
+      console.log(e);
+
+      this.controls.push(L.Routing.control({
+        waypoints: [L.latLng(<number>e.start._lat, <number>e.start._lon),
+          L.latLng(<number>e.end._lat, <number>e.end._lon)],
+        routeWhileDragging: true,
+        showAlternatives: true,
+        lineOptions: {styles: [
+            {color: 'white', opacity: 0.9, weight: 9},
+            {color: 'orange', opacity: 1, weight: 3},
+          ], extendToWaypoints: false,
+          missingRouteTolerance: 0},
+        altLineOptions: {
+          styles: [
+            {color: '#646464', opacity: 0.9, weight: 5},
+            {color: '#CECECE', opacity: 1, weight: 3},
+          ], extendToWaypoints: false,
+          missingRouteTolerance: 0
+        },
+        fitSelectedRoutes: true
+
+      }).addTo(this.map));
+    })
+
 
   }
 
@@ -149,41 +201,56 @@ export class MapComponent implements OnInit,OnDestroy {
     this.map$.emit(map);
     this.zoom = map.getZoom();
     this.zoom$.emit(this.zoom);
-    // if(this.setRoute!=null) {
-    //  this.controls.push(L.Routing.control({
-    //
-    //     waypoints: [L.latLng(<number>this.setRoute.coordinates1._lat, <number>this.setRoute.coordinates1._lon), L.latLng(57.6792, 11.949)],
-    //     routeWhileDragging: true,
-    //     showAlternatives: true,
-    //     altLineOptions: {
-    //       styles: [
-    //         {color: '#646464', opacity: 0.9, weight: 5},
-    //         {color: '#CECECE', opacity: 1, weight: 3},
-    //       ], extendToWaypoints: false,
-    //       missingRouteTolerance: 0
-    //     },
-    //     fitSelectedRoutes: true
-    //
-    //   }).addTo(map));
-    //
-    // }
-    // L.Routing.control({
-    //   waypoints: [L.latLng(57.50, 11.94), L.latLng(57.40, 11.949)],
-    //   routeWhileDragging: true,
-    //   lineOptions: {styles: [
-    //       {color: 'white', opacity: 0.9, weight: 9},
-    //       {color: '#FC8428', opacity: 1, weight: 3},
-    //     ],extendToWaypoints:false,
-    //     missingRouteTolerance:0},
-    //   fitSelectedRoutes:true
-    //
-    // }).addTo(map);
+
+
+    if(this.setRoute!=null) {
+     this.controls.push(L.Routing.control({
+
+        waypoints: [L.latLng(50.2137321, 19.00588775660632), L.latLng(52.2319581, 21.0067249)],
+        routeWhileDragging: true,
+        showAlternatives: true,
+        altLineOptions: {
+          styles: [
+            {color: '#646464', opacity: 0.9, weight: 5},
+            {color: '#CECECE', opacity: 1, weight: 3},
+          ], extendToWaypoints: false,
+          missingRouteTolerance: 0
+        },
+        fitSelectedRoutes: true
+
+      }).addTo(map));
+
+    }
+    L.Routing.control({
+      waypoints: [L.latLng(50.2137321, 19.00588775660632), L.latLng(52.2319581, 21.0067249)],
+      routeWhileDragging: true,
+      lineOptions: {styles: [
+          {color: 'white', opacity: 0.9, weight: 9},
+          {color: '#FC8428', opacity: 1, weight: 3},
+        ],extendToWaypoints:false,
+        missingRouteTolerance:0},
+      fitSelectedRoutes:true
+
+    }).addTo(map);
+    L.Routing.control({
+      waypoints: [L.latLng(50.4445194, 18.8554757), L.latLng(52.5186925, 13.3996024)],
+      routeWhileDragging: true,
+      lineOptions: {styles: [
+          {color: 'white', opacity: 0.9, weight: 9},
+          {color: 'green', opacity: 1, weight: 3},
+        ],extendToWaypoints:false,
+        missingRouteTolerance:0},
+      fitSelectedRoutes:true
+
+    }).addTo(map);
 
     L.control.mousePosition().addTo(this.map);
   }
 
   addNewRoute(coords: Coordinates[]) {
+
     if(this.map!=undefined) {
+
 
       if (coords != undefined) {
 

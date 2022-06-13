@@ -16,7 +16,7 @@ export class RoadInfoComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<RoadInfoComponent>,
   private eventEmitterService: EventEmitterService) { }
 
-  coordinates: Coordinates =new Coordinates();
+  coordinates!: Coordinates ;
 
   ngOnInit(): void {
 
