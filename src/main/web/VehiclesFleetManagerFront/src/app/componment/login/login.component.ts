@@ -6,7 +6,6 @@ import {TokenService} from "../../service/token.service";
 import {ActivatedRoute, Router} from "@angular/router";
 
 
-declare function login():any;
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -62,7 +61,5 @@ export class LoginComponent implements OnInit {
     window.location.reload();
   }
 
-  switch() {
-    login();
-  }
+
 }
