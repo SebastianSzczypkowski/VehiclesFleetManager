@@ -1,0 +1,36 @@
+<div class="container" id="container">
+
+  <div class="form-container sign-in-container">
+        <form name="form " (ngSubmit)=" onSubmit()" >
+          <h1>Rejestracja</h1>
+
+          <input type="text" placeholder="Imię" name="username"
+                 [(ngModel)]="form.name"
+                 required
+                 minlength="3"
+                 maxlength="30"
+                 #name="ngModel"/>
+          <input type="text" placeholder="Nazwisko" name="username"
+                 [(ngModel)]="form.surname"
+                 required
+                 minlength="3"
+                 maxlength="30"
+                 #surname="ngModel"/>
+          <input type="email" placeholder="Email" name="username"
+                 [(ngModel)]="form.email"
+                 required
+                 minlength="3"
+                 maxlength="50"
+                 #email="ngModel"/>
+          <input type="password" placeholder="Hasło" name="username"
+                 [(ngModel)]="form.username"
+                 required
+                 minlength="3"
+                 maxlength="40"
+                 #password="ngModel"/>
+          <p></p>
+          <button type="submit">Zarejestruj się</button>
+        </form>
+  </div>
+
+</div>
