@@ -54,8 +54,6 @@ import {startExpression} from "@igniteui/material-icons-extended";
 })
 export class MapComponent implements OnInit,OnDestroy {
 
-
-
   @Output() map$: EventEmitter<Map> = new EventEmitter;
   @Output() zoom$: EventEmitter<number> = new EventEmitter;
   @Input() options: MapOptions= {
@@ -77,6 +75,9 @@ export class MapComponent implements OnInit,OnDestroy {
   coordsDB: Coordinates[]=[];
 
 
+// <button mat-raised-button style="background-color: var(--right-color) ;margin-left: 10vh;margin-top: 2vh" aria-label="add" (click)="getLocation()" >
+//     Zlokalizuj mnie
+//   </button>
 
   constructor(private eventEmitterService:EventEmitterService,private mapService:MapService,
               private routeService:RouteCreatorService,private toaster:ToastrService) {

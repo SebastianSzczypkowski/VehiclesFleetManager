@@ -135,7 +135,6 @@ public class DriverService {
                     search+"*"
             )).fetchAll();
 
-
             List<Driver> results = result.hits();
             Set<Driver> driverSet = new HashSet<>(results);
             results = new ArrayList<>(driverSet);

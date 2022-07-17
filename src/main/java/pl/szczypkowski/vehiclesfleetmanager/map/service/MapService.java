@@ -71,7 +71,6 @@ public class MapService {
 
         Coordinates coordinates = new Coordinates();
 
-
         coordinates.setLat(array.getJSONObject(0).getString("lat"));
         coordinates.setLon(array.getJSONObject(0).getString("lon"));
         coordinates.setDetails(array.getJSONObject(0).getString("display_name"));

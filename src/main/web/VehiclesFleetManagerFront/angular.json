@@ -36,7 +36,8 @@
               "node_modules/igniteui-angular/styles/igniteui-angular.css"
             ],
             "scripts": [ "./node_modules/hammerjs/hammer.min.js",
-            "src/assets/script/theme.js"]
+            "src/assets/script/theme.js"
+            ]
           },
           "configurations": {
             "production": {
