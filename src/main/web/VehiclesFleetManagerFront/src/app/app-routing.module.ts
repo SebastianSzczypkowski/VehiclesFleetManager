@@ -16,6 +16,8 @@ import {CargoCreatorComponent} from "./componment/cargo/cargo-creator/cargo-crea
 import {RoadTabelComponent} from "./componment/route-creator/road-tabel/road-tabel.component";
 import {DriverEvaluationComponent} from "./componment/driver-evaluation/driver-evaluation.component";
 import {MapOptionsComponent} from "./componment/map/map-options/map-options.component";
+import {UserComponent} from "./componment/user/user.component";
+import {RegisterComponent} from "./componment/register/register.component";
 
 const routes: Routes = [
   {path:'',component:HomeComponent},

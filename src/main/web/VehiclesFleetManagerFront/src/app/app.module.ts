@@ -57,6 +57,10 @@ import {MatTabsModule} from "@angular/material/tabs";
 import { RoadDeatilsMapComponent } from './componment/route-creator/road-deatils-map/road-deatils-map.component';
 import { DriverEvaluationComponent } from './componment/driver-evaluation/driver-evaluation.component';
 import { MapOptionsComponent } from './componment/map/map-options/map-options.component';
+import {UserComponent} from "./componment/user/user.component";
+import {UserDetailsComponent} from "./componment/user/user-details/user-details.component";
+import {RegisterComponent} from "./componment/register/register.component";
+import {authInterceptorProviders} from "./service/auth.interceptor";
 
 @NgModule({
   declarations: [
