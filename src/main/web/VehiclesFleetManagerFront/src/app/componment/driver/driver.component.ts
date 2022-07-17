@@ -74,8 +74,8 @@ export class DriverComponent implements OnInit {
     // The user can't close the dialog by clicking outside its body
     dialogConfig.disableClose = true;
     dialogConfig.id = "driver-info-component";
-    dialogConfig.height = "450px";
-    dialogConfig.width = "650px";
+    dialogConfig.height = "500px";
+    dialogConfig.width = "620px";
 
     const modalDialog = this.matDialog.open(DriverInfoComponent, dialogConfig);
 

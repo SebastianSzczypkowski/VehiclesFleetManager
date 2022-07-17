@@ -49,7 +49,7 @@ export class RouteCreatorComponent implements OnInit,AfterViewInit{
   defaultElevation = 2;
   raisedElevation = 8;
   driversColumns: string[] = ['id', 'name', 'surname', 'pesel','address'];
-  vehiclesColumns: string[] = ['id', 'name', 'vin', 'registrationNumber','engineCapacity','averageFuelConsumptio'];
+  vehiclesColumns: string[] = ['id', 'name', 'vin', 'registrationNumber','engineCapacity','averageFuelConsumption'];
   cargosColumns: string[] = ['id', 'name', 'description', 'type','sensitivity','specialRemarks'];
   drivers:Driver[]=[];
   driversEvent: PageEvent = new PageEvent;
@@ -278,15 +278,18 @@ export class RouteCreatorComponent implements OnInit,AfterViewInit{
 
   onDriverClick(element:Driver) {
     this.driverSelected=element;
+    this.toaster.info("Wybrano kierowcę");
   }
 
   onVehicleClick(element:Vehicle) {
     this.vehicleSelected=element;
+    this.toaster.info("Wybrano pojazd");
 
   }
 
   onCargoClick(element:Cargo) {
     this.cargoSelected=element;
+    this.toaster.info("Wybrano ładunek");
   }
 
   save() {

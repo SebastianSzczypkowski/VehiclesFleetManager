@@ -40,7 +40,7 @@ export class VehicleInspectionCreatorComponent implements OnInit,AfterViewInit {
     this.vehicleInspectionForm=this._formBuilder.group({
       carRepairShopName:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
       date:[new Date()],
-      validityOfTheVehicleInspection:[new Date()],
+      validityOfTheVehicleInspection:[],
       description:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
       performedBy:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
       idVehicle:new FormControl(''),
@@ -61,7 +61,7 @@ export class VehicleInspectionCreatorComponent implements OnInit,AfterViewInit {
 
     this.vehicleSelected=element;
     this.vehicleInspectionForm.patchValue({idVehicle:element.id});
-    this.toaster.success("Wybrano pojazd");
+    this.toaster.info("Wybrano pojazd");
     // this.vehicles.forEach(e=>{
     //   if(element==e)
     //     this.addClass=true;

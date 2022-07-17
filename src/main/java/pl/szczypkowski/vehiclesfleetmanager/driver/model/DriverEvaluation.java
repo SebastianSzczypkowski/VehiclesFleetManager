@@ -36,6 +36,8 @@ public class DriverEvaluation {
     public DriverEvaluation() {
     }
 
+
+
     public DriverEvaluation(Long id, Integer rate, Road roadId, String description, Date date, Date updateDate, Boolean valid) {
         this.id = id;
         this.rate = rate;
