@@ -4,7 +4,9 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Table(name = "user")
 @Entity
@@ -33,6 +35,12 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(	name = "user_roles",
+            joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "id_roles"))
+    private Set<UserRole> roles = new HashSet<>();
+
     public User() {
     }
     public User(@NonNull String name, String email, String password) {
@@ -44,6 +52,7 @@ public class User {
 
     }
 
+
     public User(Long id, @NonNull String name, String login, Boolean active, Date dateOfRegistration, String email, String password) {
         this.id = id;
         this.name = name;
@@ -53,6 +62,8 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+
 
     public Long getId() {
         return id;
@@ -109,6 +120,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<UserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<UserRole> roles) {
+        this.roles = roles;
     }
 
     @Override
