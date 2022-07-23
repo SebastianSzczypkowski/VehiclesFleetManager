@@ -20,7 +20,7 @@ export class AuthService {
   }
   register(user:any):Observable<any>{
     return this.http.post(AUTH_API+'signup',{
-      username:user.username,
+      username:user.name+"."+ user.surname,
       email: user.email,
       password: user.password
     },httpOptions);

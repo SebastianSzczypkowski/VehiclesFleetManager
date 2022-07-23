@@ -1,33 +1,33 @@
 <div class="container" id="container">
 
   <div class="form-container sign-in-container">
-        <form name="form " (ngSubmit)=" onSubmit()" >
+        <form [formGroup]="registerForm " (ngSubmit)=" onSubmit()" >
           <h1>Rejestracja</h1>
 
-          <input type="text" placeholder="Imię" name="username"
-                 [(ngModel)]="form.name"
+          <input type="text" placeholder="Imię" name="name"
+                 formControlName="name"
                  required
                  minlength="3"
                  maxlength="30"
-                 #name="ngModel"/>
-          <input type="text" placeholder="Nazwisko" name="username"
-                 [(ngModel)]="form.surname"
+                 />
+          <input type="text" placeholder="Nazwisko" name="surname"
+                 formControlName="surname"
                  required
                  minlength="3"
                  maxlength="30"
-                 #surname="ngModel"/>
-          <input type="email" placeholder="Email" name="username"
-                 [(ngModel)]="form.email"
+                 />
+          <input type="email" placeholder="Email" name="email"
+                 formControlName="email"
                  required
                  minlength="3"
                  maxlength="50"
-                 #email="ngModel"/>
-          <input type="password" placeholder="Hasło" name="username"
-                 [(ngModel)]="form.username"
+          />
+          <input type="password" placeholder="Hasło" name="password"
+                 formControlName="password"
                  required
                  minlength="3"
                  maxlength="40"
-                 #password="ngModel"/>
+                 />
           <p></p>
           <button type="submit">Zarejestruj się</button>
         </form>

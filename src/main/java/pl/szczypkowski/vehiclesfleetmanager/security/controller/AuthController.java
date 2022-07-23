@@ -90,13 +90,13 @@ public class AuthController {
 
                         break;
                     case "user":
-                        UserRole modRole = userRoleRepo.findByName(Roles.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
-                    default:
                         UserRole userRole = userRoleRepo.findByName(Roles.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(userRole);
+                    default:
+                        UserRole userR = userRoleRepo.findByName(Roles.ROLE_USER)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(userR);
                 }
             });
         }

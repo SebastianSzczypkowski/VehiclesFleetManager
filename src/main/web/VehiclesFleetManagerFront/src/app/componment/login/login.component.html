@@ -14,15 +14,25 @@
 <!--    </form>-->
 <!--  </div>-->
   <div class="form-container sign-in-container">
-    <form action="#">
+    <form [formGroup]="loginForm " (ngSubmit)=" onSubmit()" >
       <h1>Logowanie</h1>
 
-      <input type="email" placeholder="Email" />
-      <input type="password" placeholder="Hasło" />
-      <a href="#">Zapomniałeś hasła?</a>
+      <input type="text" placeholder="Imię" name="username"
+             formControlName="username"
+             required
+             minlength="3"
+             maxlength="30"
+      />
+      <input type="password" placeholder="Hasło" name="password"
+             formControlName="password"
+             required
+             minlength="3"
+             maxlength="40"
+      />
       <p></p>
-      <button>Zaloguj się</button>
+      <button type="submit">Zaloguj się</button>
     </form>
+
   </div>
 <!--  <div class="overlay-container">-->
 <!--    <div class="overlay">-->

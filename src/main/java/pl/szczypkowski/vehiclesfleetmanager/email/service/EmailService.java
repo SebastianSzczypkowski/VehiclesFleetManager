@@ -13,6 +13,9 @@ import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 
 import java.io.File;
 import java.util.Optional;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -30,21 +33,26 @@ public class EmailService {
     }
 
 
+    ThreadPoolExecutor executor =
+            new ThreadPoolExecutor(10, 10, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
     public ResponseEntity<?> sendEmail(EmailRequest emailRequest) {
        if(emailRequest!=null && emailRequest.getRecipient().size()>0)
        {
            AtomicInteger counter = new AtomicInteger();
            emailRequest.getRecipient().forEach(e->{
-               //TODO pobrać email użytkownika
-               try {
-                   Optional<User> userOptional = userRepository.findByName(e);
-                   userOptional.ifPresent(user -> emailSender.sendEmail(user.getEmail(), emailRequest.getTitle(), emailRequest.getContent()));
-                   counter.getAndIncrement();
-               }catch (Exception exe)
-               {
-                   exe.printStackTrace();
-                   LOGGER.error("Nie udało się wysłać wiadomości do użytkownika : "+e);
-               }
+               //TODO wysyłanie wiadomości na wątkach + informacja na widok o postępie
+               executor.execute(new Runnable() {
+                   @Override
+                   public void run() {
+                       try {
+                           Optional<User> userOptional = userRepository.findByName(e);
+                           userOptional.ifPresent(user -> emailSender.sendEmail(user.getEmail(), emailRequest.getTitle(), emailRequest.getContent()));
+                           counter.getAndIncrement();
+                       } catch (Exception exe) {
+                           exe.printStackTrace();
+                           LOGGER.error("Nie udało się wysłać wiadomości do użytkownika : " + e);
+                       }
+                   }});
            });
 
 

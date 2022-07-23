@@ -95,8 +95,7 @@ public class VehicleInspectionService {
             if (vehicle != null) vehicle = '%' + vehicle.toLowerCase(Locale.ROOT) + '%';
 
 
-            List<VehicleInspection> list  = new ArrayList<>();
-            vehicleInspectionRepository.findByColumnFilter(id,dataOd,dataDo,validityDataOd,validityDataDo,vehicle,description,performedBy);
+            List<VehicleInspection> list  = vehicleInspectionRepository.findByColumnFilter(id,dataOd,dataDo,validityDataOd,validityDataDo,vehicle,description,performedBy);
             posortuj(list, pageable.getSort().toString().replace(":", ""));
 
             final int startP = (int)pageable.getOffset();
