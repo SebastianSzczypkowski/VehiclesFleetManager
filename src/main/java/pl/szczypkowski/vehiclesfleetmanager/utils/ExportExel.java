@@ -22,16 +22,6 @@ public class ExportExel {
 
     private static final String FILE_EXTENSION = ".xlsx";
 
-    private static final String PARSE_ERROR_MESSAGE = "Błąd parsowania {} ({}) podczas exportu";
-
-    /**
-     * DATE, <br />
-     * PROCENT, // Format without % calculation. eg. input 100 result 100 % <br />
-     * NUMERIC, // Numeric without thousand separator <br />
-     * VALUE, // Numeric values with thousand separator <br />
-     * MONEY, // Numeric value with local currency <br />
-     * NONE // Default string format
-     */
     public enum FormatCell {
         DATE, DATE_TIME, TIME, PROCENT, NUMERIC, VALUE, MONEY, MULTILINE, NONE, HEADER
     }
@@ -46,8 +36,8 @@ public class ExportExel {
 
     }
 
-    public static final boolean export(String filePath, List<List<String>> data, Map<Integer, FormatCell> columnFormat,
-                                       boolean filtr, boolean autosize) {
+    public static boolean export(String filePath, List<List<String>> data, Map<Integer, FormatCell> columnFormat,
+                                 boolean filtr, boolean autosize) {
         if (!filePath.endsWith(FILE_EXTENSION)) {
             filePath = filePath.concat(FILE_EXTENSION);
         }
@@ -72,13 +62,13 @@ public class ExportExel {
 
     }
 
-    public static final boolean exportMultipleSheets(String filePath, Map<String, List<List<String>>> data,
-                                                     boolean filtr) {
+    public static boolean exportMultipleSheets(String filePath, Map<String, List<List<String>>> data,
+                                               boolean filtr) {
         return exportMultipleSheets(filePath, data, null, filtr);
     }
 
-    public static final boolean exportMultipleSheets(String filePath, Map<String, List<List<String>>> data,
-                                                     Map<String, Map<Integer, FormatCell>> columnFormat, boolean filtr) {
+    public static boolean exportMultipleSheets(String filePath, Map<String, List<List<String>>> data,
+                                               Map<String, Map<Integer, FormatCell>> columnFormat, boolean filtr) {
         if (!filePath.endsWith(FILE_EXTENSION)) {
             filePath = filePath.concat(FILE_EXTENSION);
         }

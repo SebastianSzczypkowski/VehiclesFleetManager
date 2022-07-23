@@ -16,7 +16,7 @@ import java.util.List;
 public class EntitlementstotransportService {
 
     private EntitlementstotransportRepository entitlementstotransportRepository;
-    private Logger logger = LoggerFactory.getLogger(EntitlementstotransportService.class);
+    private Logger LOGGER = LoggerFactory.getLogger(EntitlementstotransportService.class);
 
 
     public EntitlementstotransportService(EntitlementstotransportRepository entitlementstotransportRepository) {
@@ -35,7 +35,7 @@ public class EntitlementstotransportService {
         } catch (Exception e)
         {
             e.printStackTrace();
-            logger.error("Nie odnaleziono upranienia o ID "+id);
+            LOGGER.error("Nie odnaleziono upranienia o ID "+id);
             return null;
         }
     }

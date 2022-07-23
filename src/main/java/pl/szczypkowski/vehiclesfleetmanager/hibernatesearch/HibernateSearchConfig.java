@@ -30,7 +30,8 @@ public class HibernateSearchConfig {
     {
         SearchSession searchSession = Search.session(entityManager);
 
-        MassIndexer indexer = searchSession.massIndexer(Road.class, Driver.class, Cargo.class, Vehicle.class ).threadsToLoadObjects(10);
+        //TODO dodać dla tras
+        MassIndexer indexer = searchSession.massIndexer(Driver.class, Cargo.class, Vehicle.class ).threadsToLoadObjects(10);
         LOGGER.warn("Wyszukiwanie - rozpoczynam indeksowanie danych...");
         try
         {
@@ -39,7 +40,7 @@ public class HibernateSearchConfig {
         }
         catch (Exception e)
         {
-            LOGGER.error("ERR.S.HSC.001 - przerwano indeksowanie danych do wyszukiwania", e);
+            LOGGER.error("Przerwano indeksowanie danych do wyszukiwania", e);
         }
     }
 }

@@ -19,8 +19,6 @@ import java.util.*;
 public class MapService {
 
 
-
-
     private final Logger LOGGER = LoggerFactory.getLogger(MapService.class);
     private final CoordinatesRepository coordinatesRepository;
     private final RoadService roadService;
@@ -55,7 +53,6 @@ public class MapService {
         }
 
     }
-
 
 
 

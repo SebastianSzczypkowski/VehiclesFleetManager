@@ -1,6 +1,7 @@
 package pl.szczypkowski.vehiclesfleetmanager.road.model;
 
 
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import pl.szczypkowski.vehiclesfleetmanager.cargo.model.Cargo;
 import pl.szczypkowski.vehiclesfleetmanager.driver.model.Driver;
 import pl.szczypkowski.vehiclesfleetmanager.map.model.Coordinates;
