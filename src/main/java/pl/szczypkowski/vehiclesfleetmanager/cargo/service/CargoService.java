@@ -333,12 +333,6 @@ public class CargoService {
     public ResponseEntity<?> searchCargo(String search, Pageable pageable) {
         try {
 
-            SearchSession searchSession = Search.session( entityManager );
-            //TODO wyrzucić do pliku osobnego
-            MassIndexer indexer = searchSession.massIndexer( Cargo.class )
-                    .threadsToLoadObjects( 7 );
-            indexer.startAndWait();
-
             SearchResult<Cargo> result = Search.session(entityManager).search(
                     Cargo.class).where(f->f.wildcard().fields("name","description","type","sensitivity",
                     "specialRemarks").matching(

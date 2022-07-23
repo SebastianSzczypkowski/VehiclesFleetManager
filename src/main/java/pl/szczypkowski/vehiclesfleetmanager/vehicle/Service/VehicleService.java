@@ -161,11 +161,7 @@ public class VehicleService {
 
     public ResponseEntity<?> searchVehicle(String search,Pageable pageable) {
         try {
-            SearchSession searchSession = Search.session( entityManager );
 
-            MassIndexer indexer = searchSession.massIndexer( Vehicle.class )
-                    .threadsToLoadObjects( 7 );
-            indexer.startAndWait();
 
             SearchResult<Vehicle> result = Search.session(entityManager).search(
                     Vehicle.class).where(f->f.wildcard().fields("name","vin","registrationNumber").matching(

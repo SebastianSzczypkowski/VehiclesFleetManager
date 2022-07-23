@@ -232,11 +232,6 @@ public class DriverService {
 
     public ResponseEntity<?> searchDriver(String search, Pageable pageable) {
         try {
-            SearchSession searchSession = Search.session( entityManager );
-
-            MassIndexer indexer = searchSession.massIndexer( Driver.class )
-                    .threadsToLoadObjects( 7 );
-            indexer.startAndWait();
 
             SearchResult<Driver> result = Search.session(entityManager).search(
                     Driver.class).where(f->f.wildcard().fields("name","surname","address").matching(
