@@ -6,10 +6,14 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,15 +22,19 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.szczypkowski.vehiclesfleetmanager.cargo.service.CargoService;
 import pl.szczypkowski.vehiclesfleetmanager.driver.service.DriverService;
 import pl.szczypkowski.vehiclesfleetmanager.map.model.Coordinates;
-import pl.szczypkowski.vehiclesfleetmanager.map.service.MapService;
+import pl.szczypkowski.vehiclesfleetmanager.map.repository.CoordinatesRepository;
+import pl.szczypkowski.vehiclesfleetmanager.map.service.CoordinatesService;
 import pl.szczypkowski.vehiclesfleetmanager.road.model.Road;
 import pl.szczypkowski.vehiclesfleetmanager.road.model.RoadFromExel;
 import pl.szczypkowski.vehiclesfleetmanager.road.repository.RoadRepository;
+import pl.szczypkowski.vehiclesfleetmanager.utils.ExportExel;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.Service.VehicleService;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.Vehicle;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -35,18 +43,18 @@ public class RoadService {
 
     private final RoadRepository roadRepository;
     private final Logger LOGGER = LoggerFactory.getLogger(RoadService.class);
-    private final MapService mapService;
     private final CargoService cargoService;
     private final DriverService driverService;
     private final VehicleService vehicleService;
+    private final CoordinatesService coordinatesService;
 
 
-    public RoadService(RoadRepository roadRepository, MapService mapService,  CargoService cargoService,  DriverService driverService,  VehicleService vehicleService) {
+    public RoadService(RoadRepository roadRepository, CargoService cargoService, DriverService driverService, VehicleService vehicleService,  CoordinatesService coordinatesService) {
         this.roadRepository = roadRepository;
-        this.mapService = mapService;
         this.cargoService = cargoService;
         this.driverService = driverService;
         this.vehicleService = vehicleService;
+        this.coordinatesService = coordinatesService;
     }
 
 
@@ -95,9 +103,9 @@ public class RoadService {
         }
     }
 
-    public ResponseEntity<?> getAllPage(MultiValueMap<String, String> queryParams, Pageable pageable) {
-        try{
-
+    public List<Road> getFilteredList(MultiValueMap<String, String> queryParams)
+    {
+        try {
             String idStr = Optional.ofNullable(queryParams.getFirst("id")).filter(val -> !val.isEmpty()).orElse(null);
             Long id = null;
             if (idStr != null)
@@ -120,16 +128,26 @@ public class RoadService {
 
             String dataOd = Optional.ofNullable(queryParams.getFirst("dataOd")).filter(val -> !val.isEmpty())
                     .orElse(null);
-            if(dataOd!=null)
-                dataOd = dataOd.substring(0,dataOd.indexOf("T"));
+            if (dataOd != null)
+                dataOd = dataOd.substring(0, dataOd.indexOf("T"));
 
             String dataDo = Optional.ofNullable(queryParams.getFirst("dataDo")).filter(val -> !val.isEmpty())
                     .orElse(null);
-            if(dataDo!=null)
-                dataDo = dataDo.substring(0,dataDo.indexOf("T"));
+            if (dataDo != null)
+                dataDo = dataDo.substring(0, dataDo.indexOf("T"));
 
+            return roadRepository.findByColumnFilter(id, start, end, driver, cargo, vehicle, dataOd, dataDo);
+        }catch (Exception e)
+        {
+            LOGGER.error("Wystąpił błąd podczas pobierania listy tras wiadomość: {}",e.getMessage());
+            return null;
+        }
+    }
 
-            List<Road> list  = roadRepository.findByColumnFilter(id,start,end,driver,cargo,vehicle,dataOd,dataDo);
+    public ResponseEntity<?> getAllPage(MultiValueMap<String, String> queryParams, Pageable pageable) {
+        try{
+
+            List<Road> list= getFilteredList(queryParams);
             posortuj(list, pageable.getSort().toString().replace(":", ""));
 
             final int startP = (int)pageable.getOffset();
@@ -179,10 +197,10 @@ public class RoadService {
 
                 Coordinates startDb =null;
                 if(road.getStart()!=null)
-                    startDb =mapService.save(road.getStart());
+                    startDb =coordinatesService.save(road.getStart());
                 Coordinates endDb=null ;
                 if(road.getEnd()!=null)
-                    endDb=mapService.save(road.getEnd());
+                    endDb=coordinatesService.save(road.getEnd());
 
 
                 if(road.getId()!=null)
@@ -356,8 +374,9 @@ public class RoadService {
             toSave.setCargo(cargoService.getByName(roadFromExel.getCargoName()));
             toSave.setVehicle(vehicleService.getByRegistrationNumber(roadFromExel.getVehicleRegistrationNumber()));
             toSave.setDriver(driverService.getByDriverPESEL(roadFromExel.getDriverPESEL()));
-            toSave.setStart(mapService.getCoordinates(roadFromExel.getStartLocation(),null,null));
-            toSave.setStart(mapService.getCoordinates(roadFromExel.getEndLocation(),null,null));
+            //TODO coordinbates service;
+            toSave.setStart(coordinatesService.getCoordinates(roadFromExel.getStartLocation(),null,null));
+            toSave.setStart(coordinatesService.getCoordinates(roadFromExel.getEndLocation(),null,null));
             return roadRepository.save(toSave);
 
         }
@@ -366,6 +385,86 @@ public class RoadService {
 
             LOGGER.error("Wystąpił błąd podczas zapisu trasy wiadomosc {}",e.getMessage());
             return null;
+        }
+
+    }
+
+
+    public ResponseEntity<?> exportToExcel(MultiValueMap<String, String> params)
+    {
+
+
+        List<Road> roads = getFilteredList(params);
+        List<List<String>> exportRows = new ArrayList<>();
+        exportRows.add(Arrays.asList("ID", "Start", "Koniec", "Nazwa ładunku", "Nazwa pojazdu", "Numer rejestracyjny pojazdu",
+                "Kierowca", "PESEL kierowcy", "Data utworzenia"));
+
+        roads.forEach(entry->{
+            List<String> row = new ArrayList<>();
+
+            if (entry.getId() != null)
+                row.add(entry.getId().toString());
+            else
+                row.add("");
+            if (entry.getStart().getName() != null)
+                row.add(entry.getStart().getName());
+            else
+                row.add("");
+            if (entry.getEnd().getName() != null)
+                row.add(entry.getEnd().getName());
+            else
+                row.add("");
+            if (entry.getCargo().getName() != null)
+                row.add(entry.getCargo().getName() );
+            else
+                row.add("");
+            if (entry.getVehicle().getName() != null)
+                row.add(entry.getVehicle().getName() );
+            else
+                row.add("");
+            if (entry.getVehicle().getRegistrationNumber() != null)
+                row.add(entry.getVehicle().getRegistrationNumber() );
+            else
+                row.add("");
+            if (entry.getDriver().getName() != null && entry.getDriver().getSurname() != null)
+                row.add(entry.getDriver().getName()+" "+entry.getDriver().getSurname());
+            else
+                row.add("");
+            if (entry.getDriver().getPesel() != null )
+                row.add(String.valueOf(entry.getDriver().getPesel()));
+            else
+                row.add("");
+            if (entry.getCreationDate() != null)
+                row.add(entry.getCreationDate().toString());
+            else
+                row.add("");
+
+
+            exportRows.add(row);
+        });
+        Path exportFile;
+        try {
+            exportFile = Files.createTempFile("raport_tras" + System.currentTimeMillis(), ".xlsx");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił błąd podczas tworzenia raportu (nie udało się utworzyc pliku)");
+        }
+
+        ExportExel.export(exportFile.toString(), exportRows, false);
+
+        try {
+            Resource resource = new UrlResource(exportFile.toUri());
+            if (resource.exists()) {
+                HttpHeaders headers = new HttpHeaders();
+
+                headers.add("Content-Disposition",
+                        "attachment; filename=raport_tras" + System.currentTimeMillis() + ".xlsx");
+                return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).headers(headers).body(resource);
+                //return resource;
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił błąd podczas tworzenia raportu (pliki nie istnieje)");
+            }
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił błąd podczas tworzenia raportu (błąd podczas przesyłania pliku)");
         }
 
     }

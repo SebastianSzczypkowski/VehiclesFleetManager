@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
+import pl.szczypkowski.vehiclesfleetmanager.road.model.Road;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.Vehicle;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.VehicleInspection;
@@ -64,9 +65,46 @@ public class VehicleInspectionService {
             String car_repair_shop_name = Optional.ofNullable(queryParams.getFirst("car_repair_shop_name")).filter(val -> !val.isEmpty()).orElse(null);
             if (car_repair_shop_name != null) car_repair_shop_name = '%' + car_repair_shop_name.toLowerCase(Locale.ROOT) + '%';
             //TODO dokończyć
+            String dataOd = Optional.ofNullable(queryParams.getFirst("dataOd")).filter(val -> !val.isEmpty())
+                    .orElse(null);
+            if(dataOd!=null)
+                dataOd = dataOd.substring(0,dataOd.indexOf("T"));
+
+            String dataDo = Optional.ofNullable(queryParams.getFirst("dataDo")).filter(val -> !val.isEmpty())
+                    .orElse(null);
+            if(dataDo!=null)
+                dataDo = dataDo.substring(0,dataDo.indexOf("T"));
+
+            String validityDataOd = Optional.ofNullable(queryParams.getFirst("validityDataOd")).filter(val -> !val.isEmpty())
+                    .orElse(null);
+            if(validityDataOd!=null)
+                validityDataOd = validityDataOd.substring(0,validityDataOd.indexOf("T"));
+
+            String validityDataDo = Optional.ofNullable(queryParams.getFirst("validityDataDo")).filter(val -> !val.isEmpty())
+                    .orElse(null);
+            if(validityDataDo!=null)
+                validityDataDo = validityDataDo.substring(0,validityDataDo.indexOf("T"));
+
+            String description = Optional.ofNullable(queryParams.getFirst("description")).filter(val -> !val.isEmpty()).orElse(null);
+            if (description != null) description = '%' + description.toLowerCase(Locale.ROOT) + '%';
+
+            String performedBy = Optional.ofNullable(queryParams.getFirst("performedBy")).filter(val -> !val.isEmpty()).orElse(null);
+            if (performedBy != null) performedBy = '%' + performedBy.toLowerCase(Locale.ROOT) + '%';
+
+            String vehicle = Optional.ofNullable(queryParams.getFirst("idVehicle.name")).filter(val -> !val.isEmpty()).orElse(null);
+            if (vehicle != null) vehicle = '%' + vehicle.toLowerCase(Locale.ROOT) + '%';
 
 
-            return ResponseEntity.ok().body(vehicleInspectionRepository.findAll(pageable));
+            List<VehicleInspection> list  = new ArrayList<>();
+            vehicleInspectionRepository.findByColumnFilter(id,dataOd,dataDo,validityDataOd,validityDataDo,vehicle,description,performedBy);
+            posortuj(list, pageable.getSort().toString().replace(":", ""));
+
+            final int startP = (int)pageable.getOffset();
+            final int endP = Math.min((startP + pageable.getPageSize()), list.size());
+            final Page<VehicleInspection> page = new PageImpl<>(list.subList(startP, endP), pageable, list.size());
+
+            return ResponseEntity.ok().body(page);
+
         } catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało sie pobrać listy przeglądów technicznych"));
@@ -103,6 +141,30 @@ public class VehicleInspectionService {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się znaleść wyników"));
         }
+
+    }
+
+    private void posortuj(List<VehicleInspection> filtered, String how)
+    {
+        //TODO sortowanie dokończyć daty
+        if (how.contains("UNSORTED"))
+            filtered.sort(Comparator.comparing(VehicleInspection::getId, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("id") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(VehicleInspection::getId, Comparator.nullsLast(Comparator.naturalOrder())));
+        if (how.contains("id") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(VehicleInspection::getId, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("idVehicle.name") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(e->e.getIdVehicle().getName(), Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("idVehicle.name") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(e->e.getIdVehicle().getName(), Comparator.nullsLast(Comparator.naturalOrder())));
+        if (how.contains("description") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(VehicleInspection::getDescription, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("description") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(VehicleInspection::getDescription, Comparator.nullsLast(Comparator.naturalOrder())));
+        if (how.contains("performedBy") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(VehicleInspection::getPerformedBy, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("performedBy") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(VehicleInspection::getPerformedBy, Comparator.nullsLast(Comparator.naturalOrder())));
 
     }
 }

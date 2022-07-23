@@ -2,6 +2,7 @@ package pl.szczypkowski.vehiclesfleetmanager.driver.controller;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.driver.model.Driver;
 import pl.szczypkowski.vehiclesfleetmanager.driver.service.DriverService;
@@ -22,9 +23,6 @@ public class DriverController {
     public ResponseEntity<?> getAll()
     {
         try{
-            int x =1,y=2;
-
-
 
             return driverService.getAll();
 
@@ -35,12 +33,10 @@ public class DriverController {
         }
     }
     @GetMapping("/get-all-page")
-    public ResponseEntity<?> getAllPage(Pageable pageable)
+    public ResponseEntity<?> getAllPage(@RequestParam MultiValueMap<String, String> queryParams, Pageable pageable)
     {
-        return driverService.getAllPage(pageable);
+        return driverService.getAllPage(queryParams,pageable);
     }
-
-
 
 
     @PostMapping("/save")
@@ -55,6 +51,11 @@ public class DriverController {
         return driverService.searchDriver(search,pageable);
     }
 
+    @GetMapping("/export")
+    public ResponseEntity<?> export(@RequestParam MultiValueMap<String, String> queryParams)
+    {
+        return driverService.exportToExcel(queryParams);
+    }
 
 }
 

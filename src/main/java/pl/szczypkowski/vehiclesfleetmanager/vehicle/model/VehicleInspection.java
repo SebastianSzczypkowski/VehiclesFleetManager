@@ -49,6 +49,14 @@ public class VehicleInspection {
     }
 
 
+    public Vehicle getIdVehicle() {
+        return idVehicle;
+    }
+
+    public void setIdVehicle(Vehicle idVehicle) {
+        this.idVehicle = idVehicle;
+    }
+
     public Long getId() {
         return id;
     }

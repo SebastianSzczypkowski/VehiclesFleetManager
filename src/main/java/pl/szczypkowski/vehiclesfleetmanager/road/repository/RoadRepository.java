@@ -16,13 +16,14 @@ public interface RoadRepository extends JpaRepository<Road,Long> {
 
 
 
-    //(DATE_FORMAT(uzytkownik.idZlecenia.dataZakonczenia, '%Y-%m-%d') between :dataZakonczenia and :dataZakonczenia or :dataZakonczenia  is null)
-    //TODO dokończyć filtrować po obiektach kierowca ładunek itp
     @Query("select road from Road road where  "+
             "(road.id = :id or :id is null)  and "+
             "(lower(road.start.name) like :start or :start is null) and "+
             "(lower(road.end.name) like :end or :end is null) and " +
-            "(lower(road.driver.pesel) like :end or :end is null) ")
+            "(lower(road.driver.pesel) like :driver or :driver is null) and " +
+            "(lower(road.cargo.name) like :cargo or :cargo is null) and " +
+            "(lower(road.vehicle.name) like :vehicle or :vehicle is null) and " +
+            "(DATE_FORMAT(road.creationDate, '%Y-%m-%d') between :dataOd and :dataDo or :dataDo  is null or :dataOd is null)")
     List<Road> findByColumnFilter(@Param("id") Long id,@Param("start") String start,@Param("end") String end,
                                      @Param("driver")String driver, @Param("cargo")String cargo, @Param("vehicle")String vehicle,
                                      @Param("dataOd")String dataOd,@Param("dataDo") String dataDo);

@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ExportExel;
+import org.springframework.util.MultiValueMap;
+import pl.szczypkowski.vehiclesfleetmanager.utils.ExportExel;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.Vehicle;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.repository.VehicleRepository;
@@ -187,12 +189,9 @@ public class VehicleService {
 
     }
 
-
-
-    public ResponseEntity<?> getAllPage(MultiValueMap<String, String> queryParams, Pageable pageable)
+    public List<Vehicle> getFilteredList(MultiValueMap<String, String> queryParams)
     {
-        try
-        {
+        try {
             String idStr = Optional.ofNullable(queryParams.getFirst("id")).filter(val -> !val.isEmpty()).orElse(null);
             Long id = null;
             if (idStr != null)
@@ -205,20 +204,34 @@ public class VehicleService {
             if (vin != null) vin = '%' + vin.toLowerCase(Locale.ROOT) + '%';
 
             String registrationNumber = Optional.ofNullable(queryParams.getFirst("registrationNumber")).filter(val -> !val.isEmpty()).orElse(null);
-            if (registrationNumber != null) registrationNumber = '%' + registrationNumber.toLowerCase(Locale.ROOT) + '%';
+            if (registrationNumber != null)
+                registrationNumber = '%' + registrationNumber.toLowerCase(Locale.ROOT) + '%';
 
             String carMileageStr = Optional.ofNullable(queryParams.getFirst("carMileage")).filter(val -> !val.isEmpty()).orElse(null);
-            Integer carMileage=null;
-            if(carMileageStr!=null)
-             carMileage = Integer.parseInt(carMileageStr);
+            Integer carMileage = null;
+            if (carMileageStr != null)
+                carMileage = Integer.parseInt(carMileageStr);
 
             String carLoadCapacityStr = Optional.ofNullable(queryParams.getFirst("carLoadCapacity")).filter(val -> !val.isEmpty()).orElse(null);
-            Integer carLoadCapacity=null;
-            if(carLoadCapacityStr!=null)
+            Integer carLoadCapacity = null;
+            if (carLoadCapacityStr != null)
                 carLoadCapacity = Integer.parseInt(carLoadCapacityStr);
 
 
-            List<Vehicle> list  = vehicleRepository.findByColumnFilter(id,name,vin,registrationNumber,carMileage,carLoadCapacity);
+            return vehicleRepository.findByColumnFilter(id, name, vin, registrationNumber, carMileage, carLoadCapacity);
+        }catch (Exception e)
+        {
+            LOGGER.error("Wystąpił błąd podczas pobierania listy pojazdów");
+            return null;
+        }
+    }
+
+
+    public ResponseEntity<?> getAllPage(MultiValueMap<String, String> queryParams, Pageable pageable)
+    {
+        try
+        {
+            List<Vehicle> list =getFilteredList(queryParams);
             posortuj(list, pageable.getSort().toString().replace(":", ""));
 
             final int start = (int)pageable.getOffset();
@@ -267,38 +280,13 @@ public class VehicleService {
 
     public ResponseEntity<?> exportToExcel(MultiValueMap<String, String> params)
     {
-        //TODO wyciągnąć do osobnej metody
-        String idStr = Optional.ofNullable(params.getFirst("id")).filter(val -> !val.isEmpty()).orElse(null);
-        Long id = null;
-        if (idStr != null)
-            id = Long.parseLong(idStr);
 
-        String name = Optional.ofNullable(params.getFirst("name")).filter(val -> !val.isEmpty()).orElse(null);
-        if (name != null) name = '%' + name.toLowerCase(Locale.ROOT) + '%';
 
-        String vin = Optional.ofNullable(params.getFirst("vin")).filter(val -> !val.isEmpty()).orElse(null);
-        if (vin != null) vin = '%' + vin.toLowerCase(Locale.ROOT) + '%';
-
-        String registrationNumber = Optional.ofNullable(params.getFirst("registrationNumber")).filter(val -> !val.isEmpty()).orElse(null);
-        if (registrationNumber != null) registrationNumber = '%' + registrationNumber.toLowerCase(Locale.ROOT) + '%';
-
-        String carMileageStr = Optional.ofNullable(params.getFirst("carMileage")).filter(val -> !val.isEmpty()).orElse(null);
-        Integer carMileage=null;
-        if(carMileageStr!=null)
-            carMileage = Integer.parseInt(carMileageStr);
-
-        String carLoadCapacityStr = Optional.ofNullable(params.getFirst("carLoadCapacity")).filter(val -> !val.isEmpty()).orElse(null);
-        Integer carLoadCapacity=null;
-        if(carLoadCapacityStr!=null)
-            carLoadCapacity = Integer.parseInt(carLoadCapacityStr);
-
-        List<Vehicle> vehicles = vehicleRepository.findByColumnFilter(id,name,vin,registrationNumber,carMileage,carLoadCapacity);
-
+        List<Vehicle> vehicles = getFilteredList(params);
         List<List<String>> exportRows = new ArrayList<>();
         exportRows.add(Arrays.asList("ID", "Name", "VIN", "Registration Number", "Car Mileage", "Car LoadCapacity",
                 "Lorry Semitrailer", "Number Of Seats", "Engine Capacity",  "Average Fuel Consumption", "Roadworthy", "Occupied"));
 
-        //TODO spróbować zamienić forEach
         vehicles.forEach(entry->{
             List<String> row = new ArrayList<>();
 
@@ -364,7 +352,6 @@ public class VehicleService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił błąd podczas tworzenia raportu (nie udało się utworzyc pliku)");
         }
 
-
         ExportExel.export(exportFile.toString(), exportRows, false);
 
         try {
@@ -384,6 +371,7 @@ public class VehicleService {
         }
 
     }
+
 
 
 

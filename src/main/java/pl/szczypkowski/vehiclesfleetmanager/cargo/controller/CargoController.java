@@ -3,6 +3,7 @@ package pl.szczypkowski.vehiclesfleetmanager.cargo.controller;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.cargo.model.Cargo;
 import pl.szczypkowski.vehiclesfleetmanager.cargo.model.CargoRequest;
@@ -49,10 +50,10 @@ public class CargoController {
         }
     }
     @GetMapping("/get-all-page")
-    public ResponseEntity<?> getAllPage(Pageable pageable)
+    public ResponseEntity<?> getAllPage(@RequestParam MultiValueMap<String, String> queryParams,Pageable pageable)
     {
 
-            return cargoService.getAllPage(pageable);
+            return cargoService.getAllPage(queryParams,pageable);
 
     }
 
@@ -66,5 +67,11 @@ public class CargoController {
     public ResponseEntity<?> searchVehicle(@RequestParam("search") String search,Pageable pageable)
     {
         return cargoService.searchCargo(search,pageable);
+    }
+
+    @GetMapping("/export")
+    public ResponseEntity<?> export(@RequestParam MultiValueMap<String, String> queryParams)
+    {
+        return cargoService.exportToExcel(queryParams);
     }
 }

@@ -6,22 +6,33 @@ import org.hibernate.search.mapper.orm.massindexing.MassIndexer;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import pl.szczypkowski.vehiclesfleetmanager.driver.model.Driver;
 import pl.szczypkowski.vehiclesfleetmanager.driver.model.EntitleRequest;
 import pl.szczypkowski.vehiclesfleetmanager.driver.repository.DriverRepository;
 import pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.model.EntitlementstToTransport;
 import pl.szczypkowski.vehiclesfleetmanager.entitlementstotransport.repository.EntitlementstotransportRepository;
+import pl.szczypkowski.vehiclesfleetmanager.road.model.Road;
+import pl.szczypkowski.vehiclesfleetmanager.utils.ExportExel;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.Vehicle;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 @Service
@@ -131,15 +142,92 @@ public class DriverService {
         }
     }
 
-    public ResponseEntity<?> getAllPage(Pageable pageable) {
+    public List<Driver> getFilteredList(MultiValueMap<String, String> queryParams)
+    {
         try{
 
-            return ResponseEntity.ok().body(driverRepository.findAll(pageable));
+            String idStr = Optional.ofNullable(queryParams.getFirst("id")).filter(val -> !val.isEmpty()).orElse(null);
+            Long id = null;
+            if (idStr != null)
+                id = Long.parseLong(idStr);
+
+            String name = Optional.ofNullable(queryParams.getFirst("name")).filter(val -> !val.isEmpty()).orElse(null);
+            if (name != null) name = '%' + name.toLowerCase(Locale.ROOT) + '%';
+
+            String surname = Optional.ofNullable(queryParams.getFirst("surname")).filter(val -> !val.isEmpty()).orElse(null);
+            if (surname != null) surname = '%' + surname.toLowerCase(Locale.ROOT) + '%';
+
+            String peselStr = Optional.ofNullable(queryParams.getFirst("pesel")).filter(val -> !val.isEmpty()).orElse(null);
+            Long pesel = null;
+            if (peselStr != null) pesel = Long.parseLong(peselStr);
+
+            String address = Optional.ofNullable(queryParams.getFirst("address")).filter(val -> !val.isEmpty()).orElse(null);
+            if (address != null) address = '%' + address.toLowerCase(Locale.ROOT) + '%';
+
+            String entitlementstToTransport = Optional.ofNullable(queryParams.getFirst("entitlementstToTransport.name")).filter(val -> !val.isEmpty()).orElse(null);
+            if (entitlementstToTransport != null) entitlementstToTransport = '%' + entitlementstToTransport.toLowerCase(Locale.ROOT) + '%';
+
+            String dateOfBirth = Optional.ofNullable(queryParams.getFirst("dateOfBirth")).filter(val -> !val.isEmpty()).orElse(null);
+            if (dateOfBirth != null) dateOfBirth = '%' + dateOfBirth.toLowerCase(Locale.ROOT) + '%';
+
+
+            //TODO sortowanie po uprawnieniach
+            return driverRepository.findByColumnFilter(id,name,surname,pesel,address,dateOfBirth);
+
+        }catch (Exception e)
+        {
+            LOGGER.error("Wystąpił błąd podczas pobierania listy kierowców wiadomość: {}",e.getMessage());
+            return null;
+        }
+    }
+    public ResponseEntity<?> getAllPage(MultiValueMap<String, String> queryParams, Pageable pageable) {
+        try{
+
+            List<Driver> list =getFilteredList(queryParams);
+            posortuj(list, pageable.getSort().toString().replace(":", ""));
+
+            final int startP = (int)pageable.getOffset();
+            final int endP = Math.min((startP + pageable.getPageSize()), list.size());
+            final Page<Driver> page = new PageImpl<>(list.subList(startP, endP), pageable, list.size());
+
+            return ResponseEntity.ok().body(page);
         }catch (Exception e)
         {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się pobrać listy pojazdów"));
         }
+    }
+
+    private void posortuj(List<Driver> filtered, String how)
+    {
+        //TODO sortowanie dokończyć
+        if (how.contains("UNSORTED"))
+            filtered.sort(Comparator.comparing(Driver::getId, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("id") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(Driver::getId, Comparator.nullsLast(Comparator.naturalOrder())));
+        if (how.contains("id") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(Driver::getId, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("name") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(Driver::getName, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("name") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(Driver::getName, Comparator.nullsLast(Comparator.naturalOrder())));
+        if (how.contains("end") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(Driver::getSurname, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("end") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(Driver::getSurname, Comparator.nullsLast(Comparator.naturalOrder())));
+        if (how.contains("pesel") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(Driver::getPesel, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("pesel") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(Driver::getPesel, Comparator.nullsLast(Comparator.naturalOrder())));
+        if (how.contains("address") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(Driver::getAddress, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("address") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(Driver::getAddress, Comparator.nullsLast(Comparator.naturalOrder())));
+        if (how.contains("dateOfBirth") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(Driver::getDateOfBirth, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("dateOfBirth") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(Driver::getDateOfBirth, Comparator.nullsLast(Comparator.naturalOrder())));
+
     }
 
     public ResponseEntity<?> searchDriver(String search, Pageable pageable) {
@@ -168,6 +256,78 @@ public class DriverService {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się znaleść wyników"));
         }
+    }
+
+    public ResponseEntity<?> exportToExcel(MultiValueMap<String, String> params)
+    {
+
+
+        List<Driver> roads = getFilteredList(params);
+        List<List<String>> exportRows = new ArrayList<>();
+        exportRows.add(Arrays.asList("ID", "Imię", "Nazwisko", "PESEL", "Data urodzenia", "Adres", "Uprawnienia"));
+
+        roads.forEach(entry->{
+            List<String> row = new ArrayList<>();
+
+            if (entry.getId() != null)
+                row.add(entry.getId().toString());
+            else
+                row.add("");
+            if (entry.getName() != null)
+                row.add(entry.getName());
+            else
+                row.add("");
+            if (entry.getSurname() != null)
+                row.add(entry.getSurname());
+            else
+                row.add("");
+            if (entry.getPesel() != null)
+                row.add(String.valueOf(entry.getPesel()));
+            else
+                row.add("");
+            if (entry.getDateOfBirth() != null)
+                row.add(String.valueOf(entry.getDateOfBirth()));
+            else
+                row.add("");
+            if (entry.getAddress() != null)
+                row.add(entry.getAddress() );
+            else
+                row.add("");
+            StringBuilder entitles = new StringBuilder("");
+
+            for(EntitlementstToTransport en : entry.getEntitlementstToTransport()) {
+                entitles.append(en.getTypeOfPermission().getName());
+            }
+                row.add(entitles.toString());
+
+
+            exportRows.add(row);
+        });
+        Path exportFile;
+        try {
+            exportFile = Files.createTempFile("raport_kierowców" + System.currentTimeMillis(), ".xlsx");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił błąd podczas tworzenia raportu (nie udało się utworzyc pliku)");
+        }
+
+        ExportExel.export(exportFile.toString(), exportRows, false);
+
+        try {
+            Resource resource = new UrlResource(exportFile.toUri());
+            if (resource.exists()) {
+                HttpHeaders headers = new HttpHeaders();
+
+                headers.add("Content-Disposition",
+                        "attachment; filename=raport_kierowców" + System.currentTimeMillis() + ".xlsx");
+                return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).headers(headers).body(resource);
+                //return resource;
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił błąd podczas tworzenia raportu (pliki nie istnieje)");
+            }
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił błąd podczas tworzenia raportu (błąd podczas przesyłania pliku)");
+        }
+
     }
 
 

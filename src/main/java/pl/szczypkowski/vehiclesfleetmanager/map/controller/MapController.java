@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.map.model.Coordinates;
+import pl.szczypkowski.vehiclesfleetmanager.map.service.CoordinatesService;
 import pl.szczypkowski.vehiclesfleetmanager.map.service.MapService;
 
 import java.io.IOException;
@@ -17,9 +18,11 @@ public class MapController {
 
 
     private final MapService mapService;
+    private final CoordinatesService coordinatesService;
 
-    public MapController(MapService mapService) {
+    public MapController(MapService mapService, CoordinatesService coordinatesService) {
         this.mapService = mapService;
+        this.coordinatesService = coordinatesService;
     }
 
     @GetMapping("/cord")
@@ -32,7 +35,7 @@ public class MapController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Coordinates coordinates)
     {
-        return mapService.createCoordinates(coordinates);
+        return coordinatesService.createCoordinates(coordinates);
     }
 
 

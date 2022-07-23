@@ -47,11 +47,7 @@ public class RoadController {
         return roadService.saveRoad(road);
     }
 
-    @PostMapping("/create-from-existing/{id}")
-    public ResponseEntity<?> creatFromExisting(@PathVariable Long id)
-    {
-        return roadService.createFromExisting(id);
-    }
+
 
     @PostMapping("/create-from-xlsx")
     public ResponseEntity<?> createFromXlsx( @RequestParam("file") MultipartFile file )
@@ -60,4 +56,15 @@ public class RoadController {
     }
 
 
+    @PostMapping("/creat-from-existing/{id}")
+    public ResponseEntity<?> creatFromExisting(@PathVariable Long id)
+    {
+        return roadService.createFromExisting(id);
+    }
+
+    @GetMapping("/export")
+    public ResponseEntity<?> export(@RequestParam MultiValueMap<String, String> queryParams)
+    {
+        return roadService.exportToExcel(queryParams);
+    }
 }
