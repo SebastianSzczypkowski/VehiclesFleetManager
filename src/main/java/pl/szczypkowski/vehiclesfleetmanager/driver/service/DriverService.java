@@ -27,7 +27,7 @@ import java.util.*;
 @Service
 public class DriverService {
 
-    private Logger logger = LoggerFactory.getLogger(DriverService.class);
+    private Logger LOGGER = LoggerFactory.getLogger(DriverService.class);
     private DriverRepository driverRepository;
     private EntitlementstotransportRepository entitlementstotransportRepository;
     @PersistenceContext
@@ -43,6 +43,26 @@ public class DriverService {
     }
 
 
+    public Driver getByDriverPESEL(String pesel) {
+        try{
+
+            //TODO walidacja tylko liczby + długość musi być równa 11
+            if(!pesel.equals(" "))
+            {
+                Optional<Driver> optional = driverRepository.getDriverByPeselEquals(Long.valueOf(pesel));
+                return optional.orElse(null);
+            }
+            else{
+                return null;
+            }
+
+        }catch (Exception e)
+        {
+            LOGGER.error("Wystąpił bład podczas pobierania kierowcy o peselu: {} ",pesel);
+            return null;
+        }
+    }
+
 
     public ResponseEntity<?> getAll() {
 
@@ -54,9 +74,9 @@ public class DriverService {
     public ResponseEntity<?> save(Driver driver) {
         try
         {
-
             if(driver.getId()!=null)
             {
+
                 Optional<Driver> getFromDb =driverRepository.findById(driver.getId());
                 if(getFromDb.isPresent())
                 {
@@ -149,4 +169,6 @@ public class DriverService {
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się znaleść wyników"));
         }
     }
+
+
 }

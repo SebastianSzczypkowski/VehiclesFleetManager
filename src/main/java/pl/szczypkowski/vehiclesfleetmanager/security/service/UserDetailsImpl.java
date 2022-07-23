@@ -3,11 +3,14 @@ package pl.szczypkowski.vehiclesfleetmanager.security.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.szczypkowski.vehiclesfleetmanager.user.model.User;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
@@ -28,9 +31,9 @@ public class UserDetailsImpl implements UserDetails {
 
     public static UserDetailsImpl build(User appUser)
     {
-//        List<GrantedAuthority> authorities = appUser.getRoles().stream()
-//                .map(userRole->new SimpleGrantedAuthority(userRole.getName().name())).
-//                        collect(Collectors.toList());
+        List<GrantedAuthority> authorities = appUser.getRoles().stream()
+                .map(userRole->new SimpleGrantedAuthority(userRole.getName().name())).
+                        collect(Collectors.toList());
         return new UserDetailsImpl(
                 appUser.getId(),
                 appUser.getName(),

@@ -2,8 +2,11 @@ package pl.szczypkowski.vehiclesfleetmanager.road.controller;
 
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.szczypkowski.vehiclesfleetmanager.road.model.Road;
 import pl.szczypkowski.vehiclesfleetmanager.road.service.RoadService;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
@@ -33,9 +36,9 @@ public class RoadController {
         }
     }
     @GetMapping("/get-all-page")
-    public ResponseEntity<?> getAllPage(Pageable pageable)
+    public ResponseEntity<?> getAllPage(@RequestParam MultiValueMap<String, String> queryParams, Pageable pageable)
     {
-        return roadService.getAllPage(pageable);
+        return roadService.getAllPage(queryParams,pageable);
     }
 
     @PostMapping("/save")
@@ -43,5 +46,18 @@ public class RoadController {
     {
         return roadService.saveRoad(road);
     }
+
+    @PostMapping("/create-from-existing/{id}")
+    public ResponseEntity<?> creatFromExisting(@PathVariable Long id)
+    {
+        return roadService.createFromExisting(id);
+    }
+
+    @PostMapping("/create-from-xlsx")
+    public ResponseEntity<?> createFromXlsx( @RequestParam("file") MultipartFile file )
+    {
+        return roadService.createFromXlsx(file);
+    }
+
 
 }

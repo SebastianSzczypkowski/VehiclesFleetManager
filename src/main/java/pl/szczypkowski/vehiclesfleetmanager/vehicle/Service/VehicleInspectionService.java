@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.Vehicle;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.VehicleInspection;
@@ -18,10 +19,7 @@ import pl.szczypkowski.vehiclesfleetmanager.vehicle.repository.VehicleInspection
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class VehicleInspectionService {
@@ -55,8 +53,18 @@ public class VehicleInspectionService {
     }
 
 
-    public ResponseEntity<?> getAllPage(Pageable pageable) {
+    public ResponseEntity<?> getAllPage(MultiValueMap<String, String> queryParams, Pageable pageable) {
         try{
+
+            String idStr = Optional.ofNullable(queryParams.getFirst("id")).filter(val -> !val.isEmpty()).orElse(null);
+            Long id = null;
+            if (idStr != null)
+                id = Long.parseLong(idStr);
+
+            String car_repair_shop_name = Optional.ofNullable(queryParams.getFirst("car_repair_shop_name")).filter(val -> !val.isEmpty()).orElse(null);
+            if (car_repair_shop_name != null) car_repair_shop_name = '%' + car_repair_shop_name.toLowerCase(Locale.ROOT) + '%';
+            //TODO dokończyć
+
 
             return ResponseEntity.ok().body(vehicleInspectionRepository.findAll(pageable));
         } catch (Exception e){
@@ -64,6 +72,8 @@ public class VehicleInspectionService {
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało sie pobrać listy przeglądów technicznych"));
         }
     }
+
+
 
     public ResponseEntity<?> searchVehicleInspection(String search, Pageable pageable) {
 

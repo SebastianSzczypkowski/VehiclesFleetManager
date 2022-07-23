@@ -3,6 +3,7 @@ package pl.szczypkowski.vehiclesfleetmanager.vehicle.controller;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.Service.VehicleInspectionService;
@@ -32,9 +33,9 @@ public class VehicleInspectionController {
     }
 
     @GetMapping("/get-all-page")
-    public ResponseEntity<?> getAllPage(Pageable pageable)
+    public ResponseEntity<?> getAllPage(@RequestParam MultiValueMap<String, String> queryParams,Pageable pageable)
     {
-      return vehicleInspectionService.getAllPage(pageable);
+      return vehicleInspectionService.getAllPage(queryParams,pageable);
     }
 
     @PostMapping("/save")
@@ -54,4 +55,10 @@ public class VehicleInspectionController {
     {
         return vehicleInspectionService.searchVehicleInspection(search,pageable);
     }
+
+//    @GetMapping("/export")
+//    public ResponseEntity<?> export(@RequestParam MultiValueMap<String, String> queryParams)
+//    {
+//        return vehicleInspectionService
+//    }
 }

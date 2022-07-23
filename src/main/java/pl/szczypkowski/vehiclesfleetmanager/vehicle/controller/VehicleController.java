@@ -2,11 +2,12 @@ package pl.szczypkowski.vehiclesfleetmanager.vehicle.controller;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.Service.VehicleService;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.Vehicle;
-import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.VehicleRequest;
+
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -33,9 +34,9 @@ public class VehicleController {
     }
 
     @GetMapping("/get-all-page")
-    public ResponseEntity<?> getAllPage(Pageable pageable)
+    public ResponseEntity<?> getAllPage(@RequestParam MultiValueMap<String, String> queryParams,Pageable pageable)
     {
-        return vehicleService.getAllPage(pageable);
+        return vehicleService.getAllPage(queryParams,pageable);
     }
 
     @GetMapping("/get-all-free")
@@ -57,4 +58,9 @@ public class VehicleController {
         return vehicleService.searchVehicle(search,pageable);
     }
 
+    @GetMapping("/export")
+    public ResponseEntity<?> export(@RequestParam MultiValueMap<String, String> queryParams)
+    {
+        return vehicleService.exportToExcel(queryParams);
+    }
 }

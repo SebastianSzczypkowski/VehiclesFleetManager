@@ -7,8 +7,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import pl.szczypkowski.vehiclesfleetmanager.map.model.Coordinates;
 import pl.szczypkowski.vehiclesfleetmanager.map.repository.CoordinatesRepository;
@@ -20,9 +22,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Service
 public class MapService {
@@ -41,19 +41,25 @@ public class MapService {
 
     public ResponseEntity<?> getCoordinatesForRoute(MultiValueMap<String, String> params) throws IOException {
 
-        String start = params.get("start"). get(0).toLowerCase(Locale.ROOT);
-        String end = params.get("end").get(0).toLowerCase(Locale.ROOT);
-        String color = params.get("color").get(0).toLowerCase(Locale.ROOT);
-        String name = params.get("name").get(0).toLowerCase(Locale.ROOT);
+        String start =  Optional.ofNullable(params.getFirst("start")).filter(val -> !val.isEmpty()).orElse(null);
+        String end = Optional.ofNullable(params.getFirst("end")).filter(val -> !val.isEmpty()).orElse(null);
+        String color = Optional.ofNullable(params.getFirst("color")).filter(val -> !val.isEmpty()).orElse(null);
+        String name = Optional.ofNullable(params.getFirst("name")).filter(val -> !val.isEmpty()).orElse(null);
 
         //TODO sprawdzenie przekazanyuch parametrów + dodanie ich do link z api
 
         List<Coordinates> coordinatesList = new ArrayList<>();
 
-        coordinatesList.add(getCoordinates(start,color,name));
-        coordinatesList.add(getCoordinates(end,color,name));
+        if(start!=null && end!=null) {
+            coordinatesList.add(getCoordinates(start, color, name));
+            coordinatesList.add(getCoordinates(end, color, name));
 
-        return ResponseEntity.ok().body(coordinatesList);
+            return ResponseEntity.ok().body(coordinatesList);
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ToJsonString.toJsonString("Brak początkowego/końcowego punktu trasy"));
+        }
 
     }
 
@@ -76,18 +82,31 @@ public class MapService {
         coordinates.setDetails(array.getJSONObject(0).getString("display_name"));
         if(color!=null)
         coordinates.setColor(color);
-        if(name!=null)
-        coordinates.setName(name);
+        coordinates.setName(Objects.requireNonNullElseGet(name, () -> "road_" + System.currentTimeMillis()));
 
         return coordinates;
     }
 
 
-    public ResponseEntity<?> save(Coordinates coordinates) {
+    @Transactional
+    public Coordinates save(Coordinates coordinates)
+    {
+        try{
+
+            return  coordinatesRepository.save(coordinates);
+        }catch (Exception e)
+        {
+            LOGGER.error("Nie udało się zapisać trasy wiadomość: {}",e.getMessage());
+            return null;
+        }
+    }
+
+
+    public ResponseEntity<?> createCoordinates(Coordinates coordinates) {
 
         try{
 
-            Coordinates saved = coordinatesRepository.save(coordinates);
+            Coordinates saved = coordinatesRepository.save(save(coordinates));
             return ResponseEntity.ok().body(saved);
         }catch (Exception e)
         {
@@ -103,7 +122,7 @@ public class MapService {
             if(list.size()>0) {
                 Coordinates start = coordinatesRepository.save(list.get(0));
                 Coordinates end = coordinatesRepository.save(list.get(1));
-                roadService.save(start, end);
+                roadService.saveFromCoordinates(start, end);
                 return ResponseEntity.ok().body(ToJsonString.toJsonString("Pomyślnie zapisano trase"));
             }
             else

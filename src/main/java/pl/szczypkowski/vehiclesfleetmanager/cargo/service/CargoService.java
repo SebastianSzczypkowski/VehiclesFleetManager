@@ -60,6 +60,25 @@ public class CargoService {
             return null;
         }
     }
+    public Cargo getByName(String name)
+    {
+        try{
+            if(!name.equals(" ")){
+                Optional<Cargo> optional =cargoRepository.getByName(name);
+
+                return optional.orElse(null);
+            }else
+            {
+                return null;
+            }
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 
     public List<Cargo> getNotAssignedCargo()
@@ -173,7 +192,7 @@ public class CargoService {
         try {
 
             SearchSession searchSession = Search.session( entityManager );
-
+            //TODO wyrzucić do pliku osobnego
             MassIndexer indexer = searchSession.massIndexer( Cargo.class )
                     .threadsToLoadObjects( 7 );
             indexer.startAndWait();

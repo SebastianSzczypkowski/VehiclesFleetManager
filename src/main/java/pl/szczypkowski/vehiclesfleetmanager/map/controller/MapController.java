@@ -32,7 +32,7 @@ public class MapController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Coordinates coordinates)
     {
-        return mapService.save(coordinates);
+        return mapService.createCoordinates(coordinates);
     }
 
 

@@ -6,24 +6,35 @@ import org.hibernate.search.mapper.orm.massindexing.MassIndexer;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
+import pl.szczypkowski.vehiclesfleetmanager.utils.ExportExel;
 import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.model.Vehicle;
 import pl.szczypkowski.vehiclesfleetmanager.vehicle.repository.VehicleRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 @Service
 public class VehicleService {
 
-    private VehicleRepository vehicleRepository;
-    private Logger logger = LoggerFactory.getLogger(VehicleService.class);
+    private final VehicleRepository vehicleRepository;
+    private final Logger LOGGER = LoggerFactory.getLogger(VehicleService.class);
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -36,7 +47,8 @@ public class VehicleService {
 
             return vehicleRepository.findAll();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Błąd podczas pobierania listy pojazdów  wiadomość: {}",e.getMessage());
+
             return null;
         }
     }
@@ -44,8 +56,29 @@ public class VehicleService {
     public Vehicle getOne(Long id) {
         try {
             return vehicleRepository.getById(id);
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+        catch (Exception e) {
+            LOGGER.error("Błąd podczas pobierania pojazdu o ID:{}| wiadomość: {}",id,e.getMessage());
+            return null;
+        }
+    }
+
+    public Vehicle getByRegistrationNumber(String vehicleRegistrationNumber) {
+        try{
+
+            if(!vehicleRegistrationNumber.equals(" "))
+            {
+                Optional<Vehicle> optional = vehicleRepository.getByRegistrationNumber(vehicleRegistrationNumber);
+                return optional.orElse(null);
+            }
+            else {
+                return null;
+            }
+
+        }catch (Exception e)
+        {
+            LOGGER.error("Błąd podczas pobierania pojazdu o numerze rejestracyjnym: {}| wiadomość: {}",vehicleRegistrationNumber,e.getMessage());
+
             return null;
         }
     }
@@ -60,6 +93,7 @@ public class VehicleService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> save(Vehicle vehicle) {
         try {
 
@@ -112,16 +146,16 @@ public class VehicleService {
         }
     }
 
-    public ResponseEntity<?> getAllPage(Pageable pageable) {
-        try {
-
-            Page<Vehicle> vehiclePage = vehicleRepository.findAll(pageable);
-            return ResponseEntity.ok().body(vehiclePage);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("NIe udało  się pobrać listy pojazdów"));
-        }
-    }
+//    public ResponseEntity<?> getAllPage(Pageable pageable) {
+//        try {
+//
+//            Page<Vehicle> vehiclePage = vehicleRepository.findAll(pageable);
+//            return ResponseEntity.ok().body(vehiclePage);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("NIe udało  się pobrać listy pojazdów"));
+//        }
+//    }
 
     public ResponseEntity<?> searchVehicle(String search,Pageable pageable) {
         try {
@@ -152,6 +186,205 @@ public class VehicleService {
         }
 
     }
+
+
+
+    public ResponseEntity<?> getAllPage(MultiValueMap<String, String> queryParams, Pageable pageable)
+    {
+        try
+        {
+            String idStr = Optional.ofNullable(queryParams.getFirst("id")).filter(val -> !val.isEmpty()).orElse(null);
+            Long id = null;
+            if (idStr != null)
+                id = Long.parseLong(idStr);
+
+            String name = Optional.ofNullable(queryParams.getFirst("name")).filter(val -> !val.isEmpty()).orElse(null);
+            if (name != null) name = '%' + name.toLowerCase(Locale.ROOT) + '%';
+
+            String vin = Optional.ofNullable(queryParams.getFirst("vin")).filter(val -> !val.isEmpty()).orElse(null);
+            if (vin != null) vin = '%' + vin.toLowerCase(Locale.ROOT) + '%';
+
+            String registrationNumber = Optional.ofNullable(queryParams.getFirst("registrationNumber")).filter(val -> !val.isEmpty()).orElse(null);
+            if (registrationNumber != null) registrationNumber = '%' + registrationNumber.toLowerCase(Locale.ROOT) + '%';
+
+            String carMileageStr = Optional.ofNullable(queryParams.getFirst("carMileage")).filter(val -> !val.isEmpty()).orElse(null);
+            Integer carMileage=null;
+            if(carMileageStr!=null)
+             carMileage = Integer.parseInt(carMileageStr);
+
+            String carLoadCapacityStr = Optional.ofNullable(queryParams.getFirst("carLoadCapacity")).filter(val -> !val.isEmpty()).orElse(null);
+            Integer carLoadCapacity=null;
+            if(carLoadCapacityStr!=null)
+                carLoadCapacity = Integer.parseInt(carLoadCapacityStr);
+
+
+            List<Vehicle> list  = vehicleRepository.findByColumnFilter(id,name,vin,registrationNumber,carMileage,carLoadCapacity);
+            posortuj(list, pageable.getSort().toString().replace(":", ""));
+
+            final int start = (int)pageable.getOffset();
+            final int end = Math.min((start + pageable.getPageSize()), list.size());
+            final Page<Vehicle> page = new PageImpl<>(list.subList(start, end), pageable, list.size());
+            return ResponseEntity.ok().body(page);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ToJsonString.toJsonString("Błąd podczas pobierania danych! Komunikat: "+e.getMessage()));
+        }
+    }
+
+
+    private void posortuj(List<Vehicle> filtered, String how)
+    {
+        if (how.contains("UNSORTED"))
+            filtered.sort(Comparator.comparing(Vehicle::getId, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("id") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(Vehicle::getId, Comparator.nullsLast(Comparator.naturalOrder())));
+        if (how.contains("id") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(Vehicle::getId, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("name") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(Vehicle::getName, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("name") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(Vehicle::getName, Comparator.nullsLast(Comparator.naturalOrder())));
+        if (how.contains("vin") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(Vehicle::getVin, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("vin") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(Vehicle::getVin, Comparator.nullsLast(Comparator.naturalOrder())));
+        if (how.contains("registrationNumber") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(Vehicle::getRegistrationNumber, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("registrationNumber") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(Vehicle::getRegistrationNumber, Comparator.nullsLast(Comparator.naturalOrder())));
+        if (how.contains("carMileage") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(Vehicle::getCarMileage, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("carMileage") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(Vehicle::getCarMileage, Comparator.nullsLast(Comparator.naturalOrder())));
+        if (how.contains("carLoadCapacity") && how.contains("DESC"))
+            filtered.sort(Comparator.comparing(Vehicle::getCarLoadCapacity, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (how.contains("carLoadCapacity") && how.contains("ASC"))
+            filtered.sort(Comparator.comparing(Vehicle::getCarLoadCapacity, Comparator.nullsLast(Comparator.naturalOrder())));
+    }
+
+
+    public ResponseEntity<?> exportToExcel(MultiValueMap<String, String> params)
+    {
+        //TODO wyciągnąć do osobnej metody
+        String idStr = Optional.ofNullable(params.getFirst("id")).filter(val -> !val.isEmpty()).orElse(null);
+        Long id = null;
+        if (idStr != null)
+            id = Long.parseLong(idStr);
+
+        String name = Optional.ofNullable(params.getFirst("name")).filter(val -> !val.isEmpty()).orElse(null);
+        if (name != null) name = '%' + name.toLowerCase(Locale.ROOT) + '%';
+
+        String vin = Optional.ofNullable(params.getFirst("vin")).filter(val -> !val.isEmpty()).orElse(null);
+        if (vin != null) vin = '%' + vin.toLowerCase(Locale.ROOT) + '%';
+
+        String registrationNumber = Optional.ofNullable(params.getFirst("registrationNumber")).filter(val -> !val.isEmpty()).orElse(null);
+        if (registrationNumber != null) registrationNumber = '%' + registrationNumber.toLowerCase(Locale.ROOT) + '%';
+
+        String carMileageStr = Optional.ofNullable(params.getFirst("carMileage")).filter(val -> !val.isEmpty()).orElse(null);
+        Integer carMileage=null;
+        if(carMileageStr!=null)
+            carMileage = Integer.parseInt(carMileageStr);
+
+        String carLoadCapacityStr = Optional.ofNullable(params.getFirst("carLoadCapacity")).filter(val -> !val.isEmpty()).orElse(null);
+        Integer carLoadCapacity=null;
+        if(carLoadCapacityStr!=null)
+            carLoadCapacity = Integer.parseInt(carLoadCapacityStr);
+
+        List<Vehicle> vehicles = vehicleRepository.findByColumnFilter(id,name,vin,registrationNumber,carMileage,carLoadCapacity);
+
+        List<List<String>> exportRows = new ArrayList<>();
+        exportRows.add(Arrays.asList("ID", "Name", "VIN", "Registration Number", "Car Mileage", "Car LoadCapacity",
+                "Lorry Semitrailer", "Number Of Seats", "Engine Capacity",  "Average Fuel Consumption", "Roadworthy", "Occupied"));
+
+        //TODO spróbować zamienić forEach
+        vehicles.forEach(entry->{
+            List<String> row = new ArrayList<>();
+
+            if (entry.getId() != null)
+                row.add(entry.getId().toString());
+            else
+                row.add("");
+            if (entry.getName() != null)
+                row.add(entry.getName());
+            else
+                row.add("");
+            if (entry.getVin() != null)
+                row.add(entry.getVin());
+            else
+                row.add("");
+            if (entry.getRegistrationNumber() != null)
+                row.add(entry.getRegistrationNumber());
+            else
+                row.add("");
+            if (entry.getCarMileage() != null)
+                row.add(entry.getCarMileage().toString());
+            else
+                row.add("");
+            if (entry.getCarLoadCapacity() != null)
+                row.add(entry.getCarLoadCapacity().toString());
+            else
+                row.add("");
+            if (entry.getLorrySemitrailer() != null)
+                row.add(entry.getLorrySemitrailer().toString());
+            else
+                row.add("");
+            if (entry.getNumberOfSeats() != null)
+                row.add(entry.getNumberOfSeats().toString());
+            else
+                row.add("");
+            if (entry.getEngineCapacity() != null)
+                row.add(entry.getEngineCapacity().toString());
+            else
+                row.add("");
+            if (entry.getAverageFuelConsumption() != null)
+                row.add(entry.getAverageFuelConsumption().toString());
+            else
+                row.add("");
+            if (entry.getRoadworthy() != null)
+                row.add(entry.getRoadworthy().toString());
+            else
+                row.add("");
+            if (entry.getRoadworthy() != null)
+                row.add(entry.getRoadworthy().toString());
+            else
+                row.add("");
+            if (entry.getOccupied() != null)
+                row.add(entry.getOccupied().toString());
+            else
+                row.add("");
+
+            exportRows.add(row);
+        });
+        Path exportFile;
+        try {
+            exportFile = Files.createTempFile("vehicle_raport" + System.currentTimeMillis(), ".xlsx");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił błąd podczas tworzenia raportu (nie udało się utworzyc pliku)");
+        }
+
+
+        ExportExel.export(exportFile.toString(), exportRows, false);
+
+        try {
+            Resource resource = new UrlResource(exportFile.toUri());
+            if (resource.exists()) {
+                HttpHeaders headers = new HttpHeaders();
+
+                headers.add("Content-Disposition",
+                        "attachment; filename=vehicle_raport" + System.currentTimeMillis() + ".xlsx");
+                return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).headers(headers).body(resource);
+                //return resource;
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił błąd podczas tworzenia raportu (pliki nie istnieje)");
+            }
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił błąd podczas tworzenia raportu (błąd podczas przesyłania pliku)");
+        }
+
+    }
+
 
 
 }

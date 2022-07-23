@@ -1,10 +1,14 @@
 package pl.szczypkowski.vehiclesfleetmanager.driver.service;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.szczypkowski.vehiclesfleetmanager.driver.model.Driver;
 import pl.szczypkowski.vehiclesfleetmanager.driver.model.DriverEvaluation;
 import pl.szczypkowski.vehiclesfleetmanager.driver.repository.DriverEvaluationRepository;
@@ -16,6 +20,7 @@ import java.util.Optional;
 @Service
 public class DriverEvaluationService {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(DriverEvaluationService.class);
     private final DriverEvaluationRepository driverEvaluationRepository;
 
 
@@ -23,7 +28,7 @@ public class DriverEvaluationService {
         this.driverEvaluationRepository = driverEvaluationRepository;
     }
 
-    public ResponseEntity<?> save(DriverEvaluation driverEvaluation)
+    public ResponseEntity<?> saveOrUpdate(DriverEvaluation driverEvaluation)
     {
         try{
 
@@ -32,34 +37,65 @@ public class DriverEvaluationService {
                 Optional<DriverEvaluation> dbDriverEvaluation =driverEvaluationRepository.findById(driverEvaluation.getId());
                 if(dbDriverEvaluation.isPresent()) {
 
-                    if(driverEvaluation.getRate()!=null)
-                    dbDriverEvaluation.get().setRate(driverEvaluation.getRate());
-                    dbDriverEvaluation.get().setUpdateDate(new Date());
-                    DriverEvaluation saved =driverEvaluationRepository.save(dbDriverEvaluation.get());
-                    return ResponseEntity.ok().body(saved);
-
+                    DriverEvaluation updated = update(driverEvaluation,dbDriverEvaluation.get());
+                    return ResponseEntity.ok().body(updated);
                 }
                 else
                 {
-                    return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się zaktualizować oceny kierowcy"));
+                    return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się zaktualizować oceny kierowcy " +
+                            "ponieważ ocena o przesłanym ID nie istnieje w bazie danych !"));
                 }
 
             }
             else {
-                driverEvaluation.setDate(new Date());
-                driverEvaluation.setUpdateDate(new Date());
-                driverEvaluation.setValid(true);
-                DriverEvaluation saved = driverEvaluationRepository.save(driverEvaluation);
 
+                DriverEvaluation saved = save(driverEvaluation);
                 return ResponseEntity.ok().body(saved);
-
             }
 
         }catch (Exception e)
         {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się dodac oceny kierowcy"));
+            LOGGER.error("Wystąpił błąd podczas zapisywania oceny kierowcy wiadomość:{} ", e.getMessage());
+            return null;
         }
+    }
+
+    @Transactional
+    public DriverEvaluation save(DriverEvaluation driverEvaluation)
+    {
+        try{
+            driverEvaluation.setDate(new Date());
+            driverEvaluation.setUpdateDate(new Date());
+            driverEvaluation.setValid(true);
+            return driverEvaluationRepository.save(driverEvaluation);
+        } catch (Exception e)
+        {
+            LOGGER.error("Wystąpił błąd podczas zapisywania oceny kierowcy wiadomość:{} ", e.getMessage());
+            return null;
+        }
+    }
+
+    @Transactional
+    public DriverEvaluation update(DriverEvaluation driverEvaluation,DriverEvaluation dbDriverEvaluation)
+    {
+        try{
+
+            if(driverEvaluation.getRate()!=null)
+                dbDriverEvaluation.setRate(driverEvaluation.getRate());
+            if(driverEvaluation.getDescription()!=null)
+                dbDriverEvaluation.setDescription(driverEvaluation.getDescription());
+            if(dbDriverEvaluation.getRoadId()!=null)
+                dbDriverEvaluation.setRoadId(dbDriverEvaluation.getRoadId());
+            dbDriverEvaluation.setUpdateDate(new Date());
+            dbDriverEvaluation.setValid(true);
+            return driverEvaluationRepository.save(dbDriverEvaluation);
+
+        }catch (Exception e)
+        {
+            LOGGER.error("Wystąpił błąd podczas aktualizacji oceny kierowcy wiadomość:{} ", e.getMessage());
+            return null;
+        }
+
     }
 
     public ResponseEntity<?> getAllPage(Pageable pageable)
@@ -89,5 +125,6 @@ public class DriverEvaluationService {
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się pobrać oceny kierowcy"));
         }
     }
+
 
 }

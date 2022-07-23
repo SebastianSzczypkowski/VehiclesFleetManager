@@ -3,10 +3,8 @@ package pl.szczypkowski.vehiclesfleetmanager.driver.controller;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.szczypkowski.vehiclesfleetmanager.driver.model.DriverEvaluation;
 import pl.szczypkowski.vehiclesfleetmanager.driver.service.DriverEvaluationService;
 
 @RestController
@@ -30,5 +28,11 @@ public class DriverEvaluationController {
     public ResponseEntity<?> getAllByDriver(@RequestParam("id") Long id ,Pageable pageable)
     {
         return driverEvaluationService.getByDriver(pageable,id);
+    }
+
+    @PostMapping("/create-evaluation")
+    public ResponseEntity<?> createEvaluation(@RequestBody DriverEvaluation driverEvaluation)
+    {
+        return driverEvaluationService.saveOrUpdate(driverEvaluation);
     }
 }
