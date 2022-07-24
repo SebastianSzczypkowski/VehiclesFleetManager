@@ -30,6 +30,13 @@
           </button>
         </a>
 
+
+          <button mat-fab style="background-color: var(--right-color)" aria-label="add" (click)="sendEmail()">
+            <mat-icon> email</mat-icon>
+
+          </button>
+
+
         <mat-form-field appearance="fill" style="margin-left: 3vh;">
           <mat-label>Szukaj</mat-label>
           <input matInput placeholder="Szukaj"  (input)="search($event)"  >

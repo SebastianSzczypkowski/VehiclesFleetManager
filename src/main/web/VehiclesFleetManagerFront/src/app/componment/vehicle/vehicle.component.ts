@@ -79,7 +79,7 @@ export class VehicleComponent implements OnInit,AfterViewInit {
     dialogConfig.disableClose = true;
     dialogConfig.id = "driver-info-component";
     dialogConfig.height = "700px";
-    dialogConfig.width = "650px";
+    dialogConfig.width = "850px";
     const modalDialog = this.matDialog.open(VehicleInfoComponent, dialogConfig);
 
     this.vehicles.forEach(e=>{

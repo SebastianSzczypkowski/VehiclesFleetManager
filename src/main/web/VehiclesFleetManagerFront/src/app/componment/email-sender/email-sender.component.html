@@ -12,37 +12,40 @@
         <path d="M0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256zM175 208.1L222.1 255.1L175 303C165.7 312.4 165.7 327.6 175 336.1C184.4 346.3 199.6 346.3 208.1 336.1L255.1 289.9L303 336.1C312.4 346.3 327.6 346.3 336.1 336.1C346.3 327.6 346.3 312.4 336.1 303L289.9 255.1L336.1 208.1C346.3 199.6 346.3 184.4 336.1 175C327.6 165.7 312.4 165.7 303 175L255.1 222.1L208.1 175C199.6 165.7 184.4 165.7 175 175C165.7 184.4 165.7 199.6 175 208.1V208.1z"/>
       </g>
     </svg>
-    <h1 id="modal-title" style="margin-top: -5vh">Dodaj zmodyfikuj użytkownika  </h1>
+    <h1 id="modal-title" style="margin-top: -5vh">Wyślij wiadomość </h1>
 
   </header>
 
   <section id="modal-body" style="margin-top: 5vh">
 
-    <form [formGroup]="userDeatils"  (ngSubmit)="onSubmit()">
+    <form  (ngSubmit)="onSubmit()">
       <mat-form-field class="example-form-field" appearance="fill">
-        <mat-label>Nazwa</mat-label>
+        <mat-label>Teamat</mat-label>
         <input matInput type="text"  formControlName="name">
-
+        <!--        <button *ngIf="vehicleData.name" matSuffix mat-icon-button aria-label="Clear" >-->
+        <!--          <mat-icon>close</mat-icon>-->
+        <!--        </button>-->
       </mat-form-field>
       <mat-form-field class="example-form-field" appearance="fill">
-        <mat-label>Login</mat-label>
-        <input matInput type="text"  formControlName="login">
-
-      </mat-form-field>
-      <p></p>
-      <mat-form-field class="example-form-field" appearance="fill">
-        <mat-label>Email</mat-label>
-        <input matInput type="text"  formControlName="email">
-
-      </mat-form-field>
-      <mat-form-field class="example-form-field" appearance="fill">
-        <mat-label>Hasło</mat-label>
-        <input matInput type="number"  formControlName="password">
-
-
+        <mat-label>Treść</mat-label>
+        <input matInput type="text"  formControlName="content">
+        <!--        <button *ngIf="vehicleData.vin" matSuffix mat-icon-button aria-label="Clear" (click)="vehicleData.vin">-->
+        <!--          <mat-icon>close</mat-icon>-->
+        <!--        </button>-->
       </mat-form-field>
 
-      <button mat-raised-button color="primary" style="margin-left: 70vh" type="submit" >zapisz</button>
+      <mat-form-field style="width: 700px;">
+        <textarea matInput rows="5" cols="40" placeholder="text"></textarea>
+      </mat-form-field>
+
+
+
+      <button mat-raised-button color="primary" style="margin-left: 60vh;margin-top: 20vh" type="submit"(click)="fileInput.click()">	<mat-icon> attach_file</mat-icon></button>
+      <input #file hidden (change)="handleFileInput(file.files)" #fileInput type="file" id="file">
+      <button mat-raised-button color="primary" style="margin-left: 2vh;" type="submit" >	<mat-icon>send</mat-icon></button>
+      <div>
+        <mat-label *ngIf="fileToUpload!=null">{{fileToUpload.name}}</mat-label>
+      </div>
     </form>
 
 
@@ -53,3 +56,4 @@
 
   </footer>
 </div>
+

@@ -35,9 +35,12 @@ public class RoadController {
             return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało się pobrać listy aut"));
         }
     }
-    @GetMapping("/get-all-page")
-    public ResponseEntity<?> getAllPage(@RequestParam MultiValueMap<String, String> queryParams, Pageable pageable)
+    @GetMapping({"/get-all-page","/get-all-page{id}"})
+    public ResponseEntity<?> getAllPage(@PathVariable(required = false) String id,@RequestParam MultiValueMap<String, String> queryParams, Pageable pageable)
     {
+        if(id!=null)
+        return roadService.getAllPageById(queryParams,pageable);
+        else
         return roadService.getAllPage(queryParams,pageable);
     }
 

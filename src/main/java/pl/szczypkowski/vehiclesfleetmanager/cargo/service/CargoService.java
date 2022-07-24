@@ -239,47 +239,13 @@ public class CargoService {
         try{
 
 
-            String idStr = Optional.ofNullable(queryParams.getFirst("id")).filter(val -> !val.isEmpty()).orElse(null);
-            Long id = null;
-            if (idStr != null)
-                id = Long.parseLong(idStr);
-
-            String description = Optional.ofNullable(queryParams.getFirst("description")).filter(val -> !val.isEmpty()).orElse(null);
-            if (description != null) description = '%' + description.toLowerCase(Locale.ROOT) + '%';
-
-            String name = Optional.ofNullable(queryParams.getFirst("name")).filter(val -> !val.isEmpty()).orElse(null);
-            if (name != null) name = '%' + name.toLowerCase(Locale.ROOT) + '%';
-
-            String type = Optional.ofNullable(queryParams.getFirst("type")).filter(val -> !val.isEmpty()).orElse(null);
-            if (type != null) type = '%' + type.toLowerCase(Locale.ROOT) + '%';
-
-            String sensitivity = Optional.ofNullable(queryParams.getFirst("sensitivity")).filter(val -> !val.isEmpty()).orElse(null);
-            if (sensitivity != null) sensitivity = '%' + sensitivity.toLowerCase(Locale.ROOT) + '%';
-
-            String special_remarks = Optional.ofNullable(queryParams.getFirst("special_remarks")).filter(val -> !val.isEmpty()).orElse(null);
-            if (special_remarks != null) special_remarks = '%' + special_remarks.toLowerCase(Locale.ROOT) + '%';
-
-            String driver = Optional.ofNullable(queryParams.getFirst("driver")).filter(val -> !val.isEmpty()).orElse(null);
-            if (driver != null) driver = '%' + driver.toLowerCase(Locale.ROOT) + '%';
-
-            String assignedDateOd = Optional.ofNullable(queryParams.getFirst("assignedDateOd")).filter(val -> !val.isEmpty())
-                    .orElse(null);
-            if(assignedDateOd!=null)
-                assignedDateOd = assignedDateOd.substring(0,assignedDateOd.indexOf("T"));
-
-            String assignedDateDo = Optional.ofNullable(queryParams.getFirst("assignedDateDo")).filter(val -> !val.isEmpty())
-                    .orElse(null);
-            if(assignedDateDo!=null)
-                assignedDateDo = assignedDateDo.substring(0,assignedDateDo.indexOf("T"));
-
-
-            List<Cargo> list  =
-                    cargoRepository.findByColumnFilter(id,name,description,type,sensitivity,special_remarks,driver,assignedDateOd,assignedDateDo);
+            List<Cargo> list =//cargoRepository.findAll();
+                    getFilteredList(queryParams);
             posortuj(list, pageable.getSort().toString().replace(":", ""));
 
-            final int startP = (int)pageable.getOffset();
-            final int endP = Math.min((startP + pageable.getPageSize()), list.size());
-            final Page<Cargo> page = new PageImpl<>(list.subList(startP, endP), pageable, list.size());
+            final int start = (int)pageable.getOffset();
+            final int end = Math.min((start + pageable.getPageSize()), list.size());
+            final Page<Cargo> page = new PageImpl<>(list.subList(start, end), pageable, list.size());
 
             return ResponseEntity.ok().body(page);
         }catch (Exception e)

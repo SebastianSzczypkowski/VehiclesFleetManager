@@ -9,6 +9,7 @@ import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {RoadInfoComponent} from "../set-route/road-info/road-info.component";
 import {DriverInfoComponent} from "./driver-info/driver-info.component";
 import {DriverEmmiterService} from "./service/driver-emmiter.service";
+import {EmailSenderComponent} from "../email-sender/email-sender.component";
 
 @Component({
   selector: 'app-driver',
@@ -75,7 +76,7 @@ export class DriverComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.id = "driver-info-component";
     dialogConfig.height = "500px";
-    dialogConfig.width = "620px";
+    dialogConfig.width = "820px";
 
     const modalDialog = this.matDialog.open(DriverInfoComponent, dialogConfig);
 
@@ -86,6 +87,18 @@ export class DriverComponent implements OnInit {
     this.driverEmmiter.setdriverId(this.id);
     this.driverEmmiter.setdriver(d);
     //this.driverEmmiter.driverDetails.emit();
+  }
+
+  sendEmail(){
+    const dialogConfig = new MatDialogConfig();
+    // The user can't close the dialog by clicking outside its body
+    dialogConfig.disableClose = true;
+    dialogConfig.id = "driver-info-component";
+    dialogConfig.height = "600px";
+    dialogConfig.width = "820px";
+
+    const modalDialog = this.matDialog.open(EmailSenderComponent, dialogConfig);
+
   }
 
   search(event: any) {

@@ -136,7 +136,8 @@ public class RoadService {
             if (dataDo != null)
                 dataDo = dataDo.substring(0, dataDo.indexOf("T"));
 
-            return roadRepository.findByColumnFilter(id, start, end, driver, cargo, vehicle, dataOd, dataDo);
+            return  roadRepository.findAll();
+                    //roadRepository.findByColumnFilter(id, start, end, driver, cargo, vehicle, dataOd, dataDo);
         }catch (Exception e)
         {
             LOGGER.error("Wystąpił błąd podczas pobierania listy tras wiadomość: {}",e.getMessage());
@@ -150,9 +151,9 @@ public class RoadService {
             List<Road> list= getFilteredList(queryParams);
             posortuj(list, pageable.getSort().toString().replace(":", ""));
 
-            final int startP = (int)pageable.getOffset();
-            final int endP = Math.min((startP + pageable.getPageSize()), list.size());
-            final Page<Road> page = new PageImpl<>(list.subList(startP, endP), pageable, list.size());
+            final int start = (int)pageable.getOffset();
+            final int end = Math.min((start + pageable.getPageSize()), list.size());
+            final Page<Road> page = new PageImpl<>(list.subList(start, end), pageable, list.size());
 
             return ResponseEntity.ok().body(page);
 
@@ -469,4 +470,22 @@ public class RoadService {
 
     }
 
+    public ResponseEntity<?> getAllPageById(MultiValueMap<String, String> queryParams, Pageable pageable) {
+        try{
+
+            List<Road> list= getFilteredList(queryParams);
+            posortuj(list, pageable.getSort().toString().replace(":", ""));
+
+            final int start = (int)pageable.getOffset();
+            final int end = Math.min((start + pageable.getPageSize()), list.size());
+            final Page<Road> page = new PageImpl<>(list.subList(start, end), pageable, list.size());
+
+            return ResponseEntity.ok().body(page);
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(ToJsonString.toJsonString("Nie udało sie pobrać listy tras"));
+        }
+    }
 }

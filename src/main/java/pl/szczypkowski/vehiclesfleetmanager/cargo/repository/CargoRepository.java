@@ -22,7 +22,7 @@ public interface CargoRepository extends JpaRepository<Cargo,Long> {
             "(lower(cargo.type) like :cargoType or :cargoType is null) and " +
             "(lower(cargo.sensitivity) like :sensitivity or :sensitivity is null) and " +
             "(lower(cargo.specialRemarks) like :special_remarks or :special_remarks is null) and " +
-            "(lower(cargo.driver.pesel) like :driver or :driver is null) and " +
+            "(cargo.driver.pesel = :driver or :driver is null) and " +
             "(DATE_FORMAT(cargo.assignedDate, '%Y-%m-%d') between :assignedDateOd and :assignedDateDo or :assignedDateOd  is null or :assignedDateDo is null)")
     List<Cargo> findByColumnFilter(@Param("id") Long id,@Param("name") String name,@Param("description") String description,
                                    @Param("cargoType")String type,@Param("sensitivity") String sensitivity,@Param("special_remarks") String special_remarks,

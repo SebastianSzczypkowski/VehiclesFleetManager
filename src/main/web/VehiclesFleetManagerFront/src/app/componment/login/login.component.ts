@@ -5,6 +5,8 @@ import {AuthService} from "../../service/auth.service";
 import {TokenService} from "../../service/token.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {ToastrService} from "ngx-toastr";
+import {AppComponent} from "../../app.component";
 
 
 @Component({
@@ -27,13 +29,14 @@ export class LoginComponent implements OnInit {
   hide: boolean =true;
   constructor(private _route: ActivatedRoute,
               private _router: Router,private authService:AuthService,private token:TokenService,
-              private nav:NavbarService,private formBuilder:FormBuilder)
+              private nav:NavbarService,private formBuilder:FormBuilder,private toaster:ToastrService,
+              )
   {
     this.returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/home';
   }
 
   ngOnInit(): void {
-    //this.nav.show();
+    this.nav.hide();
     this.loginForm=this.formBuilder.group(
       {
         username: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
@@ -59,15 +62,23 @@ export class LoginComponent implements OnInit {
 
         this.isLoginFailed = false;
         this.isLoggedIn = true;
-        this.reloadPage();
+
+
+        //this.reloadPage();
+        this.toaster.success("Zalogowano");
+        this.nav.show();
+
+
       },
       err => {
         this.errorMessage = err.error.message;
         this.isLoginFailed = true;
+        this.toaster.error("Wystąpił błąd podczas logowania");
       }
     );
   }
   reloadPage(): void {
+
     window.location.reload();
   }
 

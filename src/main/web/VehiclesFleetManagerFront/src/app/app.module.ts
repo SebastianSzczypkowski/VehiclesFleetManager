@@ -61,6 +61,8 @@ import {UserComponent} from "./componment/user/user.component";
 import {UserDetailsComponent} from "./componment/user/user-details/user-details.component";
 import {RegisterComponent} from "./componment/register/register.component";
 import {authInterceptorProviders} from "./service/auth.interceptor";
+import { EmailSenderComponent } from './componment/email-sender/email-sender.component';
+import { CreateUserComponent } from './componment/user/create-user/create-user.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +96,8 @@ import {authInterceptorProviders} from "./service/auth.interceptor";
     UserComponent,
     UserDetailsComponent,
     RegisterComponent,
+    EmailSenderComponent,
+    CreateUserComponent,
 
   ],
   imports: [

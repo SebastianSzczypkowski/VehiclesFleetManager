@@ -26,6 +26,7 @@ import pl.szczypkowski.vehiclesfleetmanager.utils.ToJsonString;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -100,6 +101,7 @@ public class AuthController {
                 }
             });
         }
+        user.setLogin(signupRequest.getUsername().toLowerCase(Locale.ROOT));
         user.setRoles(roles);
         userRepository.save(user);
 

@@ -19,17 +19,17 @@ public class EmailSenderController {
     }
 
 
-//    @PostMapping("/send")
-//    public ResponseEntity<?> sendEmail(@RequestBody EmailRequest emailRequest)
-//    {
-//            return emailService.sendEmail(emailRequest);
-//    }
-//
-//    @PostMapping("/send=with-attachment")
-//    public ResponseEntity<?> sendEmail(@RequestBody EmailRequest emailRequest,@RequestParam("file") MultipartFile multipartFile)
-//    {
-//        return emailService.sendEmailWithAttachment(emailRequest,multipartFile);
-//    }
+    @PostMapping("/send")
+    public ResponseEntity<?> sendEmail(@RequestBody EmailRequest emailRequest)
+    {
+            return emailService.sendEmail(emailRequest);
+    }
+
+    @PostMapping("/send-with-attachment")
+    public ResponseEntity<?> sendEmail(@RequestBody EmailRequest emailRequest,@RequestParam("file") MultipartFile multipartFile)
+    {
+        return emailService.sendEmailWithAttachment(emailRequest,multipartFile);
+    }
 
 
 }
