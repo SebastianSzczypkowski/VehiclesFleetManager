@@ -10,4 +10,7 @@ export class User {
   password!:string|undefined;
   roles:Userrole[]=[];
 
+
+  constructor() {
+  }
 }

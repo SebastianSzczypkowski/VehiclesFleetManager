@@ -50,8 +50,8 @@ export class VehicleComponent implements OnInit,AfterViewInit {
         this.pageSize=data.size;
         this.length=data.totalElements;
 
-
       })
+
   }
   getServerData(event: PageEvent) {
     if(event?.pageIndex!=null)

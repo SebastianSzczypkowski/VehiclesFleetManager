@@ -61,6 +61,20 @@ public class Vehicle {
     public Vehicle() {
     }
 
+    public Vehicle( String name, String vin, String registrationNumber, Integer carMileage, Integer carLoadCapacity, Boolean lorrySemitrailer, Integer numberOfSeats, Double engineCapacity, Double averageFuelConsumption, Boolean roadworthy, Boolean occupied) {
+        this.name = name;
+        this.vin = vin;
+        this.registrationNumber = registrationNumber;
+        this.carMileage = carMileage;
+        this.carLoadCapacity = carLoadCapacity;
+        this.lorrySemitrailer = lorrySemitrailer;
+        this.numberOfSeats = numberOfSeats;
+        this.engineCapacity = engineCapacity;
+        this.averageFuelConsumption = averageFuelConsumption;
+        this.roadworthy = roadworthy;
+        this.occupied = occupied;
+    }
+
     public Vehicle(Long id, String name, String vin, String registrationNumber, Integer carMileage, Integer carLoadCapacity, Boolean lorrySemitrailer, Integer numberOfSeats, Double engineCapacity, Double averageFuelConsumption, List<VehicleInspection> vehicleInspection, Boolean roadworthy, Boolean occupied) {
         this.id = id;
         this.name = name;

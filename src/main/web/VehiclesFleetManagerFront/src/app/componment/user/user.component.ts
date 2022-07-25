@@ -6,6 +6,8 @@ import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {UserDetailsComponent} from "./user-details/user-details.component";
 import {User} from "../../model/user";
 import {UserService} from "./service/user.service";
+import {DriverEmmiterService} from "../driver/service/driver-emmiter.service";
+import {UserEmmiterService} from "./service/user-emmiter.service";
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -17,6 +19,7 @@ export class UserComponent implements OnInit,AfterViewInit  {
   pageIndex=0;
   pageSize=10;
   length!:number;
+  newUser:User = new User();
   users:User[]=[];
   displayedColumns: string[] = ['id', 'email', 'login', 'password'];
   dataSource = new MatTableDataSource<User>();
@@ -28,19 +31,23 @@ export class UserComponent implements OnInit,AfterViewInit  {
    // this.dataSource.sort = this.sort;
   }
 
-  constructor(private userService:UserService,public matDialog:MatDialog) { }
+
+  constructor(private userService:UserService,public matDialog:MatDialog,
+              private userEmmiter:UserEmmiterService) { }
 
 
   ngOnInit(): void {
 
     this.userService.getAllPage(this.pageIndex,this.pageSize).subscribe(
-      data=>{
-        this.users=data.content;
-        this.pageIndex=data.number;
-        this.pageSize=data.size;
-        this.length=data.totalElements;
+      data=> {
+
+        this.users = data.content;
+        this.pageIndex = data.number;
+        this.pageSize = data.size;
+        this.length = data.totalElements;
       }
     )
+
   }
 
 
@@ -73,12 +80,12 @@ export class UserComponent implements OnInit,AfterViewInit  {
     dialogConfig.width = "850px";
     const modalDialog = this.matDialog.open(UserDetailsComponent, dialogConfig);
 
-    // this.users.forEach(e=>{
-    //   if(e.id ==d.id)
-    //     this.id=e.id;
-    // });
-    // this.use.setvehilce(d);
-
+    this.users.forEach(e=>{
+      if(e.id ==d.id)
+        this.id=e.id;
+    });
+    this.userEmmiter.setuserID(this.id);
+    this.userEmmiter.setuser(d);
     //this.driverEmmiter.driverDetails.emit();
   }
   search(event: any) {

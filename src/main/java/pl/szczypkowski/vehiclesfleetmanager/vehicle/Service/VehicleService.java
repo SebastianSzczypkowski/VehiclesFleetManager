@@ -162,12 +162,10 @@ public class VehicleService {
     public ResponseEntity<?> searchVehicle(String search,Pageable pageable) {
         try {
 
-
             SearchResult<Vehicle> result = Search.session(entityManager).search(
                     Vehicle.class).where(f->f.wildcard().fields("name","vin","registrationNumber").matching(
                             search+"*"
             )).fetchAll();
-
 
             List<Vehicle> results = result.hits();
             Set<Vehicle> vehicleSet = new HashSet<>(results);
@@ -348,7 +346,7 @@ public class VehicleService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił błąd podczas tworzenia raportu (nie udało się utworzyc pliku)");
         }
 
-        ExportExel.export(exportFile.toString(), exportRows, false);
+        ExportExel.export(exportFile.toString(), exportRows,null, false);
 
         try {
             Resource resource = new UrlResource(exportFile.toUri());

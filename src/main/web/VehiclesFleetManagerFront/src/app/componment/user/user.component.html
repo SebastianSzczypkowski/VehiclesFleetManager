@@ -6,7 +6,7 @@
 
       <div>
 
-          <button mat-fab style="background-color: var(--right-color)" aria-label="add" (click)="getuserDeatils(null)">
+          <button mat-fab style="background-color: var(--right-color)" aria-label="add" (click)="getuserDeatils(newUser)">
             add
             <!--            <svg aria-hidden="true"-->
             <!--                 focusable="false"-->
@@ -44,8 +44,8 @@
   <table mat-table [dataSource]="users"
          class="mat-elevation-z8 demo-table ">
     <!-- Position Column -->
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by position">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">
         ID
       </th>
       <td mat-cell *matCellDef="let element"> {{element.id}} </td>

@@ -305,7 +305,7 @@ public class DriverService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił błąd podczas tworzenia raportu (nie udało się utworzyc pliku)");
         }
 
-        ExportExel.export(exportFile.toString(), exportRows, false);
+        ExportExel.export(exportFile.toString(), exportRows, null,false);
 
         try {
             Resource resource = new UrlResource(exportFile.toUri());

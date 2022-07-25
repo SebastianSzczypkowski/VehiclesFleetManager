@@ -4,6 +4,10 @@ import {UserComponent} from "../user.component";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
 import {UserService} from "../service/user.service";
+import {DriverEmmiterService} from "../../driver/service/driver-emmiter.service";
+import {UserEmmiterService} from "../service/user-emmiter.service";
+import {Driver} from "../../../model/driver";
+import {User} from "../../../model/user";
 
 @Component({
   selector: 'app-user-details',
@@ -14,8 +18,10 @@ export class UserDetailsComponent implements OnInit {
   hide: boolean = false;
 
   userDeatils!:FormGroup;
+  userData!: User;
+  userId!:number;
   constructor(public dialogRef:MatDialogRef<UserComponent>,private toaster:ToastrService,
-              private _formBuilder: FormBuilder,private userService:UserService) { }
+              private _formBuilder: FormBuilder,private userService:UserService, private userEmmiter:UserEmmiterService) { }
 
   ngOnInit(): void {
     this.userDeatils=this._formBuilder.group({
@@ -24,9 +30,16 @@ export class UserDetailsComponent implements OnInit {
       email:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
       password:new FormControl('',[Validators.required,Validators.minLength(2),Validators.maxLength(45)]),
       roles:[],
-
-
     })
+
+    this.userId=this.userEmmiter.getuserID();
+    this.userData=this.userEmmiter.getuser();
+    this.userDeatils.patchValue({name:this.userEmmiter.getuser().name});
+    this.userDeatils.patchValue({login:this.userEmmiter.getuser().login});
+    this.userDeatils.patchValue({email:this.userEmmiter.getuser().email});
+    this.userDeatils.patchValue({password:this.userEmmiter.getuser().password});
+    this.userDeatils.patchValue({roles:this.userEmmiter.getuser().roles});
+
   }
 
   closeModal() {

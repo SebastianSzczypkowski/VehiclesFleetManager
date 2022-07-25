@@ -32,9 +32,11 @@ public class EmailService {
         this.userRepository = userRepository;
     }
 
-
     ThreadPoolExecutor executor =
             new ThreadPoolExecutor(10, 10, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+
+
+
     public ResponseEntity<?> sendEmail(EmailRequest emailRequest) {
        if(emailRequest!=null && emailRequest.getRecipient().size()>0)
        {

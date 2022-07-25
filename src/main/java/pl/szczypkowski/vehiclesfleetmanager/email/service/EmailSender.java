@@ -19,7 +19,6 @@ public class EmailSender {
     @Autowired
     private JavaMailSender javaMailSender;
 
-
     public void sendEmail(String to, String title, String content) {
         MimeMessage mail = javaMailSender.createMimeMessage();
         try {

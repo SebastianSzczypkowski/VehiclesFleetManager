@@ -26,24 +26,14 @@ public class ExportExel {
         DATE, DATE_TIME, TIME, PROCENT, NUMERIC, VALUE, MONEY, MULTILINE, NONE, HEADER
     }
 
-    public static final boolean export(String filePath, List<List<String>> data, boolean filtr) {
-        return export(filePath, data, null, filtr);
-    }
-
-    public static final boolean export(String filePath, List<List<String>> data, Map<Integer, FormatCell> columnFormat,
-                                       boolean filtr) {
-        return export(filePath, data, columnFormat, filtr, false);
-
-    }
 
     public static boolean export(String filePath, List<List<String>> data, Map<Integer, FormatCell> columnFormat,
-                                 boolean filtr, boolean autosize) {
+                                 boolean filtr) {
         if (!filePath.endsWith(FILE_EXTENSION)) {
             filePath = filePath.concat(FILE_EXTENSION);
         }
-        if (columnFormat == null) {
+
             columnFormat = new HashMap<>();
-        }
 
         String sheetName = FilenameUtils.getBaseName(filePath);
 
@@ -52,11 +42,7 @@ public class ExportExel {
         Map<FormatCell, CellStyle> styles = createStyles(wb);
 
         fillSheet(sheet, data, styles, columnFormat, filtr);
-        if (autosize && !data.isEmpty()) {
-            for (int c = 0; c < data.get(0).size(); c++) {
-                sheet.autoSizeColumn(c);
-            }
-        }
+
 
         return saveFile(filePath, wb);
 

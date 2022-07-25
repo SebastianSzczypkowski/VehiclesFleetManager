@@ -406,7 +406,7 @@ public class CargoService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił błąd podczas tworzenia raportu (nie udało się utworzyc pliku)");
         }
 
-        ExportExel.export(exportFile.toString(), exportRows, false);
+        ExportExel.export(exportFile.toString(), exportRows, null,false);
 
         try {
             Resource resource = new UrlResource(exportFile.toUri());
@@ -416,7 +416,6 @@ public class CargoService {
                 headers.add("Content-Disposition",
                         "attachment; filename=raport_ładunków" + System.currentTimeMillis() + ".xlsx");
                 return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).headers(headers).body(resource);
-                //return resource;
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił błąd podczas tworzenia raportu (pliki nie istnieje)");
             }
